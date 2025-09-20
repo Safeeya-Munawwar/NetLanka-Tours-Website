@@ -1,0 +1,60 @@
+/* Keep map properly contained */
+.leaflet-container {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 12px; /* optional: keeps rounded corners */
+}
+
+/* Ensure leaflet zoom controls & routing instructions appear above map tiles */
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-control,
+#instructions-container {
+  z-index: 500 !important; /* higher than map tiles */
+}
+
+/* Map Quick Jump container */
+.map-quick-jump {
+  z-index: 500 !important;
+  position: absolute;
+  bottom: 12px;   /* ✅ bottom-left */
+  left: 12px;
+  background: rgba(255, 255, 255, 0.95); /* slight transparency */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1200;
+  cursor: pointer;
+}
+
+/* Mobile fix */
+@media (max-width: 768px) {
+  /* Route instructions container below the map */
+  #instructions-container {
+    position: static !important;
+    width: 100% !important;
+    max-height: 220px !important;
+    margin-top: 10px;
+    overflow-y: auto !important;
+  }
+
+  /* Quick jump stays bottom-left but arranged horizontally */
+  .map-quick-jump {
+    bottom: 10px !important;
+    left: 10px !important;
+    flex-direction: row;
+    gap: 12px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  /* Keep map visible */
+  .leaflet-container {
+    height: 420px !important;
+  }
+}
