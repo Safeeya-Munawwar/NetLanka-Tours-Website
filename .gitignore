@@ -1,0 +1,20 @@
+# Ignore backend environment file
+/backend/.env
+
+# Ignore frontend environment files
+/frontend/.env
+/frontend/*.env
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+# Node modules
+/frontend/node_modules/
+/backend/node_modules/
+
+# Logs
+*.log
+
+# Build outputs
+/frontend/build/
