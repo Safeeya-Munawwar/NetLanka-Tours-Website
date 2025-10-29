@@ -95,3 +95,103 @@ ul {
   font-size: 1.7rem;
   color: var(--heading-color);
 }
+
+/* Mobile Responsive */
+
+/* Small tablets and below */
+@media (max-width: 1024px) {
+  section {
+    padding: 40px 20px;
+  }
+
+  .section__subtitle {
+    font-size: 1.5rem;
+    padding-right: 0.8rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.75rem;
+  }
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  .primary__btn, .secondary__btn {
+    padding: 0.35rem 1.2rem !important;
+  }
+
+  .primary__btn a, .secondary__btn a {
+    font-size: 1rem;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 768px) {
+  section {
+    padding: 30px 15px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  .section__subtitle {
+    font-size: 1.3rem;
+    padding-right: 0.6rem;
+  }
+
+  .primary__btn, .secondary__btn {
+    padding: 0.3rem 1rem !important;
+  }
+
+  .primary__btn a, .secondary__btn a {
+    font-size: 0.95rem;
+  }
+
+  .leaflet-container {
+    height: 300px;
+  }
+}
+
+/* Extra small mobile phones */
+@media (max-width: 480px) {
+  section {
+    padding: 20px 10px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+  h2 {
+    font-size: 1.25rem;
+  }
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  .section__subtitle {
+    font-size: 1.1rem;
+    padding-right: 0.4rem;
+  }
+
+  .primary__btn, .secondary__btn {
+    padding: 0.25rem 0.8rem !important;
+  }
+
+  .primary__btn a, .secondary__btn a {
+    font-size: 0.9rem;
+  }
+
+  .leaflet-container {
+    height: 250px;
+  }
+}

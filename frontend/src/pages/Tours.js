@@ -137,7 +137,12 @@ const Tours = () => {
     };
 
     try {
-      await emailjs.send("service_4738ygi", "template_1t1ssv1", templateParams, "V6ZMioOe9GnndO1Y-");
+            await emailjs.send(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        process.env.REACT_APP_EMAILJS_USER_ID
+      );
 
       await axios.post("http://localhost:5000/api/bookings", {
         tourId: bookingId,
@@ -589,68 +594,84 @@ const Tours = () => {
   const popupStyle = { position: "fixed", top: 20, right: 20, padding: "12px 20px", borderRadius: 10, zIndex: 2000, color: "#fff", fontWeight: 600, fontFamily: "'Times New Roman', Times, serif", boxShadow: "0 4px 12px rgba(0,0,0,0.25)", backgroundColor: popup.type === "success" ? "#66bb6a" : "#e53935", transition: "all 0.3s ease" };
 
   return (
-    <div className="flex flex-col items-center" style={{ fontFamily: "'Times New Roman', Times, serif" }}>
+    <div
+    className="flex flex-col items-center font-serif"
+    style={{ fontFamily: "'Times New Roman', Times, serif" }}
+  >
+    {/* Hero Section */}
+    <div
+  className="w-full relative flex flex-col justify-center items-center text-center 
+             h-[620px] sm:h-[520px] md:h-[550px] lg:h-[600px] bg-cover bg-center 
+             pt-24 sm:pt-28" // ✅ slightly reduced top padding on mobile
+  style={{ backgroundImage: "url(/images/adam.png)" }}
+>
+  <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
 
-      <div
-        className="w-full h-[400px] md:h-[450px] lg:h-[500px] relative flex flex-col justify-center items-center text-center bg-cover bg-center"
-        style={{ backgroundImage: "url(/images/adam.png)" }}
+  {/* Text content */}
+  <div className="relative z-10 px-6 md:px-20 mt-[-10px] sm:mt-0"> 
+    {/* ✅ lift content slightly up on mobile */}
+    <h1 className="text-3xl md:text-5xl font-semibold text-green-900 mb-3 sm:mb-4 text-center drop-shadow-sm">
+      Handpicked Tours across Sri Lanka
+    </h1>
+    <p className="text-black text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
+      Discover the best of Sri Lanka with our curated day and round tours. From serene beaches to lush forests, cultural landmarks, and thrilling adventures, we offer experiences that cater to every traveler. Choose from guided tours, adventure packages, or custom itineraries and create memories that last a lifetime.
+    </p>
+  </div>
+
+{/* Search bar */}
+<div className="relative mt-4 sm:mt-5 flex w-[80%] sm:w-[70%] max-w-xs sm:max-w-md mx-auto z-10">
+  <input
+    type="text"
+    placeholder="Search tours..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="flex-1 h-10 sm:h-11 pl-4 border border-gray-300 rounded-l-lg shadow-sm outline-none text-sm sm:text-base"
+  />
+  <button
+    onClick={handleSearch}
+    className="h-10 sm:h-11 bg-green-700 hover:bg-green-800 text-white px-3 sm:px-5 rounded-r-lg text-sm sm:text-base"
+  >
+    Search
+  </button>
+</div>
+
+
+  {/* Main filter buttons */}
+  <div className="flex flex-wrap justify-center mt-2 sm:mt-6 z-10">
+    {["all", "day", "round"].map((f) => (
+      <button
+        key={f}
+        onClick={() => {
+          setMainFilter(f);
+          setSubFilter("all");
+        }}
+        className={`w-56 sm:w-72 py-2 rounded mr-2 mb-2 font-serif text-white text-sm sm:text-lg transition-colors ${
+          mainFilter === f ? "bg-orange-500" : "bg-green-900"
+        }`}
       >
+        {f === "all" ? "All Tours" : f === "day" ? "Day Tours" : "Round Tours"}
+      </button>
+    ))}
+  </div>
 
-        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+  {/* Sub-filter buttons */}
+  {(mainFilter === "day" || mainFilter === "round") && (
+    <div className="flex flex-wrap justify-center mt-2 z-10">
+      {["all", "special", "regular"].map((f) => (
+        <button
+          key={f}
+          onClick={() => setSubFilter(f)}
+          className={`w-48 sm:w-60 px-4 py-2 rounded mr-2 mb-2 font-serif text-white text-sm sm:text-md transition-colors ${
+            subFilter === f ? "bg-orange-500" : "bg-green-900"
+          }`}
+        >
+          {f === "all" ? "All" : f === "special" ? "Special" : "Regular"}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
-        <div className="relative z-10 px-6 md:px-20">
-        <h1 className="text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-6">
-            Handpicked Tours across Sri Lanka
-          </h1>
-          <p className="text-black text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            Discover the best of Sri Lanka with our curated day and round tours. From serene beaches to lush forests, cultural landmarks, and thrilling adventures, we offer experiences that cater to every traveler. Choose from guided tours, adventure packages, or custom itineraries and create memories that last a lifetime.
-          </p>
-        </div>
-
-        <div className="relative w-full max-w-md mt-6 z-10 flex">
-          <input
-            type="text"
-            placeholder="Search tours..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 p-3 pl-4 border border-gray-300 rounded-l-lg shadow-sm outline-none text-base font-serif"
-          />
-          <button
-            onClick={handleSearch}
-            className="bg-green-700 hover:bg-green-800 text-white font-serif px-5 rounded-r-lg"
-          >
-            Search
-          </button>
-        </div>
-
-        <div className="flex flex-wrap justify-center mt-12 z-10">
-          {["all", "day", "round"].map((f) => (
-            <button
-              key={f}
-              onClick={() => { setMainFilter(f); setSubFilter("all"); }}
-              className={`w-80 py-2 rounded mr-3 mb-2 font-serif text-white transition-colors text-lg ${mainFilter === f ? "bg-orange-500" : "bg-green-900"
-                }`}
-            >
-              {f === "all" ? "All Tours" : f === "day" ? "Day Tours" : "Round Tours"}
-            </button>
-          ))}
-        </div>
-
-        {(mainFilter === "day" || mainFilter === "round") && (
-          <div className="flex flex-wrap justify-center mt-2 z-10">
-            {["all", "special", "regular"].map((f) => (
-              <button
-                key={f}
-                onClick={() => setSubFilter(f)}
-                className={`w-72 px-5 py-2 rounded mr-3 mb-2 font-serif text-white transition-colors text-md ${subFilter === f ? "bg-orange-500" : "bg-green-900"
-                  }`}
-              >
-                {f === "all" ? "All" : f === "special" ? "Special" : "Regular"}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
 
       <div style={containerStyle}>
         <div style={{ padding: "20px" }}>
