@@ -1,213 +1,152 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import {
+  FaTachometerAlt,
+  FaHome,
+  FaImages,
+  FaBlog,
+  FaBook,
+  FaUserAlt,
+  FaCommentDots,
+  FaPhoneAlt,
+  FaCogs,
+  FaSignOutAlt,
+  FaMapMarkedAlt,
+} from "react-icons/fa";
+import { MdTour } from "react-icons/md";
 
 const AdminLayout = ({ children }) => {
   const location = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) setMenuOpen(false);
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const links = [
-    { label: "Home", to: "/admin-home" },
-    { label: "Tour Packages", to: "/admin-tours" },
-    { label: "Destinations", to: "/admin-destination" },
-    { label: "Gallery", to: "/admin-gallery" },
-    { label: "Blog", to: "/admin-blog" },
-    { label: "Bookings", to: "/admin-bookings" },
-    { label: "Customize Tour", to: "/admin-customiseTour" },
-    { label: "Comments", to: "/admin-comments" },
-    { label: "About", to: "/admin-about" },
-    { label: "Contact", to: "/admin-contact" },
-    { label: "Logout", to: "/admin-login" },
+    { label: "Dashboard", to: "/admin-dashboard", icon: <FaTachometerAlt /> },
+    { label: "Home", to: "/admin-home", icon: <FaHome /> },
+    { label: "Tour Packages", to: "/admin-tours", icon: <MdTour /> },
+    { label: "Destinations", to: "/admin-destination", icon: <FaMapMarkedAlt /> },
+    { label: "Gallery", to: "/admin-gallery", icon: <FaImages /> },
+    { label: "Blog", to: "/admin-blog", icon: <FaBlog /> },
+    { label: "Bookings", to: "/admin-bookings", icon: <FaBook /> },
+    { label: "Customize Tour", to: "/admin-customiseTour", icon: <FaCogs /> },
+    { label: "Comments", to: "/admin-comments", icon: <FaCommentDots /> },
+    { label: "About", to: "/admin-about", icon: <FaUserAlt /> },
+    { label: "Contact", to: "/admin-contact", icon: <FaPhoneAlt /> },
+    { label: "Logout", to: "/admin-login", icon: <FaSignOutAlt /> },
   ];
 
-
   return (
-    <>
-      <nav className="admin-navbar">
-        <Link to="/admin-dashboard" className="logo">
-          <img src="/images/logo.PNG" alt="NetLanka Logo" />
-        </Link>
-
-        {!isMobile && (
-          <div className="desktop-links">
-            {links.map(({ label, to }, idx) => (
-              <React.Fragment key={to}>
-                <Link
-                  to={to}
-                  className={`nav-link ${location.pathname === to ? "active" : ""}`}
-                >
-                  {label}
-                  <span className="underline"></span>
-                </Link>
-                {idx !== links.length - 1 && <span className="nav-divider"></span>}
-              </React.Fragment>
-            ))}
+    <div className="flex min-h-screen bg-gray-100 font-poppins">
+      {/* Sidebar */}
+      <aside
+        className={`${
+          isCollapsed ? "w-20" : "w-64"
+        } bg-green-900 text-white flex flex-col transition-all duration-300 shadow-lg fixed h-screen z-50`}
+      >
+        {/* Logo & Toggle */}
+        <div className="flex items-center justify-between p-4 border-b border-green-700">
+          <div className="flex items-center gap-2">
+            <img src="/images/logo.PNG" alt="NetLanka" className="h-10" />
+            {!isCollapsed && <h2 className="text-lg font-semibold">Admin Panel</h2>}
           </div>
-        )}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="text-white hover:text-green-300 transition"
+          >
+            {isCollapsed ? "→" : "←"}
+          </button>
+        </div>
 
-        {isMobile && (
-          <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        )}
-      </nav>
-
-      {isMobile && menuOpen && (
-        <div className="mobile-menu">
-          {links.map(({ label, to }) => (
+        {/* Nav Links */}
+        <nav className="flex-1 mt-4">
+          {links.map(({ label, to, icon }) => (
             <Link
               key={to}
               to={to}
-              onClick={() => setMenuOpen(false)}
-              className={location.pathname === to ? "mobile-link active" : "mobile-link"}
+              className={`flex items-center gap-3 px-5 py-3 text-sm font-medium hover:bg-green-800 transition-all ${
+                location.pathname === to ? "bg-green-700 text-white" : "text-green-100"
+              }`}
             >
-              {label}
+              <span className="text-lg">{icon}</span>
+              {!isCollapsed && <span>{label}</span>}
             </Link>
           ))}
-        </div>
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main
+        className={`flex-1 transition-all duration-300 ${
+          isCollapsed ? "ml-20" : "ml-64"
+        } p-6`}
+      >
+        {children}
+      </main>
+
+      {/* Mobile Sidebar Overlay */}
+      {isMobile && (
+        <>
+          <button
+            className="fixed top-4 left-4 z-50 bg-green-800 text-white p-2 rounded-md"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            ☰
+          </button>
+
+          {menuOpen && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-40 z-40"
+              onClick={() => setMenuOpen(false)}
+            ></div>
+          )}
+
+          <aside
+            className={`fixed top-0 left-0 bg-green-900 text-white h-full w-64 transition-transform duration-300 z-50 ${
+              menuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+          >
+            <div className="flex items-center justify-between p-4 border-b border-green-700">
+              <div className="flex items-center gap-2">
+                <img src="/images/logo.PNG" alt="NetLanka" className="h-10" />
+                <h2 className="text-lg font-semibold">Admin</h2>
+              </div>
+              <button
+                className="text-white hover:text-green-300"
+                onClick={() => setMenuOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <nav className="mt-4">
+              {links.map(({ label, to, icon }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className={`flex items-center gap-3 px-5 py-3 text-sm font-medium hover:bg-green-800 transition-all ${
+                    location.pathname === to ? "bg-green-700 text-white" : "text-green-100"
+                  }`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className="text-lg">{icon}</span>
+                  <span>{label}</span>
+                </Link>
+              ))}
+            </nav>
+          </aside>
+        </>
       )}
-
-      <main className="admin-content">{children}</main>
-
-      <style>{`
-        .admin-navbar {
-          position: sticky;
-          top: 0;
-          z-index: 1000;
-          background-color: #064420;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 20px;
-          box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-          flex-wrap: wrap;
-          border-bottom: 4px solid #81c784;
-          height: 60px;
-        }
-
-        .logo {
-          display: flex;
-          align-items: center;
-          text-decoration: none;
-          color: #e8f5e9;
-          font-size: 20px;
-          font-weight: bold;
-          gap: 8px;
-        }
-
-        .logo img {
-          height: 40px;
-          width: auto;
-        }
-
-        .desktop-links {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-left: auto;
-        }
-
-        .nav-link {
-          position: relative;
-          color: #c5e1a5;
-          text-decoration: none;
-          padding: 6px 10px;
-          font-weight: 500;
-          font-family: 'Times New Roman', Times, serif;
-          transition: color 0.3s ease;
-        }
-
-        .nav-link.active {
-          color: #fff;
-          font-weight: 700;
-          border-bottom: 2px solid #aed581;
-        }
-
-        .nav-link .underline {
-          position: absolute;
-          bottom: -2px;
-          left: 0;
-          height: 2px;
-          width: 0%;
-          background-color: #81c784;
-          transition: width 0.3s ease;
-        }
-
-        .nav-link:hover .underline {
-          width: 100%;
-        }
-
-        .nav-divider {
-          width: 1px;
-          height: 20px;
-          background: linear-gradient(to bottom, #81c784, #1b5e20);
-        }
-
-        .hamburger {
-          display: none;
-          flex-direction: column;
-          cursor: pointer;
-          gap: 4px;
-        }
-
-        .hamburger span {
-          width: 25px;
-          height: 3px;
-          background-color: #e8f5e9;
-          border-radius: 2px;
-        }
-
-        .mobile-menu {
-          position: absolute;
-          top: 60px;
-          right: 20px;
-          background-color: #f4f9f9;
-          border-radius: 8px;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          width: 200px;
-          box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
-
-        .mobile-link {
-          color: #064420;
-          text-decoration: none;
-          font-size: 16px;
-          font-weight: 600;
-          font-family: 'Times New Roman', Times, serif;
-          padding: 6px 0;
-        }
-
-        .mobile-link.active {
-          color: #1b5e20;
-        }
-
-        .admin-content {
-          padding-top: 10px;
-          background-color: #f6f6f6;
-          min-height: 100vh;
-        }
-
-        @media (max-width: 768px) {
-          .desktop-links {
-            display: none;
-          }
-          .hamburger {
-            display: flex;
-          }
-        }
-      `}</style>
-    </>
+    </div>
   );
 };
 

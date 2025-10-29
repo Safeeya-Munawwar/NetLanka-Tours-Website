@@ -16,6 +16,7 @@ import destinationRoute from "./routes/destinations.js";
 import customTourRoutes from "./routes/customTour.js";
 import contactRoutes from "./routes/contact.js";
 import transportRoutes from "./routes/transport.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -43,6 +44,7 @@ app.use("/api/bookings", bookingsRoute);
 app.use("/api/customTours", customTourRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/transport", transportRoutes);
+app.use("/api/admin", adminRoutes);
 
 mongoose
   .connect(MONGODB_URI)
