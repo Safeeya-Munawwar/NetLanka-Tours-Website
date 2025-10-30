@@ -1,113 +1,209 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  FaFacebookF,
-  FaInstagram,
-  FaYoutube,
+  FaYoutubeSquare,
   FaTripadvisor,
-  FaPinterest,
-  FaGooglePlusG,
+  FaPinterestSquare,
+  FaInstagramSquare,
+  FaGooglePlusSquare,
+  FaFacebookSquare,
+  FaMapMarkerAlt,
+  FaPhoneSquare,
+  FaEnvelopeSquare,
 } from "react-icons/fa";
-import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
+import axios from "axios";
 
-export default function Footer() {
+const iconBoxStyle = {
+  width: 42,
+  height: 42,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "#1b5e20",
+  borderRadius: "50%",
+  flexShrink: 0,
+};
+
+const Footer = () => {
+  const [contactInfo, setContactInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const res = await axios.get("/api/contact");
+        setContactInfo(res.data);
+      } catch (err) {
+        console.error("Failed to fetch contact info:", err);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
+
+  if (!contactInfo) return <p className="text-center mt-10 text-white">Loading Footer...</p>;
+
+  const socialMediaMap = {
+    Facebook: { url: contactInfo.socialMedia.Facebook, icon: <FaFacebookSquare size={38} /> },
+    Youtube: { url: contactInfo.socialMedia.Youtube, icon: <FaYoutubeSquare size={38} /> },
+    Tripadvisor: { url: contactInfo.socialMedia.Tripadvisor, icon: <FaTripadvisor size={38} /> },
+    Pinterest: { url: contactInfo.socialMedia.Pinterest, icon: <FaPinterestSquare size={38} /> },
+    Instagram: { url: contactInfo.socialMedia.Instagram, icon: <FaInstagramSquare size={38} /> },
+    Google: { url: contactInfo.socialMedia.Google, icon: <FaGooglePlusSquare size={38} /> },
+  };
+
+  const Divider = () => (
+    <div
+      style={{
+        width: "2px",
+        background: "linear-gradient(to bottom, #4caf50, #81c784)",
+        borderRadius: 2,
+        margin: "0 20px",
+        alignSelf: "stretch",
+      }}
+    />
+  );
+
   return (
-    <footer className="relative w-full text-white overflow-hidden">
-      {/* Background Image */}
+    <footer
+      style={{
+        padding: "40px 20px 30px",
+        backgroundColor: "#064420",
+        color: "#e8f5e9",
+        fontFamily: "'Times New Roman', Times, serif",
+        borderTop: "5px solid transparent",
+        borderImage: "linear-gradient(to right, #4caf50, #81c784)",
+        borderImageSlice: 1,
+      }}
+    >
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat brightness-90"
-        style={{ backgroundImage: "url('/images/footer-bg.jpg')" }}
-      ></div>
-
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-green-900/80"></div>
-
-      {/* Footer Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
-        {/* Left Section - Logo & Description */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-3 sm:space-y-4">
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "40px",
+          maxWidth: 1200,
+          margin: "0 auto",
+          textAlign: "center",
+          justifyContent: "center",
+        }}
+      >
+        {/* Logo & Description */}
+        <div style={{ flex: "1 1 250px", minWidth: 220 }}>
           <img
             src="/images/logo.PNG"
-            alt="Net Lanka Tours Logo"
-            className="w-24 sm:w-28 md:w-32 h-auto object-contain"
+            alt="Logo"
+            style={{ width: 120, margin: "0 auto 12px", display: "block" }}
           />
-          <p className="text-sm sm:text-base md:text-lg leading-relaxed font-serif">
-            Explore the best tours and holidays with Net Lanka Tours. Creating
-            memorable journeys across Sri Lanka.
+          <p style={{ fontSize: 15, lineHeight: 1.7, maxWidth: 250, margin: "0 auto" }}>
+            Explore the best tours and holidays with Net Lanka Tours. Creating memorable journeys
+            across Sri Lanka.
           </p>
         </div>
 
-        {/* Middle Section - Quick Links */}
-        <div className="flex flex-col items-center md:items-start space-y-2 sm:space-y-3">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 text-green-200">
-            Quick Links
-          </h3>
-          {[
-            "Home",
-            "Tour Packages",
-            "Destinations",
-            "Gallery",
-            "Blog",
-            "About",
-            "Contact",
-          ].map((link) => (
-            <a
-              key={link}
-              href={`/${
-                link === "Home" ? "" : link.toLowerCase().replace(" ", "")
-              }`}
-              className="text-sm sm:text-base md:text-lg font-semibold hover:text-green-400 transition"
-            >
-              {link}
-            </a>
-          ))}
+        {/* Divider */}
+        <div className="hidden md:flex">
+          <Divider />
         </div>
 
-        {/* Right Section - Contact & Social */}
-        <div className="flex flex-col items-center md:items-start space-y-3 sm:space-y-4">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 text-green-200">
-            Contact Us
-          </h3>
+        {/* Quick Links */}
+        <div style={{ flex: "1 1 180px", minWidth: 150 }}>
+          <h3 style={{ fontSize: 18, marginBottom: 12 }}>Quick Links</h3>
+          <ul style={{ listStyle: "none", padding: 0, lineHeight: 1.8 }}>
+            {["Home", "Tour Packages", "Destinations", "Gallery", "Blog", "About", "Contact"].map(
+              (page) => (
+                <li key={page}>
+                  <a
+                    href={`/${page === "Home" ? "" : page.toLowerCase().replace(" ", "")}`}
+                    style={{ color: "#e8f5e9", textDecoration: "none", fontSize: 15 }}
+                  >
+                    {page}
+                  </a>
+                </li>
+              )
+            )}
+          </ul>
+        </div>
 
-          <p className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base md:text-lg font-semibold">
-            <MdPhone className="text-green-300 text-lg sm:text-xl md:text-2xl" />
-            +94 77 123 4567
-          </p>
-          <p className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base md:text-lg font-semibold">
-            <MdEmail className="text-green-300 text-lg sm:text-xl md:text-2xl" />
-            info@netlankatours.com
-          </p>
-          <p className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base md:text-lg font-semibold leading-snug text-center md:text-left">
-            <MdLocationOn className="text-green-300 text-lg sm:text-xl md:text-2xl" />
-            123, Colombo Rd, <br /> Kandy, Sri Lanka
-          </p>
+        <div className="hidden md:flex">
+          <Divider />
+        </div>
 
-          {/* Social Icons */}
-          <div className="flex space-x-4 sm:space-x-6 pt-3 text-2xl sm:text-3xl text-green-100">
-            {[
-              FaFacebookF,
-              FaInstagram,
-              FaYoutube,
-              FaTripadvisor,
-              FaPinterest,
-              FaGooglePlusG,
-            ].map((Icon, idx) => (
-              <button
-                key={idx}
-                type="button"
-                className="hover:text-green-400 transition text-2xl sm:text-3xl text-green-100"
+{/* Contact Info */}
+<div style={{ flex: "1 1 250px", minWidth: 200 }}>
+  <h3 style={{ fontSize: 18, marginBottom: 16, color: "#e8f5e9", textAlign: "center" }}>Contact Us</h3>
+
+  <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "center" }}>
+    {/* Phone */}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      <span style={{ ...iconBoxStyle, backgroundColor: "#2e7d32" }}>
+        <FaPhoneSquare style={{ fontSize: 20, color: "#fff" }} />
+      </span>
+      <span style={{ fontSize: 15, color: "#e8f5e9", textAlign: "center" }}>{contactInfo.phone}</span>
+    </div>
+
+    {/* Email */}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      <span style={{ ...iconBoxStyle, backgroundColor: "#2e7d32" }}>
+        <FaEnvelopeSquare style={{ fontSize: 20, color: "#fff" }} />
+      </span>
+      <span style={{ fontSize: 15, color: "#e8f5e9", textAlign: "center" }}>{contactInfo.email}</span>
+    </div>
+
+    {/* Address */}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      <span style={{ ...iconBoxStyle, backgroundColor: "#2e7d32" }}>
+        <FaMapMarkerAlt style={{ fontSize: 20, color: "#fff" }} />
+      </span>
+      <span style={{ fontSize: 15, color: "#e8f5e9", textAlign: "center", lineHeight: 1.5 }}>
+        {contactInfo.corporateOffice}
+      </span>
+    </div>
+  </div>
+</div>
+
+        {/* Social Media */}
+        <div style={{ flex: "1 1 250px", minWidth: 200 }}>
+          <h3 style={{ fontSize: 18, marginBottom: 12 }}>Follow Us</h3>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 12,
+              flexWrap: "wrap",
+            }}
+          >
+            {Object.entries(socialMediaMap).map(([platform, { url, icon }]) => (
+              <a
+                key={platform}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={platform}
+                style={{
+                  transition: "transform 0.3s, opacity 0.3s",
+                  color: "#e8f5e9",
+                  opacity: 0.85,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.2)";
+                  e.currentTarget.style.opacity = "1";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.opacity = "0.85";
+                }}
               >
-                <Icon />
-              </button>
+                {icon}
+              </a>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="relative bg-green-950 text-green-100 py-3 sm:py-4 text-xs sm:text-sm md:text-base text-center font-medium">
-        © {new Date().getFullYear()} Net Lanka Tours | Developed By{" "}
-        <span className="text-green-300 font-semibold">NetIT Technology</span>
-      </div>
+      {/* Bottom Copyright */}
+      <p style={{ marginTop: 40, fontSize: 13, textAlign: "center", userSelect: "none" }}>
+        ©2025 Net Lanka Tours. All rights reserved | Developed By: NetIT Technology
+      </p>
     </footer>
   );
-}
+};
+
+export default Footer;

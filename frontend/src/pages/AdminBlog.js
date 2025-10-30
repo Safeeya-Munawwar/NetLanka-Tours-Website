@@ -211,12 +211,12 @@ const showPopup = (message, type = "success") => {
 
           <div style={{ marginBottom: 10 }}>
             <label>Title:</label>
-            <input value={title} onChange={(e) => setTitle(e.target.value)} required style={inputStyle} />
+            <input value={title} placeholder="Blog Title" onChange={(e) => setTitle(e.target.value)} required style={inputStyle} />
           </div>
 
           <div style={{ marginBottom: 10 }}>
             <label>Content:</label>
-            <textarea value={content} onChange={(e) => setContent(e.target.value)} rows={5} required style={inputStyle} />
+            <textarea value={content} placeholder="Blog Content" onChange={(e) => setContent(e.target.value)} rows={5} required style={inputStyle} />
           </div>
 
           <div style={{ marginBottom: 10 }}>
@@ -271,7 +271,15 @@ const showPopup = (message, type = "success") => {
           {blogs.map((blog) => (
             <SwiperSlide key={blog._id}>
               <div style={{ background: "white", border: "3px solid #2e7d32", padding: 20, borderRadius: 8, userSelect: "none" }}>
-                <h4 style={{ marginBottom: 10 }}>{blog.title}</h4>
+              <h4
+    style={{
+      marginBottom: 10,
+      color: "#2c3e50",
+      fontWeight: "bold",
+      fontSize: 18 // makes title slightly larger
+    }}
+  >
+    {blog.title}</h4>
                 <p>{blog.content}</p>
                 {blog.imageUrl && (
                   <img
