@@ -320,25 +320,17 @@ function Contact() {
   const { phone, email, corporateOffice, regionalOffice, corporateCoords, regionalCoords, socialMedia } = contactInfo;
 
   return (
-    <div className="flex flex-col items-center" style={{ fontFamily: "'Times New Roman', Times, serif" }}>
-
-{/* Hero Section */}
 <div
-  className="w-full h-[400px] md:h-[450px] lg:h-[500px] relative flex flex-col justify-center items-center text-center bg-cover bg-center"
+      className="flex flex-col items-center font-serif"
+      style={{ fontFamily: "'Times New Roman', Times, serif" }}
+    >
+      <div
+  className="w-full relative flex flex-col justify-center items-center text-center h-[500px] md:h-[550px] lg:h-[600px] bg-cover bg-center"
   style={{ backgroundImage: "url(/images/yala6.jpg)" }}
 >
   <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
   <div className="relative z-10 px-6 md:px-20">
-    <h1 style={{
-  fontFamily: "'Times New Roman', Times, serif", 
-  fontWeight: 600,                               
-  fontSize: "3rem",                            
-  color: "#064420",                          
-  textAlign: "center",
-  textShadow: "0 2px 4px rgba(0,0,0,0.1)",    
-  marginBottom: "1.5rem",                       
-  marginTop: "0",     
-    }}>
+    <h1 className="text-3xl md:text-5xl font-semibold text-green-900 mb-6 text-center drop-shadow-sm">
       Plan Your Adventure with Net Lanka Tours
     </h1>
     <p className="text-black text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">

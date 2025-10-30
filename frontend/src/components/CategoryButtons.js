@@ -101,26 +101,27 @@ export default function CategoryButtons() {
       </div>
 
       {/* Buttons Row */}
-      <div className="flex flex-wrap justify-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
-        {Object.keys(placesData).map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setCategory(cat)}
-            className={`flex items-center gap-2 flex-shrink-0 px-4 py-2 rounded-full font-semibold transition-all ${
-              category === cat
-                ? "bg-green-900 text-white border-2 border-green-700"
-                : "bg-white text-green-900 border border-gray-300"
-            }`}
-          >
-            <img
-              src={categoryImages[cat]}
-              alt={cat}
-              className="w-8 h-8 rounded-full object-cover"
-            />
-            {cat}
-          </button>
-        ))}
-      </div>
+     <div className="flex flex-wrap justify-center gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide">
+  {Object.keys(placesData).map((cat) => (
+    <button
+      key={cat}
+      onClick={() => setCategory(cat)}
+      className={`flex items-center gap-1 sm:gap-2 flex-shrink-0 px-2 sm:px-4 py-1 sm:py-2 rounded-full font-semibold text-sm sm:text-base transition-all ${
+        category === cat
+          ? "bg-green-900 text-white border-2 border-green-700"
+          : "bg-white text-green-900 border border-gray-300"
+      }`}
+    >
+      <img
+        src={categoryImages[cat]}
+        alt={cat}
+        className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover"
+      />
+      {cat}
+    </button>
+  ))}
+</div>
+
 
       {/* Map */}
       <MapContainer

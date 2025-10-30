@@ -1,4 +1,3 @@
-// src/components/Transportation.js
 import React, { useState, useEffect } from "react";
 import { FaPlaneArrival, FaPlaneDeparture, FaHotel } from "react-icons/fa";
 import axios from "axios";
@@ -33,7 +32,7 @@ const Transportation = ({ transport = [] }) => {
       location: "Bandaranaike International Airport (CMB)",
       date: "10th Sep 2025",
       time: "09:00 AM",
-      icon: <FaPlaneArrival size={20} />,
+      icon: <FaPlaneArrival size={18} />,
       color: "border-blue-500",
       bg: "bg-blue-50",
     },
@@ -43,7 +42,7 @@ const Transportation = ({ transport = [] }) => {
       location: "Galle Fort",
       date: "10th Sep 2025",
       time: "11:00 AM",
-      icon: <FaHotel size={20} />,
+      icon: <FaHotel size={18} />,
       color: "border-red-500",
       bg: "bg-red-50",
     },
@@ -53,18 +52,21 @@ const Transportation = ({ transport = [] }) => {
       location: "Bandaranaike International Airport (CMB)",
       date: "15th Sep 2025",
       time: "05:00 PM",
-      icon: <FaPlaneDeparture size={20} />,
+      icon: <FaPlaneDeparture size={18} />,
       color: "border-red-500",
       bg: "bg-red-50",
     },
   ];
 
-  // Load vehicles from backend prop
   useEffect(() => {
     setVehicles(
       transport.map((v) => ({
         ...v,
-        img: v.img ? (v.img.startsWith("http") ? v.img : `http://localhost:5000${v.img}`) : "",
+        img: v.img
+          ? v.img.startsWith("http")
+            ? v.img
+            : `http://localhost:5000${v.img}`
+          : "",
       }))
     );
   }, [transport]);
@@ -142,14 +144,8 @@ const Transportation = ({ transport = [] }) => {
 
         {/* Vehicles Grid */}
         <div
-          className={`mt-10 grid gap-6 max-w-6xl mx-auto
-            ${
-              vehicles.length === 1
-                ? "grid-cols-1 justify-items-center"
-                : vehicles.length === 2
-                ? "grid-cols-2 justify-items-center"
-                : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-            }`}
+          className="mt-10 grid gap-6 max-w-7xl mx-auto justify-items-center
+          grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-4"
         >
           {vehicles.length ? (
             vehicles.map((vehicle) => (
@@ -159,27 +155,35 @@ const Transportation = ({ transport = [] }) => {
                   setSelectedVehicle(vehicle.name);
                   setForm({ ...form, vehicle: vehicle.name });
                 }}
-                className={`border-2 border-black rounded-xl overflow-hidden cursor-pointer transform bg-white shadow-md transition duration-300 hover:scale-105 hover:shadow-xl ${
-                  selectedVehicle === vehicle.name ? "border-green-800" : "border-transparent"
+                className={`w-full max-w-xs sm:max-w-sm md:max-w-md border-2 rounded-xl overflow-hidden cursor-pointer transform bg-white shadow-md transition duration-300 hover:scale-105 hover:shadow-xl ${
+                  selectedVehicle === vehicle.name
+                    ? "border-green-800"
+                    : "border-transparent"
                 }`}
               >
                 <img
                   src={vehicle.img}
                   alt={vehicle.name}
-                  className="w-full h-64 object-cover"
+                  className="w-full h-40 sm:h-48 md:h-56 object-cover"
                 />
-                <h4 className="text-center mt-2 font-semibold">{vehicle.name}</h4>
-                <p className="text-center text-gray-600 text-sm p-2">{vehicle.details}</p>
+                <h4 className="text-center mt-2 font-semibold text-sm sm:text-base">
+                  {vehicle.name}
+                </h4>
+                <p className="text-center text-gray-600 text-xs sm:text-sm p-2">
+                  {vehicle.details}
+                </p>
               </div>
             ))
           ) : (
-            <p className="text-center col-span-3 text-gray-500">No transport options available.</p>
+            <p className="text-center col-span-3 text-gray-500">
+              No transport options available.
+            </p>
           )}
         </div>
       </section>
 
       {/* Pickup & Drop Section */}
-      <section className="text-center px-6 mb-6 max-w-6xl mx-auto pt-14">
+      <section className="text-center px-4 mb-6 max-w-6xl mx-auto pt-14">
         <div className="flex justify-center gap-6 mb-4 text-green-800 text-3xl">
           <FaPlaneArrival />
           <FaHotel />
@@ -191,25 +195,25 @@ const Transportation = ({ transport = [] }) => {
         <p className="text-gray-600 mb-6">
           Hassle-free airport and hotel transfers with comfortable vehicles.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 justify-items-center">
           {pickupsDrops.map((item, idx) => (
             <div
               key={idx}
-              className={`border-l-4 ${item.color} ${item.bg} p-5 rounded-lg shadow-md cursor-pointer transition transform hover:-translate-y-1 hover:shadow-lg`}
+              className={`w-full max-w-xs sm:max-w-sm border-l-4 ${item.color} ${item.bg} p-3 rounded-lg shadow-md cursor-pointer transition transform hover:-translate-y-1 hover:shadow-lg`}
             >
-              <p className="flex items-center gap-2 mb-1">
+              <p className="flex items-center gap-2 mb-1 text-sm sm:text-base">
                 {item.icon} <strong>{item.type}</strong>
               </p>
-              <p className="mb-1">
+              <p className="mb-1 text-sm sm:text-base">
                 <strong>Method:</strong> {item.method}
               </p>
-              <p className="mb-1">
+              <p className="mb-1 text-sm sm:text-base">
                 <strong>Location:</strong> {item.location}
               </p>
-              <p className="mb-1">
+              <p className="mb-1 text-sm sm:text-base">
                 <strong>Date:</strong> {item.date}
               </p>
-              <p>
+              <p className="text-sm sm:text-base">
                 <strong>Time:</strong> {item.time}
               </p>
             </div>

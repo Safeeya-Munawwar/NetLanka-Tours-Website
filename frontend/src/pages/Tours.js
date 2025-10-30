@@ -602,7 +602,7 @@ const Tours = () => {
     <div
   className="w-full relative flex flex-col justify-center items-center text-center 
              h-[620px] sm:h-[520px] md:h-[550px] lg:h-[600px] bg-cover bg-center 
-             pt-24 sm:pt-28" // ✅ slightly reduced top padding on mobile
+             pt-8 sm:pt-4" // ✅ slightly reduced top padding on mobile
   style={{ backgroundImage: "url(/images/adam.png)" }}
 >
   <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
@@ -619,17 +619,25 @@ const Tours = () => {
   </div>
 
 {/* Search bar */}
-<div className="relative mt-4 sm:mt-5 flex w-[80%] sm:w-[70%] max-w-xs sm:max-w-md mx-auto z-10">
-  <input
-    type="text"
-    placeholder="Search tours..."
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    className="flex-1 h-10 sm:h-11 pl-4 border border-gray-300 rounded-l-lg shadow-sm outline-none text-sm sm:text-base"
-  />
+<div className="flex items-center w-[80%] sm:w-[70%] max-w-md mx-auto mt-4 sm:mt-5 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 z-10">
+  <div className="flex items-center flex-1 bg-white px-5 sm:px-6 h-12 sm:h-14">
+    <i className="fa-solid fa-magnifying-glass text-gray-400 text-base sm:text-lg mr-3 sm:mr-4"></i>
+    <input
+      type="text"
+      placeholder="Search tours..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="flex-1 text-sm sm:text-base text-gray-700 placeholder-gray-400 
+                 bg-transparent border-none focus:outline-none focus:ring-0 pt-5"
+    />
+  </div>
+
   <button
     onClick={handleSearch}
-    className="h-10 sm:h-11 bg-green-700 hover:bg-green-800 text-white px-3 sm:px-5 rounded-r-lg text-sm sm:text-base"
+    className="h-12 sm:h-14 px-6 sm:px-8 bg-green-700 text-white 
+               font-medium text-sm sm:text-base 
+               hover:bg-green-800 active:scale-95 
+               transition-all duration-200"
   >
     Search
   </button>

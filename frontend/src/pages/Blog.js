@@ -33,45 +33,44 @@ const Blog = () => {
   );
 
   return (
-    <div className="flex flex-col items-center" style={{ fontFamily: "'Times New Roman', Times, serif" }}>
-
+    <div
+      className="flex flex-col items-center font-serif"
+      style={{ fontFamily: "'Times New Roman', Times, serif" }}
+    >
       <div
-        className="w-full h-[400px] md:h-[450px] lg:h-[500px] relative flex flex-col justify-center items-center text-center bg-cover bg-center"
-        style={{ backgroundImage: "url(/images/sigiriya3.jpeg)" }}
-      >
-        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
-
-        <div className="relative z-10 px-6 md:px-20">
-          <h1 style={{
-  fontFamily: "'Times New Roman', Times, serif", 
-  fontWeight: 600,                               
-  fontSize: "3rem",                            
-  color: "#064420",                          
-  textAlign: "center",
-  textShadow: "0 2px 4px rgba(0,0,0,0.1)",    
-  marginBottom: "1.5rem",                       
-  marginTop: "0", 
-          }}
-          >
-            Travel Wisdom from Sri Lanka
+  className="w-full relative flex flex-col justify-center items-center text-center h-[500px] md:h-[550px] lg:h-[600px] bg-cover bg-center"
+  style={{ backgroundImage: "url(/images/sigiriya3.jpeg)" }}
+>
+  <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+  <div className="relative z-10 px-6 md:px-20">
+    <h1 className="text-3xl md:text-5xl font-semibold text-green-900 mb-6 text-center drop-shadow-sm">
+      Travel Wisdom from Sri Lanka
             </h1>
-          <p className="text-black text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+            <p className="text-black text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
           Stay inspired with our travel blog! Discover insider tips, destination guides, adventure stories, and cultural insights from our team of passionate explorers. Learn how to make the most of your trip, find hidden gems, and get inspired for your next journey in Sri Lanka.
            </p>
         </div>
 
-        <div className="relative mt-8 flex w-full max-w-md">
+        <div className="flex items-center w-[80%] sm:w-[70%] max-w-md mx-auto mt-6 sm:mt-8 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 z-10">
+    <div className="flex items-center flex-1 bg-white px-5 sm:px-6 h-12 sm:h-14">
+      <i className="fa-solid fa-magnifying-glass text-gray-400 text-base sm:text-lg mr-3 sm:mr-4"></i>
+      
           <input
             type="text"
             placeholder="Search blogs..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            className="flex-1 p-3 pl-4 border border-gray-300 rounded-l-lg shadow-sm outline-none text-base font-serif"
-          />
+            className="flex-1 text-sm sm:text-base text-gray-700 placeholder-gray-400 
+          bg-transparent border-none focus:outline-none focus:ring-0 pt-5"
+      />
+          </div>
           <button
             onClick={handleSearch}
-            className="bg-green-700 hover:bg-green-800 text-white font-serif px-5 rounded-r-lg"
-          >
+            className="h-12 sm:h-14 px-6 sm:px-8 bg-green-700 text-white 
+        font-medium text-sm sm:text-base 
+        hover:bg-green-800 active:scale-95 
+        transition-all duration-200"
+    >
             Search
           </button>
         </div>

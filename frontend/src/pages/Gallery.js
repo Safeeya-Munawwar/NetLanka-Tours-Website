@@ -35,8 +35,10 @@ function Gallery() {
   );
 
   return (
-    <div className="flex flex-col items-center font-serif" style={{ fontFamily: "'Times New Roman', Times, serif" }}>
-      
+    <div
+      className="flex flex-col items-center font-serif"
+      style={{ fontFamily: "'Times New Roman', Times, serif" }}
+    >
       {/* Hero Section */}
       <div
         className="w-full relative flex flex-col justify-center items-center text-center h-[400px] md:h-[450px] lg:h-[500px] bg-cover bg-center"
@@ -48,23 +50,34 @@ function Gallery() {
             A Glimpse into Unforgettable Journeys
           </h1>
           <p className="text-black text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-            Step into the world of breathtaking landscapes, vibrant cultures, and unforgettable adventures. Our gallery showcases stunning photographs and videos from our tours, highlighting Sri Lanka’s beauty - from emerald tea plantations and golden beaches to wildlife encounters and traditional festivals.
+            Step into the world of breathtaking landscapes, vibrant cultures,
+            and unforgettable adventures. Our gallery showcases stunning
+            photographs and videos from our tours, highlighting Sri Lanka’s
+            beauty - from emerald tea plantations and golden beaches to wildlife
+            encounters and traditional festivals.
           </p>
         </div>
 
         {/* Search Bar */}
-        <div className="relative mt-6 flex w-[85%] sm:w-full max-w-xs sm:max-w-md mx-auto">
-          <input
-            type="text"
-            placeholder="Search photos..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 p-2 sm:p-3 pl-4 border border-gray-300 rounded-l-lg shadow-sm outline-none text-sm sm:text-base"
-          />
+        <div className="flex items-center w-[80%] sm:w-[70%] max-w-md mx-auto mt-4 sm:mt-5 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 z-10">
+          <div className="flex items-center flex-1 bg-white px-5 sm:px-6 h-12 sm:h-14">
+            <i className="fa-solid fa-magnifying-glass text-gray-400 text-base sm:text-lg mr-3 sm:mr-4"></i>
+            <input
+              type="text"
+              placeholder="Search photos..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1 text-sm sm:text-base text-gray-700 placeholder-gray-400 
+            bg-transparent border-none focus:outline-none focus:ring-0 pt-5"
+            />
+          </div>
           <button
-            onClick={() => console.log('Searching for:', searchTerm)}
-            className="h-10 sm:h-11 bg-green-700 hover:bg-green-800 text-white px-3 sm:px-5 rounded-r-lg text-sm sm:text-base"
-  >
+            onClick={() => console.log("Searching for:", searchTerm)}
+            className="h-12 sm:h-14 px-6 sm:px-8 bg-green-700 text-white 
+            font-medium text-sm sm:text-base 
+            hover:bg-green-800 active:scale-95 
+            transition-all duration-200"
+          >
             Search
           </button>
         </div>
@@ -74,7 +87,9 @@ function Gallery() {
       <div className="bg-green-50 w-full max-w-[1500px] p-6 sm:p-8 rounded-xl mt-10 shadow-lg">
         {filteredPhotos.length === 0 ? (
           <p className="text-center text-gray-500">
-            {photos.length === 0 ? "No photos found." : "No photos match your search."}
+            {photos.length === 0
+              ? "No photos found."
+              : "No photos match your search."}
           </p>
         ) : isMobile ? (
           <Swiper
@@ -88,7 +103,9 @@ function Gallery() {
               <SwiperSlide key={photo._id}>
                 <div
                   className="bg-white rounded-xl shadow-md overflow-hidden border-2 border-green-900 cursor-pointer transform transition hover:scale-105 hover:shadow-lg"
-                  onClick={() => setSelectedImage(`${BACKEND_URL}${photo.imageUrl}`)}
+                  onClick={() =>
+                    setSelectedImage(`${BACKEND_URL}${photo.imageUrl}`)
+                  }
                 >
                   <img
                     src={`${BACKEND_URL}${photo.imageUrl}`}
@@ -96,7 +113,9 @@ function Gallery() {
                     className="w-full h-48 object-cover"
                   />
                   <div className="p-4 text-center">
-                    <h3 className="text-green-900 text-lg font-medium">{photo.title}</h3>
+                    <h3 className="text-green-900 text-lg font-medium">
+                      {photo.title}
+                    </h3>
                   </div>
                 </div>
               </SwiperSlide>
@@ -108,7 +127,9 @@ function Gallery() {
               <div
                 key={photo._id}
                 className="bg-yellow-50 rounded-xl overflow-hidden shadow-md border-2 border-green-900 cursor-pointer transform transition hover:scale-105 hover:shadow-lg"
-                onClick={() => setSelectedImage(`${BACKEND_URL}${photo.imageUrl}`)}
+                onClick={() =>
+                  setSelectedImage(`${BACKEND_URL}${photo.imageUrl}`)
+                }
               >
                 <img
                   src={`${BACKEND_URL}${photo.imageUrl}`}
@@ -116,7 +137,9 @@ function Gallery() {
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-4 text-center">
-                  <h3 className="text-green-900 text-lg font-medium">{photo.title}</h3>
+                  <h3 className="text-green-900 text-lg font-medium">
+                    {photo.title}
+                  </h3>
                 </div>
               </div>
             ))}
