@@ -34,12 +34,13 @@ router.get("/", async (req, res) => {
 // POST new destination
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-    const { name, description } = req.body;
+    const { name, description, category } = req.body;
     if (!req.file) return res.status(400).json({ error: "Image is required" });
 
     const newDest = new Destination({
       name,
       description,
+      category,
       imageUrl: `/uploads/${req.file.filename}`,
     });
 
@@ -55,13 +56,14 @@ router.post("/", upload.single("image"), async (req, res) => {
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { name, description, category } = req.body;
 
     const dest = await Destination.findById(id);
     if (!dest) return res.status(404).json({ error: "Destination not found" });
 
     dest.name = name || dest.name;
     dest.description = description || dest.description;
+    dest.category = category || dest.category;
 
     if (req.file) {
       if (dest.imageUrl) {

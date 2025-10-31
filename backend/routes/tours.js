@@ -33,6 +33,7 @@ router.get("/", async (req, res) => {
 router.post("/", upload.single("image"), async (req, res) => {
   try {
     const {
+      destinationId,
       title,
       location,
       description,
@@ -63,6 +64,7 @@ router.post("/", upload.single("image"), async (req, res) => {
       itinerary: Array.isArray(parsedItinerary) ? parsedItinerary : [],
       transport: Array.isArray(parsedTransport) ? parsedTransport : [],
       transportPrices: parsedTransportPrices, // ✅ save it
+      destinationId,
     });
     
 
@@ -79,6 +81,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
     const {
+      destinationId, // ✅ include this
       title,
       location,
       description,
@@ -89,12 +92,13 @@ router.put("/:id", upload.single("image"), async (req, res) => {
       isSpecial,
       itinerary,
       transport,
-      transportPrices, // ✅ add
+      transportPrices,
     } = req.body;
 
     const tour = await Tour.findById(id);
     if (!tour) return res.status(404).json({ error: "Tour not found" });
 
+    // Update fields
     tour.title = title || tour.title;
     tour.location = location || tour.location;
     tour.description = description || tour.description;
@@ -104,9 +108,14 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     tour.duration = duration || tour.duration;
     tour.isSpecial = isSpecial === "true" || isSpecial === true;
 
+    // ✅ Update destinationId if provided
+    if (destinationId) {
+      tour.destinationId = destinationId;
+    }
+
     // Parse JSON fields
-    tour.itinerary = itinerary ? JSON.parse(itinerary) : [];
-    tour.transport = transport ? JSON.parse(transport) : [];
+    tour.itinerary = itinerary ? JSON.parse(itinerary) : tour.itinerary;
+    tour.transport = transport ? JSON.parse(transport) : tour.transport;
     tour.transportPrices = transportPrices ? JSON.parse(transportPrices) : tour.transportPrices;
 
     if (req.file) {
@@ -130,6 +139,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   }
 });
 
+
 // DELETE a tour
 router.delete("/:id", async (req, res) => {
   try {
@@ -151,6 +161,18 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     console.error("DELETE error:", err);
     res.status(500).json({ error: "Failed to delete tour" });
+  }
+});
+
+// GET tours by destinationId
+router.get("/by-destination/:destinationId", async (req, res) => {
+  try {
+    const { destinationId } = req.params;
+    const tours = await Tour.find({ destinationId });
+    res.json(tours);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch tours for destination" });
   }
 });
 
