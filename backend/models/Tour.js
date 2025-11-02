@@ -24,6 +24,8 @@ const tourSchema = new mongoose.Schema({
   },
 transportPrices: { type: Object, default: {} },
 
+destinationId: { type: mongoose.Schema.Types.ObjectId, ref: "Destination", required: true },
+
 });
 
 const Tour = mongoose.model("Tour", tourSchema);
