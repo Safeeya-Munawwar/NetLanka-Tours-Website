@@ -1,4 +1,3 @@
-// src/App.js
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import './i18n';
@@ -33,18 +32,26 @@ import AdminContact from "./pages/AdminContact";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDestination from "./pages/AdminDestination";
 import AdminCustomTour from "./pages/AdminCustomTour";
+import LandingPage from "./pages/LandingPage";
+import Experiences from "./components/Experiences";
 
 function App() {
   const location = useLocation();
+
+  // Detect admin routes
   const isAdminRoute = location.pathname.startsWith("/admin") && location.pathname !== "/admin-login";
+
+  // Hide floating buttons on specific pages
+  const hideFloatingButtons = 
+    isAdminRoute || 
+    location.pathname === "/" ||  // Landing page
+    location.pathname === "/admin-login"; // Admin login
 
   return (
     <>
       {!isAdminRoute && <Navbar />}
 
       {isAdminRoute ? (
-
-
         <AdminLayout>
           <Routes>
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
@@ -62,23 +69,32 @@ function App() {
         </AdminLayout>
       ) : (
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/tours" element={<Tours />} />
+          <Route path="/experiences" element={<Experiences/>} />
+
           <Route path="/destinations" element={<Destinations />} /> 
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:postId" element={<BlogDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+         
           <Route path="/admin-login" element={<AdminLogin />} />
         </Routes>
-                 
       )}
 
       {!isAdminRoute && <Footer />}
-      <FloatingWhatsApp />
-      <FloatingBooking />
-      <FloatingCustomize />
+
+      {/* ✅ Hide floating buttons when needed */}
+      {!hideFloatingButtons && (
+        <>
+          <FloatingWhatsApp />
+          <FloatingBooking />
+          <FloatingCustomize />
+        </>
+      )}
     </>
   );
 }

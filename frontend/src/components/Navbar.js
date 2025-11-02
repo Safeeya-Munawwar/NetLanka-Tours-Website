@@ -6,78 +6,84 @@ function Navbar() {
   const location = useLocation();
 
   const navLinks = [
-    { to: "/", label: "Home" },
+    { to: "/home", label: "Home" },
     { to: "/tours", label: "Tour Packages" },
-    { to: "/destinations", label: "Destinations" }, // <-- new link
+    { to: "/destinations", label: "Destinations" },
+    { to: "/experiences", label: "Experiences" },
     { to: "/gallery", label: "Gallery" },
     { to: "/blog", label: "Blog" },
     { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
-  ];  
+    { to: "/support", label: "Support" },
+  ];
 
-  const linkStyle = (to) => ({
-    position: "relative",
-    textDecoration: "none",
-    color: location.pathname === to ? "#81c784" : "#e8f5e9",
-    padding: "8px 12px",
-    fontWeight: 600,
-    fontSize: "16px",
-    fontFamily: "'Times New Roman', Times, serif",
-    transition: "color 0.3s ease",
-  });
-
-  const adminButtonStyle = {
-    backgroundColor: "#1b5e20",
-    color: "#ffffff",
-    padding: "8px 16px",
-    borderRadius: "6px",
-    fontWeight: "bold",
-    fontSize: "16px",
-    textDecoration: "none",
-    border: "none",
-    transition: "background-color 0.3s ease, box-shadow 0.3s ease",
-    fontFamily: "'Times New Roman', Times, serif",
-  };
+  const isActive = (to) => location.pathname === to;
+  const fontStyle = { fontFamily: "'Times New Roman', Times, serif" };
 
   return (
-    <nav className="navbar">
-      {/* Logo */}
-      <Link to="/" className="logo">
-        <img src="/images/logo.PNG" alt="Mahaweli Logo" />
-        <span>Net Lanka Tours</span>
-      </Link>
+    <nav className="sticky top-0 z-50 bg-[#064420] shadow-md border-b-4 border-[#81c784]">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-[#e8f5e9] font-bold text-xl"
+          style={fontStyle}
+        >
+          <img src="/images/logo.PNG" alt="Mahaweli Logo" className="h-9 w-auto" />
+          <span>Net Lanka Tours</span>
+        </Link>
 
-      {/* Desktop Nav */}
-      <div className="desktop-nav">
-        {navLinks.map(({ to, label }, index) => (
-          <React.Fragment key={to}>
-            <Link to={to} style={linkStyle(to)} className="nav-link">
-              {label}
-              <span className="underline"></span>
-            </Link>
-            {index !== navLinks.length - 1 && <span className="nav-divider"></span>}
-          </React.Fragment>
-        ))}
-        <span className="nav-divider"></span>
-        <Link to="/admin-login" style={adminButtonStyle}>Admin</Link>
-      </div>
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-2">
+          {navLinks.map(({ to, label }, idx) => (
+            <React.Fragment key={to}>
+              <Link
+                to={to}
+                style={fontStyle}
+                className={`relative px-1 py-1.5 font-semibold text-base transition-colors ${
+                  isActive(to) ? "text-[#81c784]" : "text-[#e8f5e9]"
+                } hover:text-[#81c784]`}
+              >
+                {label}
+                <span className="absolute left-0 bottom-0 h-[2px] w-0 bg-[#81c784] transition-all group-hover:w-full"></span>
+              </Link>
+              {idx !== navLinks.length - 1 && (
+                <span className="w-px h-5 bg-gradient-to-b from-[#81c784] to-[#1b5e20] mx-1"></span>
+              )}
+            </React.Fragment>
+          ))}
 
-      {/* Hamburger */}
-      <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-        <span></span>
-        <span></span>
-        <span></span>
+          {/* Admin Button */}
+          <Link
+            to="/admin-login"
+            style={fontStyle}
+            className="ml-3 bg-[#1b5e20] text-white px-4 py-2 rounded-md font-bold text-base hover:bg-[#2e7d32] transition-colors"
+          >
+            Admin
+          </Link>
+        </div>
+
+        {/* Hamburger */}
+        <div
+          className="md:hidden flex flex-col gap-1 cursor-pointer"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <span className="w-6 h-0.5 bg-[#e8f5e9] rounded"></span>
+          <span className="w-6 h-0.5 bg-[#e8f5e9] rounded"></span>
+          <span className="w-6 h-0.5 bg-[#e8f5e9] rounded"></span>
+        </div>
       </div>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="mobile-menu">
+        <div className="md:hidden absolute right-4 top-16 bg-[#f4f9f9] shadow-lg rounded-lg flex flex-col gap-1 p-3 w-52">
           {navLinks.map(({ to, label }) => (
             <Link
               key={to}
               to={to}
               onClick={() => setMenuOpen(false)}
-              style={{ color: "#064420", fontWeight: "600", fontFamily: "'Times New Roman', Times, serif" }}
+              style={fontStyle}
+              className="text-[#064420] font-semibold hover:text-[#1b5e20] text-base"
             >
               {label}
             </Link>
@@ -85,135 +91,13 @@ function Navbar() {
           <Link
             to="/admin-login"
             onClick={() => setMenuOpen(false)}
-            style={{
-              ...adminButtonStyle,
-              display: "block",
-              textAlign: "center",
-              marginTop: "8px",
-            }}
+            style={fontStyle}
+            className="bg-[#1b5e20] text-white text-center font-bold px-4 py-2 rounded-md mt-2 hover:bg-[#2e7d32] transition-colors"
           >
             Admin
           </Link>
         </div>
       )}
-
-      {/* Styles */}
-      <style>{`
-        .navbar {
-          position: sticky;
-          top: 0;
-          z-index: 1000;
-          background-color: #064420;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 20px;
-          box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-          flex-wrap: wrap;
-          border-bottom: 4px solid #81c784;
-        }
-
-        .logo {
-          display: flex;
-          align-items: center;
-          text-decoration: none;
-          color: #e8f5e9;
-          font-size: 20px;
-          font-weight: bold;
-          gap: 8px;
-        }
-
-        .logo img {
-          height: 40px;
-          width: auto;
-        }
-
-        .desktop-nav {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          margin-left: auto;
-        }
-
-        .nav-divider {
-          width: 1px;
-          height: 20px;
-          background: linear-gradient(to bottom, #81c784, #1b5e20);
-          margin: 0 8px;
-          transition: all 0.3s ease;
-        }
-
-        .nav-link {
-          position: relative;
-          display: inline-block;
-        }
-
-        .nav-link .underline {
-          position: absolute;
-          bottom: -2px;
-          left: 0;
-          height: 2px;
-          width: 0%;
-          background-color: #81c784;
-          transition: width 0.3s ease;
-        }
-
-        .nav-link:hover .underline {
-          width: 100%;
-        }
-
-        .nav-link:hover + .nav-divider {
-          box-shadow: 0 0 8px #81c784;
-        }
-
-        .hamburger {
-          display: none;
-          flex-direction: column;
-          cursor: pointer;
-          gap: 4px;
-          margin-left: auto;
-        }
-
-        .hamburger span {
-          width: 25px;
-          height: 3px;
-          background-color: #e8f5e9;
-          border-radius: 2px;
-        }
-
-        .mobile-menu {
-          position: absolute;
-          top: 64px;
-          right: 20px;
-          background-color: #f4f9f9;
-          border-radius: 8px;
-          padding: 20px;
-          box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          width: 200px;
-        }
-
-        .mobile-menu a {
-          color: #064420;
-          text-decoration: none;
-          font-size: 16px;
-        }
-
-        .mobile-menu a:hover {
-          color: #1b5e20;
-        }
-
-        @media (max-width: 768px) {
-          .desktop-nav {
-            display: none;
-          }
-          .hamburger {
-            display: flex;
-          }
-        }
-      `}</style>
     </nav>
   );
 }
