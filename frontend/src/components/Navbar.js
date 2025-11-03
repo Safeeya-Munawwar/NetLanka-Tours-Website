@@ -15,75 +15,81 @@ function Navbar() {
     { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
     { to: "/support", label: "Support" },
+    { to: "/transport", label: "Transport" },
   ];
 
   const isActive = (to) => location.pathname === to;
   const fontStyle = { fontFamily: "'Times New Roman', Times, serif" };
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#064420] shadow-md border-b-4 border-[#81c784]">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
+    <nav className="sticky top-0 z-50 bg-[#064420] border-b-4 border-[#81c784] shadow-md">
+      <div className="flex items-center justify-between px-5 py-3 max-w-7xl mx-auto">
         {/* Logo */}
         <Link
           to="/"
           className="flex items-center gap-2 text-[#e8f5e9] font-bold text-xl"
           style={fontStyle}
         >
-          <img src="/images/logo.PNG" alt="Mahaweli Logo" className="h-9 w-auto" />
+          <img
+            src="/images/logo.PNG"
+            alt="Net Lanka Logo"
+            className="h-9 w-auto"
+          />
           <span>Net Lanka Tours</span>
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-2">
-          {navLinks.map(({ to, label }, idx) => (
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-3">
+          {navLinks.map(({ to, label }, index) => (
             <React.Fragment key={to}>
               <Link
                 to={to}
-                style={fontStyle}
-                className={`relative px-1 py-1.5 font-semibold text-base transition-colors ${
-                  isActive(to) ? "text-[#81c784]" : "text-[#e8f5e9]"
-                } hover:text-[#81c784]`}
+                className={`relative font-serif font-semibold text-[16px] transition-colors duration-300 ${
+                  isActive(to)
+                    ? "text-[#81c784]"
+                    : "text-[#e8f5e9] hover:text-[#81c784]"
+                }`}
               >
                 {label}
-                <span className="absolute left-0 bottom-0 h-[2px] w-0 bg-[#81c784] transition-all group-hover:w-full"></span>
               </Link>
-              {idx !== navLinks.length - 1 && (
-                <span className="w-px h-5 bg-gradient-to-b from-[#81c784] to-[#1b5e20] mx-1"></span>
+              {index !== navLinks.length - 1 && (
+                <span className="h-5 w-[1px] bg-gradient-to-b from-[#81c784] to-[#1b5e20]" />
               )}
             </React.Fragment>
           ))}
-
-          {/* Admin Button */}
           <Link
             to="/admin-login"
-            style={fontStyle}
-            className="ml-3 bg-[#1b5e20] text-white px-4 py-2 rounded-md font-bold text-base hover:bg-[#2e7d32] transition-colors"
+            className="ml-3 bg-[#1b5e20] text-white px-4 py-2 rounded-md font-bold text-[16px] font-serif hover:bg-[#2e7d32] transition-all"
           >
             Admin
           </Link>
         </div>
 
-        {/* Hamburger */}
-        <div
-          className="md:hidden flex flex-col gap-1 cursor-pointer"
+        {/* Mobile Hamburger Button */}
+        <button
+          className="flex flex-col gap-[5px] md:hidden focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          <span className="w-6 h-0.5 bg-[#e8f5e9] rounded"></span>
-          <span className="w-6 h-0.5 bg-[#e8f5e9] rounded"></span>
-          <span className="w-6 h-0.5 bg-[#e8f5e9] rounded"></span>
-        </div>
+          <span className="w-6 h-[3px] bg-[#e8f5e9] rounded transition-all duration-300" />
+          <span className="w-6 h-[3px] bg-[#e8f5e9] rounded transition-all duration-300" />
+          <span className="w-6 h-[3px] bg-[#e8f5e9] rounded transition-all duration-300" />
+        </button>
       </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden absolute right-4 top-16 bg-[#f4f9f9] shadow-lg rounded-lg flex flex-col gap-1 p-3 w-52">
+      {/* Mobile Dropdown Menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+          menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="bg-[#f4f9f9] flex flex-col gap-3 px-5 py-4 shadow-lg rounded-b-lg">
           {navLinks.map(({ to, label }) => (
             <Link
               key={to}
               to={to}
               onClick={() => setMenuOpen(false)}
               style={fontStyle}
-              className="text-[#064420] font-semibold hover:text-[#1b5e20] text-base"
+              className="text-[#064420] text-[16px] font-semibold font-serif hover:text-[#1b5e20] transition"
             >
               {label}
             </Link>
@@ -97,7 +103,7 @@ function Navbar() {
             Admin
           </Link>
         </div>
-      )}
+      </div>
     </nav>
   );
 }

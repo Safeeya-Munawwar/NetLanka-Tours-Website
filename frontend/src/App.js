@@ -17,8 +17,9 @@ import Gallery from "./pages/Gallery";
 import Blog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
 import Contact from "./pages/Contact";
+import Support from "./pages/Support";
+import Transport from "./pages/Transport";
 import AdminLogin from "./pages/AdminLogin";
-import AdminCommentsPage from "./pages/AdminCommentPage";
 
 // Admin pages
 import AdminLayout from "./components/AdminLayout";
@@ -34,6 +35,8 @@ import AdminDestination from "./pages/AdminDestination";
 import AdminCustomTour from "./pages/AdminCustomTour";
 import LandingPage from "./pages/LandingPage";
 import Experiences from "./components/Experiences";
+import AdminCommentsPage from "./pages/AdminCommentPage";
+import AdminTransport from "./pages/AdminTransport";
 
 function App() {
   const location = useLocation();
@@ -56,6 +59,7 @@ function App() {
           <Routes>
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/admin-home" element={<AdminHome />} />
+            <Route path="/admin-transport" element={<AdminTransport />} />
             <Route path="/admin-tours" element={<AdminTours />} />
             <Route path="/admin-destination" element={<AdminDestination />} />
             <Route path="/admin-gallery" element={<AdminGallery />} />
@@ -73,14 +77,15 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/tours" element={<Tours />} />
           <Route path="/experiences" element={<Experiences/>} />
-
+          <Route path="/" element={<LandingPage />} />
           <Route path="/destinations" element={<Destinations />} /> 
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:postId" element={<BlogDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-         
+          <Route path="/support" element={<Support />} />
+          <Route path="/transport" element={<Transport />} />
           <Route path="/admin-login" element={<AdminLogin />} />
         </Routes>
       )}

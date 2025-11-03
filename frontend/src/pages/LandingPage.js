@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShieldAlt, FaHotel, FaThumbsUp, FaCreditCard } from "react-icons/fa";
 import { motion } from "framer-motion";
@@ -9,6 +9,14 @@ export default function LandingPage() {
   const globeRef = useRef(null);
   const destinationsRef = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate("/home");
+    }, 3000); // ⏱ redirect after 3 seconds
+
+    return () => clearTimeout(timer);
+  }, [navigate]);
 
   const scrollToSection = (ref) => {
     if (ref.current) ref.current.scrollIntoView({ behavior: "smooth" });

@@ -30,11 +30,12 @@ router.get("/", async (req, res) => {
 });
 
 // POST create transport
+// POST create transport
 router.post("/", upload.single("image"), async (req, res) => {
   try {
     const data = {
       ...req.body,
-      vehicle: req.body.vehicle ? JSON.parse(req.body.vehicle) : [],
+      vehicles: req.body.vehicles ? JSON.parse(req.body.vehicles) : [],
       image: req.file ? `/uploads/${req.file.filename}` : "",
     };
     const transport = new Transport(data);
@@ -50,7 +51,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const data = {
       ...req.body,
-      vehicle: req.body.vehicle ? JSON.parse(req.body.vehicle) : [],
+      vehicles: req.body.vehicles ? JSON.parse(req.body.vehicles) : [],
     };
     if (req.file) data.image = `/uploads/${req.file.filename}`;
     const updated = await Transport.findByIdAndUpdate(req.params.id, data, { new: true });

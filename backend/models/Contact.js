@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const ContactSchema = new mongoose.Schema({
   phone: { type: String, default: "+94777 111553" },
-  email: { type: String, default: "info@mahaweli.lk" },
+  email: { type: String, default: "info@netlankatours.lk" },
   corporateOffice: { type: String, default: "No 15/7, Bernadett Mawatha, Kandana, Sri Lanka" },
   regionalOffice: { type: String, default: "337/1, Katugasthora Road, Kandy, Sri Lanka" },
   corporateCoords: { type: [Number], default: [7.0010, 79.9150] }, // [lat, lng]

@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaHome,
+  FaCar,
   FaImages,
   FaBlog,
   FaBook,
@@ -33,6 +34,7 @@ const AdminLayout = ({ children }) => {
   const links = [
     { label: "Dashboard", to: "/admin-dashboard", icon: <FaTachometerAlt /> },
     { label: "Home", to: "/admin-home", icon: <FaHome /> },
+    { label: "Transports", to: "/admin-transport", icon: <FaCar /> },
     { label: "Tour Packages", to: "/admin-tours", icon: <MdTour /> },
     { label: "Destinations", to: "/admin-destination", icon: <FaMapMarkedAlt /> },
     { label: "Gallery", to: "/admin-gallery", icon: <FaImages /> },
