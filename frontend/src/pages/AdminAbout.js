@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 
 const LOCALSTORAGE_KEY = "mahaweli_about_data";
 
-function AdminAbout() {
+const AdminAbout = () => {
   const [aboutTexts, setAboutTexts] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -26,13 +26,17 @@ function AdminAbout() {
     window.addEventListener("resize", handleResize);
 
     const savedData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) || {};
-    setAboutTexts(savedData.aboutTexts || [
-      "Mahaweli Tours & Holidays started in 2009 in Kandy...",
-      "We provide luxury vehicles and experienced guides..."
-    ]);
-    setTestimonials(savedData.testimonials || [
-      { id: 1, name: "John Smith", message: "Great service!", date: "2025-06-15" }
-    ]);
+    setAboutTexts(
+      savedData.aboutTexts || [
+        "Mahaweli Tours & Holidays started in 2009 in Kandy...",
+        "We provide luxury vehicles and experienced guides..."
+      ]
+    );
+    setTestimonials(
+      savedData.testimonials || [
+        { id: 1, name: "John Smith", message: "Great service!", date: "2025-06-15" }
+      ]
+    );
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -52,11 +56,13 @@ function AdminAbout() {
   };
 
   const handleAboutChange = (index, value) => {
-    const newAbout = [...aboutTexts];
-    newAbout[index] = value;
-    setAboutTexts(newAbout);
+    const updated = [...aboutTexts];
+    updated[index] = value;
+    setAboutTexts(updated);
   };
+
   const handleAddAbout = () => setAboutTexts([...aboutTexts, ""]);
+
   const handleDeleteAbout = (index) => {
     if (window.confirm("Delete this paragraph?")) {
       setAboutTexts(aboutTexts.filter((_, i) => i !== index));
@@ -65,19 +71,21 @@ function AdminAbout() {
   };
 
   const handleTestimonialChange = (id, field, value) => {
-    setTestimonials(prev =>
-      prev.map(t => (t.id === id ? { ...t, [field]: value } : t))
+    setTestimonials((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, [field]: value } : t))
     );
   };
+
   const handleAddTestimonial = () => {
-    const newTestimonial = {
+    const newT = {
       id: Date.now(),
       name: "",
       message: "",
       date: new Date().toISOString().split("T")[0],
     };
-    setTestimonials([newTestimonial, ...testimonials]);
+    setTestimonials([newT, ...testimonials]);
   };
+
   const handleDeleteTestimonial = (id) => {
     if (window.confirm("Delete this testimonial?")) {
       setTestimonials(testimonials.filter((t) => t.id !== id));
@@ -85,173 +93,184 @@ function AdminAbout() {
     }
   };
 
-  // Button hover styles
-  const addBtnHover = (e) => e.target.style.backgroundColor = "#1b4d21";
-  const addBtnUnhover = (e) => e.target.style.backgroundColor = "#2e7d32";
-
   return (
-    <div style={containerStyle}>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <img src="/images/logo.PNG" alt="NetLanka Logo" style={{ maxWidth: 100, height: "auto" }} />
-      </div>
-
-      <h3 style={{ textAlign: "center", marginBottom: 40, fontSize: isMobile ? "1.8rem" : "2.6rem", fontWeight: "700", color: "#2c5d30" }}>
+    <div style={{ maxWidth: 1500, margin: 20, padding: 30, background: "linear-gradient(135deg, #c8f5d9, #4caf50)", borderRadius: 16 }}>
+      <h3 className="text-center text-green-900 font-extrabold text-3xl sm:text-4xl mb-10">
         Admin About Management
       </h3>
 
       {/* About Section */}
-      <section style={sectionStyle}>
-        {aboutTexts.map((text, i) => (
-          <div key={i} style={cardStyle}>
-            <button
-              onClick={() => handleDeleteAbout(i)}
-              style={deleteIconStyle}
-              title="Delete Paragraph"
+      <section className="bg-white/90 rounded-xl shadow-md p-6 mb-10">
+        <h2 className="text-green-900 font-bold text-xl mb-6">About Section</h2>
+        <div className="flex flex-col gap-6">
+          {aboutTexts.map((text, i) => (
+            <div
+              key={i}
+              className="relative bg-green-50 border border-green-300 rounded-lg shadow p-4"
             >
-              ✖
-            </button>
-            <textarea
-              rows={3}
-              style={inputStyle}
-              value={text}
-              onChange={(e) => handleAboutChange(i, e.target.value)}
-            />
-          </div>
-        ))}
-        <button
-          onClick={handleAddAbout}
-          style={addBtnStyle}
-          onMouseEnter={addBtnHover}
-          onMouseLeave={addBtnUnhover}
-          type="button"
-        >
-          + Add Paragraph
-        </button>
+              <button
+                onClick={() => handleDeleteAbout(i)}
+                title="Delete Paragraph"
+                className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center"
+              >
+                ✖
+              </button>
+              <textarea
+                rows={3}
+                value={text}
+                onChange={(e) => handleAboutChange(i, e.target.value)}
+                className="w-full border-2 border-green-300 rounded-md p-3 text-gray-800 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200"
+              />
+            </div>
+          ))}
+          <button
+            onClick={handleAddAbout}
+            className="bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition"
+          >
+            + Add Paragraph
+          </button>
+        </div>
       </section>
 
       {/* Testimonials Section */}
-      <section style={sectionStyle}>
-        <h2 style={{ color: "#064420" }}>Testimonials</h2>
-        <button
-          onClick={handleAddTestimonial}
-          style={addBtnStyle}
-          onMouseEnter={addBtnHover}
-          onMouseLeave={addBtnUnhover}
-          type="button"
-        >
-          + Add Testimonial
-        </button>
+      <section className="bg-white/90 rounded-xl shadow-md p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-green-900 font-bold text-xl">Testimonials</h2>
+          <button
+            onClick={handleAddTestimonial}
+            className="bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition"
+          >
+            + Add Testimonial
+          </button>
+        </div>
 
         {testimonials.length === 0 ? (
-          <p>No testimonials found.</p>
+          <p className="text-gray-700 italic">No testimonials found.</p>
         ) : isMobile ? (
-          <Swiper modules={[Navigation, Pagination]} navigation pagination={{ clickable: true }} spaceBetween={20} slidesPerView={1}>
+          <Swiper
+            modules={[Navigation, Pagination]}
+            navigation
+            pagination={{ clickable: true }}
+            spaceBetween={20}
+            slidesPerView={1}
+          >
             {testimonials.map((t) => (
               <SwiperSlide key={t.id}>
-                <div style={cardStyle}>
+                <div className="relative bg-green-50 border border-green-300 rounded-lg shadow p-4 mb-6">
                   <button
                     onClick={() => handleDeleteTestimonial(t.id)}
-                    style={deleteIconStyle}
-                    title="Delete Testimonial"
+                    className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center"
                   >
                     ✖
                   </button>
-                  <input type="text" placeholder="Name" value={t.name} onChange={(e) => handleTestimonialChange(t.id, "name", e.target.value)} style={inputStyle} />
-                  <input type="date" value={t.date} onChange={(e) => handleTestimonialChange(t.id, "date", e.target.value)} style={{ ...inputStyle, marginTop: 12 }} />
-                  <textarea rows={3} placeholder="Message" value={t.message} onChange={(e) => handleTestimonialChange(t.id, "message", e.target.value)} style={{ ...inputStyle, marginTop: 12 }} />
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    value={t.name}
+                    onChange={(e) =>
+                      handleTestimonialChange(t.id, "name", e.target.value)
+                    }
+                    className="w-full border-2 border-green-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-green-500"
+                  />
+                  <input
+                    type="date"
+                    value={t.date}
+                    onChange={(e) =>
+                      handleTestimonialChange(t.id, "date", e.target.value)
+                    }
+                    className="w-full border-2 border-green-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-green-500"
+                  />
+                  <textarea
+                    rows={3}
+                    placeholder="Message"
+                    value={t.message}
+                    onChange={(e) =>
+                      handleTestimonialChange(t.id, "message", e.target.value)
+                    }
+                    className="w-full border-2 border-green-300 rounded-md p-2 focus:ring-2 focus:ring-green-500"
+                  />
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20, marginTop: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-4">
             {testimonials.map((t) => (
-              <div key={t.id} style={cardStyle}>
+              <div
+                key={t.id}
+                className="relative bg-green-50 border border-green-300 rounded-lg shadow p-4"
+              >
                 <button
                   onClick={() => handleDeleteTestimonial(t.id)}
-                  style={deleteIconStyle}
-                  title="Delete Testimonial"
+                  className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center"
                 >
                   ✖
                 </button>
-                <input type="text" placeholder="Name" value={t.name} onChange={(e) => handleTestimonialChange(t.id, "name", e.target.value)} style={inputStyle} />
-                <input type="date" value={t.date} onChange={(e) => handleTestimonialChange(t.id, "date", e.target.value)} style={{ ...inputStyle, marginTop: 12 }} />
-                <textarea rows={3} placeholder="Message" value={t.message} onChange={(e) => handleTestimonialChange(t.id, "message", e.target.value)} style={{ ...inputStyle, marginTop: 12 }} />
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={t.name}
+                  onChange={(e) =>
+                    handleTestimonialChange(t.id, "name", e.target.value)
+                  }
+                  className="w-full border-2 border-green-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-green-500"
+                />
+                <input
+                  type="date"
+                  value={t.date}
+                  onChange={(e) =>
+                    handleTestimonialChange(t.id, "date", e.target.value)
+                  }
+                  className="w-full border-2 border-green-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-green-500"
+                />
+                <textarea
+                  rows={3}
+                  placeholder="Message"
+                  value={t.message}
+                  onChange={(e) =>
+                    handleTestimonialChange(t.id, "message", e.target.value)
+                  }
+                  className="w-full border-2 border-green-300 rounded-md p-2 focus:ring-2 focus:ring-green-500"
+                />
               </div>
             ))}
           </div>
         )}
       </section>
 
-      {/* Save & Cancel */}
-      <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
-        <button onClick={handleSave} disabled={saving} style={{ ...addBtnStyle, backgroundColor: saving ? "#4caf5080" : "#1b5e20", flex: 1 }}>
+      {/* Save & Cancel Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 mt-8">
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className={`flex-1 py-3 rounded-lg text-white font-semibold shadow-md transition ${
+            saving
+              ? "bg-green-400 cursor-not-allowed"
+              : "bg-green-700 hover:bg-green-800"
+          }`}
+        >
           {saving ? "Saving..." : "Save Changes"}
         </button>
-        <button onClick={handleCancel} style={{ ...addBtnStyle, backgroundColor: "#b71c1c", flex: 1 }}>
+        <button
+          onClick={handleCancel}
+          className="flex-1 py-3 bg-red-700 hover:bg-red-800 text-white font-semibold rounded-lg shadow-md transition"
+        >
           Reset Changes
         </button>
       </div>
 
       {/* Popup */}
       {popup && (
-        <div style={{
-          position: "fixed",
-          top: 20,
-          right: 20,
-          backgroundColor: popupType === "success" ? "#4CAF50" : "#d32f2f",
-          color: "#fff",
-          padding: "12px 20px",
-          borderRadius: 6,
-          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-          zIndex: 9999,
-          fontWeight: "bold",
-        }}>
+        <div
+          className={`fixed top-6 right-6 px-5 py-3 rounded-md shadow-lg font-bold text-white ${
+            popupType === "success" ? "bg-green-700" : "bg-red-700"
+          }`}
+        >
           {popup}
         </div>
       )}
     </div>
   );
-}
-
-// Styles
-const containerStyle = {
-  maxWidth: 1500,
-  margin: "20px",
-  fontFamily: "'Times New Roman', Times, serif",
-  gap: '20px',
-  padding: '30px',
-  background: 'linear-gradient(135deg, #c8f5d9, #4caf50)',
-  borderRadius: '16px',
-  boxShadow: '0 6px 16px rgba(0, 100, 34, 0.15)',
-};
-
-const sectionStyle = { marginBottom: 40, padding: 24, borderRadius: 12, backgroundColor: "#f4f9f4", boxShadow: "0 6px 14px rgba(0, 128, 0, 0.12)" };
-const addBtnStyle = { padding: "12px 28px", backgroundColor: "#2e7d32", color: "white", border: "none", borderRadius: 10, cursor: "pointer", fontWeight: "700", fontSize: 16, boxShadow: "0 4px 12px rgba(46, 125, 50, 0.7)", transition: "background-color 0.3s ease" };
-const inputStyle = { width: "100%", padding: 12, fontSize: 16, borderRadius: 10, border: "2px solid #a4d4a5", boxSizing: "border-box", fontFamily: "'Times New Roman', Times, serif", transition: "border-color 0.3s ease" };
-const cardStyle = {
-  position: "relative",
-  background: "#e8f5e9",
-  borderRadius: 12,
-  padding: 20,
-  boxShadow: "0 4px 12px rgba(0,128,0,0.1)",
-};
-const deleteIconStyle = {
-  position: "absolute",
-  top: 10,
-  right: 10,
-  background: "#c62828",
-  color: "#fff",
-  width: 24,
-  height: 24,
-  borderRadius: "50%",
-  border: "none",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  fontSize: 14,
-  cursor: "pointer",
-  fontWeight: "bold",
 };
 
 export default AdminAbout;

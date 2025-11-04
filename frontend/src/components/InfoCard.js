@@ -20,10 +20,11 @@ const InfoCard = ({ intro = "", content = "", images = [], loading = false, erro
 
   const paragraphs = content.split(/\n\s*\n/);
   const img = images.length > 0 ? images : [
-    "/images/sigiriya1.jpg",
-    "/images/yala1.jpg",
-    "/images/galle5.jpg",
-    "/images/yala4.jpg",
+    "/images/info1.jpg",
+    "/images/info2.jpg",
+    "/images/info3.jpg",
+    "/images/info4.jpg",
+    "/images/info5.jpeg",
   ];
 
   return (

@@ -20,7 +20,7 @@ function AdminTransport() {
 
   const [popup, setPopup] = useState("");
   const [popupType, setPopupType] = useState("success");
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [, setIsMobile] = useState(window.innerWidth <= 768);
 
   const showPopup = (message, type = "success") => {
     setPopup(message);
@@ -160,16 +160,16 @@ function AdminTransport() {
   };
 
   return (
-    <div className="max-w-[1500px] mx-auto p-8 bg-gradient-to-r from-green-200 to-green-600 rounded-xl shadow-lg">
-      <h3 className={`text-center font-bold ${isMobile ? "text-2xl" : "text-4xl"} text-green-900 mb-10`}>
+    <div className="max-w-screen-xl mx-auto my-6 p-8 rounded-2xl bg-gradient-to-br from-green-100 to-green-500 shadow-lg">
+      <h3 className="text-center mb-10 text-3xl md:text-4xl font-bold text-green-900">
         Admin Transport Management
       </h3>
 
-      {/* Form */}
+      {/* ===== Form ===== */}
       <div ref={formRef} className="flex justify-center mb-10">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-md space-y-4"
+          className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-lg space-y-4 border border-green-700"
         >
           <h2 className="text-center text-green-900 font-semibold text-2xl">
             {formData.id ? "Edit Vehicle" : "Add New Vehicle"}
@@ -183,7 +183,7 @@ function AdminTransport() {
               onChange={handleInputChange}
               placeholder="Vehicle Type"
               required
-              className="border rounded px-3 py-2"
+              className="border rounded px-3 py-2 focus:ring-2 focus:ring-green-500 outline-none"
             />
           </div>
 
@@ -193,7 +193,7 @@ function AdminTransport() {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className="border rounded px-3 py-2"
+              className="border rounded px-3 py-2 focus:ring-2 focus:ring-green-500 outline-none"
             />
           </div>
 
@@ -203,44 +203,26 @@ function AdminTransport() {
               name="ac"
               value={formData.ac}
               onChange={handleInputChange}
-              className="border rounded px-3 py-2"
+              className="border rounded px-3 py-2 focus:ring-2 focus:ring-green-500 outline-none"
             >
               <option>AC</option>
               <option>Non AC</option>
             </select>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col">
-              <label className="mb-1 font-medium">Seats:</label>
-              <input
-                type="number"
-                name="seats"
-                value={formData.seats}
-                onChange={handleInputChange}
-                className="border rounded px-3 py-2"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="mb-1 font-medium">Luggage:</label>
-              <input
-                type="number"
-                name="luggage"
-                value={formData.luggage}
-                onChange={handleInputChange}
-                className="border rounded px-3 py-2"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="mb-1 font-medium">Capacity:</label>
-              <input
-                type="number"
-                name="capacity"
-                value={formData.capacity}
-                onChange={handleInputChange}
-                className="border rounded px-3 py-2"
-              />
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {["seats", "luggage", "capacity"].map((field) => (
+              <div key={field} className="flex flex-col">
+                <label className="mb-1 font-medium capitalize">{field}:</label>
+                <input
+                  type="number"
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleInputChange}
+                  className="border rounded px-3 py-2 focus:ring-2 focus:ring-green-500 outline-none"
+                />
+              </div>
+            ))}
           </div>
 
           <div className="flex flex-col">
@@ -256,19 +238,22 @@ function AdminTransport() {
               <img
                 src={formData.imagePreview}
                 alt="Preview"
-                className="mt-2 rounded max-h-60 object-cover"
+                className="mt-2 rounded-lg max-h-60 object-cover shadow-md"
               />
             )}
           </div>
 
-          <div className="flex gap-4 mt-4">
-            <button type="submit" className="flex-1 bg-green-800 text-white px-4 py-2 rounded hover:bg-green-900">
+          <div className="flex flex-col sm:flex-row gap-4 mt-6">
+            <button
+              type="submit"
+              className="flex-1 bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition"
+            >
               {formData.id ? "Update Vehicle" : "Add Vehicle"}
             </button>
             <button
               type="button"
               onClick={resetForm}
-              className="flex-1 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
             >
               Cancel
             </button>
@@ -278,15 +263,18 @@ function AdminTransport() {
 
       <hr className="my-10 border-green-700" />
 
-      <h3 className="text-green-900 mb-4 text-2xl">All Vehicles</h3>
+      <h3 className="text-green-900 mb-4 text-2xl font-semibold">All Vehicles</h3>
 
       {vehicles.length === 0 ? (
-        <p>No vehicles found.</p>
+        <p className="text-center text-gray-700">No vehicles found.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {vehicles.map((v) => (
-            <div key={v._id} className="bg-white p-4 rounded-lg border-2 border-green-700 flex flex-col">
-              <h4 className="font-semibold mb-2">{v.vehicles?.[0]?.type}</h4>
+            <div
+              key={v._id}
+              className="bg-white p-4 rounded-xl border-2 border-green-700 shadow-sm flex flex-col transition hover:shadow-md"
+            >
+              <h4 className="font-semibold mb-2 text-lg text-green-900">{v.vehicles?.[0]?.type}</h4>
               {v.imagePreview && (
                 <img
                   src={v.imagePreview}
@@ -294,21 +282,22 @@ function AdminTransport() {
                   className="w-full h-48 object-cover rounded mb-2"
                 />
               )}
-              <p>AC: {v.vehicles?.[0]?.ac}</p>
-              <p>Seats: {v.vehicles?.[0]?.seats}</p>
-              <p>Luggage: {v.vehicles?.[0]?.luggage}</p>
-              <p>Capacity: {v.vehicles?.[0]?.capacity}</p>
+              <p className="text-sm text-gray-700 mb-1">{v.description}</p>
+              <p className="text-sm">AC: {v.vehicles?.[0]?.ac}</p>
+              <p className="text-sm">Seats: {v.vehicles?.[0]?.seats}</p>
+              <p className="text-sm">Luggage: {v.vehicles?.[0]?.luggage}</p>
+              <p className="text-sm">Capacity: {v.vehicles?.[0]?.capacity}</p>
 
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-2 mt-3">
                 <button
                   onClick={() => startEdit(v)}
-                  className="flex-1 bg-green-400 px-2 py-1 rounded hover:bg-green-500"
+                  className="flex-1 bg-green-500 text-white py-1 rounded hover:bg-green-600 transition"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(v._id)}
-                  className="flex-1 bg-red-400 px-2 py-1 rounded hover:bg-red-500"
+                  className="flex-1 bg-red-500 text-white py-1 rounded hover:bg-red-600 transition"
                 >
                   Delete
                 </button>
@@ -320,8 +309,8 @@ function AdminTransport() {
 
       {popup && (
         <div
-          className={`fixed top-5 right-5 z-50 px-4 py-2 rounded shadow-lg font-bold ${
-            popupType === "success" ? "bg-green-600 text-white" : "bg-red-700 text-white"
+          className={`fixed top-5 right-5 z-50 px-4 py-2 rounded-lg shadow-lg font-semibold text-white transition ${
+            popupType === "success" ? "bg-green-600" : "bg-red-600"
           }`}
         >
           {popup}

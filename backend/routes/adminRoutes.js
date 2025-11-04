@@ -6,6 +6,7 @@ import GalleryPhoto from "../models/GalleryPhoto.js";
 import Blog from "../models/Blog.js";
 import Comment from "../models/Comment.js";
 import Booking from "../models/Booking.js";
+import Transport from "../models/Transport.js"; // ✅ NEW IMPORT
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.get("/dashboard", async (req, res) => {
       totalUsers,
       totalComments,
       totalBookings,
+      totalTransports, // ✅ Added
     ] = await Promise.all([
       Tour.countDocuments(),
       Destination.countDocuments(),
@@ -29,6 +31,7 @@ router.get("/dashboard", async (req, res) => {
       User.countDocuments(),
       Comment.countDocuments(),
       Booking.countDocuments(),
+      Transport.countDocuments(), // ✅ Count transports
     ]);
 
     // ✅ Monthly bookings (for chart)
@@ -61,7 +64,7 @@ router.get("/dashboard", async (req, res) => {
       total: monthlyBookings.find((b) => b._id === i + 1)?.total || 0,
     }));
 
-    // ✅ Recent updates (from latest Blog, Tour, Gallery)
+    // ✅ Recent updates
     const recentBlogs = await Blog.find().sort({ createdAt: -1 }).limit(3);
     const recentTours = await Tour.find().sort({ _id: -1 }).limit(2);
     const recentGallery = await GalleryPhoto.find().sort({ _id: -1 }).limit(2);
@@ -75,6 +78,7 @@ router.get("/dashboard", async (req, res) => {
         totalUsers,
         totalComments,
         totalBookings,
+        totalTransports, // ✅ Added here
       },
       bookingsData,
       recentUpdates: {

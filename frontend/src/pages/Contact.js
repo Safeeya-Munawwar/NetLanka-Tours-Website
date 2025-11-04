@@ -326,12 +326,12 @@ function Contact() {
     >
       <div
   className="w-full relative flex flex-col justify-center items-center text-center h-[500px] md:h-[550px] lg:h-[600px] bg-cover bg-center"
-  style={{ backgroundImage: "url(/images/yala6.jpg)" }}
+  style={{ backgroundImage: "url(/images/contact.PNG)" }}
 >
-  <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
-  <div className="relative z-10 px-6 md:px-20">
-    <h1 className="text-3xl md:text-5xl font-semibold text-green-900 mb-6 text-center drop-shadow-sm">
-      Plan Your Adventure with Net Lanka Tours
+<div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+        <div className="relative z-10 px-6 md:px-20">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
+            Plan Your Adventure with Net Lanka Tours
     </h1>
     <p className="text-black text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
     Have questions or need assistance planning your adventure? Reach out to us! Whether it’s booking a tour, requesting a custom itinerary, or simply seeking travel advice, our friendly team is here to help. Connect via phone, email, or visit our corporate and regional offices. Your journey starts with a conversation.

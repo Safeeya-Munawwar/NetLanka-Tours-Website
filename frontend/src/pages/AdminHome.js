@@ -90,7 +90,9 @@ const AdminHome = () => {
 
     const transportWithPreview = {
       ...newTransport,
-      imgPreview: newTransport.file ? URL.createObjectURL(newTransport.file) : "",
+      imgPreview: newTransport.file
+        ? URL.createObjectURL(newTransport.file)
+        : "",
     };
 
     setContentData({
@@ -120,7 +122,10 @@ const AdminHome = () => {
 
       contentData.transport.forEach((t, i) => {
         if (t.file) formData.append("transportFiles", t.file);
-        formData.append(`transport[${i}]`, JSON.stringify({ name: t.name, details: t.details }));
+        formData.append(
+          `transport[${i}]`,
+          JSON.stringify({ name: t.name, details: t.details })
+        );
       });
 
       await axios.put(`${BACKEND_URL}/api/home-content`, formData, {
@@ -140,31 +145,12 @@ const AdminHome = () => {
     <div
       style={{
         maxWidth: 1500,
-        margin: "20px auto",
-        fontFamily: "'Times New Roman', Times, serif",
-        gap: "20px",
-        padding: "30px",
+        margin: 20,
+        padding: 30,
         background: "linear-gradient(135deg, #c8f5d9, #4caf50)",
-        borderRadius: "16px",
-        boxShadow: "0 6px 16px rgba(0, 100, 34, 0.15)",
-        transition: "all 0.3s ease",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        borderRadius: 16,
       }}
     >
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <img
-          src="/images/logo.PNG"
-          alt="NetLanka Logo"
-          style={{
-            maxWidth: "100px",
-            height: "auto",
-            objectFit: "contain",
-          }}
-        />
-      </div>
       <h3
         style={{
           textAlign: "center",
@@ -181,31 +167,35 @@ const AdminHome = () => {
       <div className="bg-white p-6 rounded-xl shadow-lg max-w-7xl mx-auto space-y-6 mt-6 w-full">
         {/* Title & Description */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {["title", "intro", "description", "contact", "email", "address"].map((field) => (
-            <div key={field} className="flex flex-col">
-              <label className="font-semibold mb-1 capitalize">{field}</label>
-              {field === "intro" || field === "description" ? (
-                <textarea
-                  rows={field === "intro" ? 3 : 5}
-                  className="p-2 border rounded-lg border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none w-full"
-                  value={contentData[field]}
-                  onChange={(e) => handleInputChange(field, e.target.value)}
-                />
-              ) : (
-                <input
-                  type="text"
-                  className="p-2 border rounded-lg border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 w-full"
-                  value={contentData[field]}
-                  onChange={(e) => handleInputChange(field, e.target.value)}
-                />
-              )}
-            </div>
-          ))}
+          {["title", "intro", "description", "contact", "email", "address"].map(
+            (field) => (
+              <div key={field} className="flex flex-col">
+                <label className="font-semibold mb-1 capitalize">{field}</label>
+                {field === "intro" || field === "description" ? (
+                  <textarea
+                    rows={field === "intro" ? 3 : 5}
+                    className="p-2 border rounded-lg border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none w-full"
+                    value={contentData[field]}
+                    onChange={(e) => handleInputChange(field, e.target.value)}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    className="p-2 border rounded-lg border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 w-full"
+                    value={contentData[field]}
+                    onChange={(e) => handleInputChange(field, e.target.value)}
+                  />
+                )}
+              </div>
+            )
+          )}
         </div>
 
         {/* Stats Editing */}
         <div>
-          <h2 className="text-xl font-semibold text-green-800 mb-2">Edit Stats</h2>
+          <h2 className="text-xl font-semibold text-green-800 mb-2">
+            Edit Stats
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {contentData.stats.map((stat, i) => (
               <div
@@ -217,7 +207,9 @@ const AdminHome = () => {
                   placeholder="Number"
                   value={stat.number}
                   className="flex-1.5 p-2 border rounded-lg border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 w-full"
-                  onChange={(e) => handleStatChange(i, "number", e.target.value)}
+                  onChange={(e) =>
+                    handleStatChange(i, "number", e.target.value)
+                  }
                 />
                 <input
                   type="text"
@@ -233,7 +225,9 @@ const AdminHome = () => {
 
         {/* Transport Management */}
         <div>
-          <h2 className="text-xl font-semibold text-green-800 mb-2">Transport Options</h2>
+          <h2 className="text-xl font-semibold text-green-800 mb-2">
+            Transport Options
+          </h2>
 
           {/* Add New Transport */}
           <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 items-start mb-4 w-full">
@@ -242,20 +236,26 @@ const AdminHome = () => {
               placeholder="Vehicle Name"
               className="p-2 border rounded-lg border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 flex-1 min-w-[120px]"
               value={newTransport.name}
-              onChange={(e) => setNewTransport({ ...newTransport, name: e.target.value })}
+              onChange={(e) =>
+                setNewTransport({ ...newTransport, name: e.target.value })
+              }
             />
             <input
               type="file"
               accept="image/*"
               className="flex-1 min-w-[120px]"
-              onChange={(e) => setNewTransport({ ...newTransport, file: e.target.files[0] })}
+              onChange={(e) =>
+                setNewTransport({ ...newTransport, file: e.target.files[0] })
+              }
             />
             <input
               type="text"
               placeholder="Details"
               className="p-2 border rounded-lg border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 flex-1 min-w-[120px]"
               value={newTransport.details}
-              onChange={(e) => setNewTransport({ ...newTransport, details: e.target.value })}
+              onChange={(e) =>
+                setNewTransport({ ...newTransport, details: e.target.value })
+              }
             />
             <button
               type="button"
@@ -268,27 +268,44 @@ const AdminHome = () => {
 
           {/* Transport List */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-            {contentData.transport.length === 0 && <p className="text-gray-500 italic">No transport options</p>}
+            {contentData.transport.length === 0 && (
+              <p className="text-gray-500 italic">No transport options</p>
+            )}
             {contentData.transport.map((t, i) => (
-              <div key={i} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center w-full space-y-2">
-                {t.imgPreview && <img src={t.imgPreview} alt={t.name} className="w-full h-32 object-cover rounded-md mb-2" />}
+              <div
+                key={i}
+                className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center w-full space-y-2"
+              >
+                {t.imgPreview && (
+                  <img
+                    src={t.imgPreview}
+                    alt={t.name}
+                    className="w-full h-32 object-cover rounded-md mb-2"
+                  />
+                )}
                 <input
                   type="text"
                   value={t.name}
                   className="border p-1 rounded w-full text-center"
-                  onChange={(e) => handleTransportChange(i, "name", e.target.value)}
+                  onChange={(e) =>
+                    handleTransportChange(i, "name", e.target.value)
+                  }
                 />
                 <textarea
                   value={t.details}
                   rows={2}
                   className="border p-1 rounded w-full text-center resize-none"
-                  onChange={(e) => handleTransportChange(i, "details", e.target.value)}
+                  onChange={(e) =>
+                    handleTransportChange(i, "details", e.target.value)
+                  }
                 />
                 <input
                   type="file"
                   accept="image/*"
                   className="w-full"
-                  onChange={(e) => handleTransportFileChange(i, e.target.files[0])}
+                  onChange={(e) =>
+                    handleTransportFileChange(i, e.target.files[0])
+                  }
                 />
                 <div className="flex gap-2 mt-2">
                   <button

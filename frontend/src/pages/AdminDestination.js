@@ -107,79 +107,19 @@ const AdminDestination = () => {
     "City & Urban",
   ];
 
-  const styles = {
-    form: {
-      maxWidth: 600,
-      margin: "20px auto",
-      padding: 20,
-      background: "#f9f9f9",
-      borderRadius: 10,
-      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-    },
-    input: {
-      width: "100%",
-      padding: 10,
-      margin: "10px 0",
-      borderRadius: 5,
-      border: "1px solid #ccc",
-      fontSize: "1rem",
-      boxSizing: "border-box",
-    },
-    button: {
-      backgroundColor: "#1b5e20",
-      color: "#fff",
-      padding: "10px 15px",
-      borderRadius: 6,
-      border: "none",
-      cursor: "pointer",
-      fontWeight: "bold",
-      marginRight: 10,
-      width: 200,
-    },
-    cancelButton: {
-      backgroundColor: "#c0392b",
-      color: "#fff",
-      padding: "10px 15px",
-      borderRadius: 6,
-      border: "none",
-      cursor: "pointer",
-      fontWeight: "bold",
-      width: 200,
-    },
-  };
-
   return (
-    <div
-      style={{
-        maxWidth: 1500,
-        margin: "20px",
-        fontFamily: "'Times New Roman', Times, serif",
-        gap: "20px",
-        padding: "30px",
-        background: "linear-gradient(135deg, #c8f5d9, #4caf50)",
-        borderRadius: "16px",
-        boxShadow: "0 6px 16px rgba(0, 100, 34, 0.15)",
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <img src="/images/logo.PNG" alt="NetLanka Logo" style={{ maxWidth: "100px" }} />
-      </div>
-
-      <h3
-        style={{
-          textAlign: "center",
-          marginBottom: 40,
-          fontSize: "2.6rem",
-          fontWeight: 700,
-          color: "#2c5d30",
-        }}
-      >
+    <div className="max-w-[1500px] mx-auto my-5 p-8 bg-gradient-to-br from-green-100 to-green-400 rounded-2xl">
+      <h3 className="text-center mb-10 text-4xl font-bold text-green-900">
         Admin Destination Management
       </h3>
 
       {/* Form */}
-      <form ref={formRef} onSubmit={handleSubmit} style={styles.form}>
-        <h2 style={{ textAlign: "center", color: "#1b5e20" }}>
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="max-w-xl mx-auto bg-gray-50 p-6 rounded-xl shadow-md"
+      >
+        <h2 className="text-center text-green-900 font-semibold text-2xl mb-4">
           {editing ? "Edit Destination" : "Add New Destination"}
         </h2>
 
@@ -190,7 +130,7 @@ const AdminDestination = () => {
           onChange={handleChange}
           placeholder="Destination Name"
           required
-          style={styles.input}
+          className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
         />
 
         <select
@@ -198,7 +138,7 @@ const AdminDestination = () => {
           value={formData.category}
           onChange={handleChange}
           required
-          style={styles.input}
+          className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
         >
           <option value="">Select Category</option>
           {categories.map((cat, idx) => (
@@ -214,21 +154,21 @@ const AdminDestination = () => {
           onChange={handleChange}
           placeholder="Description"
           rows="3"
-          style={styles.input}
+          className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
         />
 
-        <input type="file" name="image" onChange={handleChange} style={{ marginBottom: 10 }} />
+        <input
+          type="file"
+          name="image"
+          onChange={handleChange}
+          className="mb-4 w-full"
+        />
 
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: 10,
-            display: "flex",
-            justifyContent: "center",
-            gap: 10,
-          }}
-        >
-          <button type="submit" style={styles.button}>
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            type="submit"
+            className="bg-green-900 text-white px-6 py-2 rounded-md font-semibold hover:bg-green-700 transition-all w-40"
+          >
             {editing ? "Update" : "Add"}
           </button>
           <button
@@ -237,80 +177,47 @@ const AdminDestination = () => {
               setEditing(false);
               setFormData({ id: "", name: "", description: "", category: "", image: null });
             }}
-            style={styles.cancelButton}
+            className="bg-red-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-red-500 transition-all w-40"
           >
             Cancel
           </button>
         </div>
       </form>
 
-      {/* Grid Grouped by Category */}
+      {/* Destination List Grouped by Category */}
       {categories.map((cat) => {
         const filtered = destinations.filter((d) => d.category === cat);
         if (filtered.length === 0) return null;
         return (
-          <div key={cat} style={{ marginTop: 40 }}>
-            <h2 style={{ color: "#1b5e20", borderBottom: "2px solid #2e7d32" }}>{cat}</h2>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: "20px",
-                marginTop: 20,
-              }}
-            >
+          <div key={cat} className="mt-10">
+            <h2 className="text-green-800 text-xl font-semibold border-b-2 border-green-700 mb-4">
+              {cat}
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {filtered.map((dest) => (
                 <div
                   key={dest._id}
-                  style={{
-                    background: "#fff",
-                    padding: 15,
-                    borderRadius: 10,
-                    border: "3px solid #2e7d32",
-                    textAlign: "center",
-                  }}
+                  className="bg-white p-4 rounded-lg border-2 border-green-700 text-center shadow-sm"
                 >
                   {dest.imageUrl && (
                     <img
                       src={`http://localhost:5000${dest.imageUrl}`}
                       alt={dest.name}
-                      style={{
-                        width: "100%",
-                        height: 140,
-                        objectFit: "cover",
-                        borderRadius: 8,
-                        marginBottom: 10,
-                      }}
+                      className="w-full h-40 object-cover rounded-md mb-3"
                     />
                   )}
-                  <h3 style={{ fontSize: 18 }}>{dest.name}</h3>
-                  <p style={{ fontSize: 14, color: "#555" }}>{dest.description}</p>
-                  <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+                  <h3 className="text-lg font-semibold">{dest.name}</h3>
+                  <p className="text-sm text-gray-600">{dest.description}</p>
+                  <div className="flex gap-2 mt-3">
                     <button
                       onClick={() => handleEdit(dest)}
-                      style={{
-                        flex: 1,
-                        backgroundColor: "#81C784",
-                        border: "none",
-                        padding: 8,
-                        borderRadius: 6,
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                      }}
+                      className="flex-1 bg-green-300 hover:bg-green-400 text-green-900 py-1 rounded font-semibold"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(dest._id)}
-                      style={{
-                        flex: 1,
-                        backgroundColor: "#E57373",
-                        border: "none",
-                        padding: 8,
-                        borderRadius: 6,
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                      }}
+                      className="flex-1 bg-red-300 hover:bg-red-400 text-red-900 py-1 rounded font-semibold"
                     >
                       Delete
                     </button>
@@ -324,17 +231,9 @@ const AdminDestination = () => {
 
       {popup && (
         <div
-          style={{
-            position: "fixed",
-            top: 20,
-            right: 20,
-            backgroundColor: popupType === "success" ? "#4CAF50" : "#d32f2f",
-            color: "#fff",
-            padding: "12px 20px",
-            borderRadius: 6,
-            zIndex: 9999,
-            fontWeight: "bold",
-          }}
+          className={`fixed top-5 right-5 px-4 py-3 rounded-lg font-semibold text-white ${
+            popupType === "success" ? "bg-green-600" : "bg-red-600"
+          }`}
         >
           {popup}
         </div>

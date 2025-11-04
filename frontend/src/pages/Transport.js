@@ -25,10 +25,10 @@ export default function UserTransport() {
         className="w-full h-[400px] md:h-[450px] lg:h-[500px] relative flex items-center justify-center text-center bg-cover bg-center"
         style={{ backgroundImage: "url(/images/transport.PNG)" }}
       >
-        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
-        <div className="relative z-10 px-6 md:px-20 max-w-3xl">
-          <h1 className="text-3xl md:text-5xl font-semibold text-green-900 mb-6 drop-shadow-sm">
-            Sri Lanka - Personal Driver and Vehicle Hire
+<div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+        <div className="relative z-10 px-6 md:px-20">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
+             Sri Lanka - Personal Driver and Vehicle Hire
           </h1>
           <p className="text-black text-base md:text-lg leading-relaxed">
             Exploring Sri Lanka becomes effortless and enjoyable with the comfort

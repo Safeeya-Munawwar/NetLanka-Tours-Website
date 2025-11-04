@@ -1,26 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { FaCheckCircle, FaTimesCircle, FaClock } from "react-icons/fa";
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [source, setSource] = useState("tours"); // tours | transport | floatingBooking
+  const [source, setSource] = useState("tours"); // tours | transport
   const [filterTours, setFilterTours] = useState("all");
   const [filterTransport, setFilterTransport] = useState("all");
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     const fetchBookings = async () => {
       setLoading(true);
       try {
         const res = await axios.get(`http://localhost:5000/api/bookings/page/${source}`);
-        console.log("Fetched bookings:", res.data);
         setBookings(res.data);
       } catch (err) {
         console.error(err);
@@ -29,187 +22,200 @@ const AdminBookings = () => {
         setLoading(false);
       }
     };
-  
     fetchBookings();
   }, [source]);
-  
 
-  // ---------------- Actions ----------------
   const updateStatus = async (id, newStatus) => {
     try {
       await axios.put(`http://localhost:5000/api/bookings/${id}`, { status: newStatus });
-      setBookings(prev =>
-        prev.map(b => (b._id === id ? { ...b, status: newStatus } : b))
+      setBookings((prev) =>
+        prev.map((b) => (b._id === id ? { ...b, status: newStatus } : b))
       );
     } catch (err) {
       console.error(err);
     }
   };
 
+  const currentFilter = source === "tours" ? filterTours : filterTransport;
+  const filteredBookings =
+    currentFilter === "all"
+      ? bookings
+      : bookings.filter((b) => b.status === currentFilter);
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "completed":
+        return <FaCheckCircle className="inline text-green-700 text-lg" />;
+      case "pending":
+        return <FaClock className="inline text-yellow-600 text-lg" />;
+      case "canceled":
+        return <FaTimesCircle className="inline text-red-600 text-lg" />;
+      default:
+        return <FaClock className="inline text-gray-500 text-lg" />;
+    }
+  };
+
+  // Delete booking
   const deleteBooking = async (id) => {
     if (!window.confirm("Are you sure you want to delete this booking?")) return;
     try {
       await axios.delete(`http://localhost:5000/api/bookings/${id}`);
-      setBookings(prev => prev.filter(b => b._id !== id));
+      setBookings((prev) => prev.filter((b) => b._id !== id));
     } catch (err) {
       console.error(err);
     }
   };
 
-  // Current filter per source
-  const currentFilter = source === "tours" ? filterTours : filterTransport;
-
-  const filteredBookings =
-    currentFilter === "all"
-      ? bookings
-      : bookings.filter(b => b.status === currentFilter);
-
-  // ---------------- Styles ----------------
-  const containerStyle = {
-    maxWidth: 1500,
-    margin: "20px auto",
-    fontFamily: "'Times New Roman', Times, serif",
-    gap: "20px",
-    padding: "30px",
-    background: "linear-gradient(135deg, #c8f5d9, #4caf50)",
-    borderRadius: "16px",
-    boxShadow: "0 6px 16px rgba(0, 100, 34, 0.15)",
-    justifyContent: "center",
-    alignItems: "center"
-  };
-
-  const headerStyle = {
-    textAlign: "center",
-    marginBottom: 30,
-    fontSize: isMobile ? "1.8rem" : "2.6rem",
-    fontWeight: 700,
-    color: "#2c5d30"
-  };
-
-  const sourceButtonStyle = (btn) => ({
-    minWidth: 150,
-    color: "#fff",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: 5,
-    cursor: "pointer",
-    fontWeight: 600,
-    fontFamily: "'Times New Roman', Times, serif",
-    transition: "all 0.3s",
-    backgroundColor: source === btn ? "#ffa500" : "#2c5d30",
-    marginBottom: 10
-  });
-
-  const filterButtonStyle = (btn) => ({
-    minWidth: 120,
-    color: "#fff",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: 5,
-    cursor: "pointer",
-    fontWeight: 600,
-    fontFamily: "'Times New Roman', Times, serif",
-    transition: "all 0.3s",
-    backgroundColor: currentFilter === btn ? "#ffa500" : "#2c5d30",
-    marginBottom: 10
-  });
-
-  const tableContainer = {
-    overflowX: "auto",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 12,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
-  };
-
-  const thTdStyle = { border: "1px solid #2c5d30", padding: "10px", textAlign: "left", fontSize: 14 };
-
-  const actionButtonStyle = (bg) => ({
-    backgroundColor: bg,
-    color: "#fff",
-    border: "none",
-    padding: "5px 10px",
-    borderRadius: 5,
-    cursor: "pointer",
-    marginRight: 5
-  });
-
-  // ---------------- Render ----------------
   return (
-    <div style={containerStyle}>
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
-        <img src="/images/logo.PNG" alt="NetLanka Logo" style={{ maxWidth: 100, height: "auto", objectFit: "contain" }} />
+    <div className="max-w-[1500px] mx-auto m-6 p-8 rounded-2xl bg-gradient-to-br from-green-100 to-green-500 shadow-lg">
+      <h3 className="text-center text-green-900 font-extrabold text-3xl sm:text-4xl mb-10">
+        Admin Bookings Management
+      </h3>
+
+      {/* Source Filter */}
+      <div className="flex justify-center flex-wrap gap-4 mb-6">
+        {[
+          { key: "tours", label: "Tours / Floating Booking" },
+          { key: "transport", label: "Transport Booking" },
+        ].map((btn) => (
+          <button
+            key={btn.key}
+            onClick={() => setSource(btn.key)}
+            className={`min-w-[180px] py-2 px-4 rounded-md font-semibold transition-all duration-300 
+              ${
+                source === btn.key
+                  ? "bg-orange-500 text-white"
+                  : "bg-green-900 text-white hover:bg-green-700"
+              }`}
+          >
+            {btn.label}
+          </button>
+        ))}
       </div>
 
-      <h3 style={headerStyle}>Admin Bookings Management</h3>
-
-      {/* Source Buttons */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
-        <button style={sourceButtonStyle("tours")} onClick={() => setSource("tours")}>Tours / Floating Booking</button>
-        <button style={sourceButtonStyle("transport")} onClick={() => setSource("transport")}>Transport Booking</button>
-      </div>
-
-      {/* Filter Buttons */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
-        {["all", "pending", "completed"].map(f => (
+      {/* Status Filter */}
+      <div className="flex justify-center flex-wrap gap-4 mb-8">
+        {["all", "pending", "completed"].map((f) => (
           <button
             key={f}
-            style={filterButtonStyle(f)}
-            onClick={() => source === "tours" ? setFilterTours(f) : setFilterTransport(f)}
+            onClick={() =>
+              source === "tours" ? setFilterTours(f) : setFilterTransport(f)
+            }
+            className={`min-w-[130px] py-2 px-4 rounded-md font-semibold transition-all duration-300 
+              ${
+                currentFilter === f
+                  ? "bg-orange-500 text-white"
+                  : "bg-green-900 text-white hover:bg-green-700"
+              }`}
           >
             {f.charAt(0).toUpperCase() + f.slice(1)}
           </button>
         ))}
       </div>
 
-      <div style={tableContainer}>
+      {/* Table */}
+      <div className="overflow-x-auto bg-white p-6 rounded-xl shadow-md">
         {loading ? (
-          <p style={{ textAlign: "center" }}>Loading bookings...</p>
+          <p className="text-center text-gray-700 font-medium">Loading bookings...</p>
         ) : filteredBookings.length === 0 ? (
-          <p style={{ textAlign: "center" }}>No bookings found.</p>
+          <p className="text-center text-gray-700 font-medium">No bookings found.</p>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 800 }}>
-            <thead style={{ backgroundColor: "#2c5d30", color: "#fff", fontWeight: 600 }}>
+          <table className="w-full border border-green-900 border-collapse min-w-[900px]">
+            <thead className="bg-green-900 text-white text-sm">
               <tr>
-                <th style={thTdStyle}>Date</th>
-                <th style={thTdStyle}>Name</th>
-                <th style={thTdStyle}>Email</th>
-                <th style={thTdStyle}>Phone</th>
-                <th style={thTdStyle}>{source === "tours" ? "Tour" : "Vehicle"}</th>
-                <th style={thTdStyle}>Location</th>
-                {source === "transport" && <th style={thTdStyle}>Pickup Location</th>}
-                {source === "transport" && <th style={thTdStyle}>Drop Location</th>}
-                <th style={thTdStyle}>Members</th>
-                <th style={thTdStyle}>Pickup Date</th>
-                <th style={thTdStyle}>Pickup Time</th>
-                <th style={thTdStyle}>Total (LKR)</th>
-                <th style={thTdStyle}>Status</th>
-                <th style={thTdStyle}>Actions</th>
+                {[
+                  "Date",
+                  "Name",
+                  "Email",
+                  "Phone",
+                  source === "tours" ? "Tour" : "Vehicle",
+                  "Location",
+                  ...(source === "transport" ? ["Pickup", "Drop"] : []),
+                  "Members",
+                  "Pickup Date",
+                  "Pickup Time",
+                  "Total (LKR)",
+                  "Status",
+                  "Actions",
+                ].map((th) => (
+                  <th key={th} className="border border-green-800 p-3 font-semibold">
+                    {th}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {filteredBookings.map(b => (
-                <tr key={b._id} style={{ backgroundColor: b.status === "completed" ? "#d0f0c0" : "transparent" }}>
-                  <td style={thTdStyle}>{new Date(b.createdAt).toLocaleString()}</td>
-                  <td style={thTdStyle}>{b.name}</td>
-                  <td style={thTdStyle}>{b.email}</td>
-                  <td style={thTdStyle}>{b.phone}</td>
-                  <td style={thTdStyle}>{source === "tours" ? b.tourTitle : b.vehicle}</td>
-                  <td style={thTdStyle}>{b.location}</td>
-                  {source === "transport" && <td style={thTdStyle}>{b.pickupLocation}</td>}
-                  {source === "transport" && <td style={thTdStyle}>{b.dropLocation}</td>}
-                  <td style={thTdStyle}>{b.members}</td>
-                  <td style={thTdStyle}>{b.pickupDate ? new Date(b.pickupDate).toLocaleDateString() : ""}</td>
-                  <td style={thTdStyle}>{b.pickupTime}</td>
-                  <td style={thTdStyle}>{b.total}</td>
-                  <td style={thTdStyle}>{b.status.toUpperCase()}</td>
-                  <td style={thTdStyle}>
-                    <button style={actionButtonStyle("#4caf50")} onClick={() => updateStatus(b._id, "completed")}>Completed</button>
-                    <button style={actionButtonStyle("#ff9800")} onClick={() => updateStatus(b._id, "pending")}>Pending</button>
-                    <button style={actionButtonStyle("#f44336")} onClick={() => deleteBooking(b._id)}>Delete</button>
-                  </td>
-                </tr>
-              ))}
+              {filteredBookings.map((b) => {
+                const status = b.status || "pending";
+                const rowBg =
+                  status === "completed"
+                    ? "bg-green-100"
+                    : status === "canceled"
+                    ? "bg-red-100"
+                    : "bg-yellow-100";
+
+                return (
+                  <tr
+                    key={b._id}
+                    className={`${rowBg} border border-green-800 text-sm`}
+                  >
+                    <td className="p-2 border">
+                      {new Date(b.createdAt).toLocaleString()}
+                    </td>
+                    <td className="p-2 border">{b.name}</td>
+                    <td className="p-2 border">{b.email}</td>
+                    <td className="p-2 border">{b.phone}</td>
+                    <td className="p-2 border">
+                      {source === "tours" ? b.tourTitle : b.vehicle}
+                    </td>
+                    <td className="p-2 border">{b.location}</td>
+                    {source === "transport" && (
+                      <>
+                        <td className="p-2 border">{b.pickupLocation}</td>
+                        <td className="p-2 border">{b.dropLocation}</td>
+                      </>
+                    )}
+                    <td className="p-2 border">{b.members}</td>
+                    <td className="p-2 border">
+                      {b.pickupDate
+                        ? new Date(b.pickupDate).toLocaleDateString()
+                        : ""}
+                    </td>
+                    <td className="p-2 border">{b.pickupTime}</td>
+                    <td className="p-2 border">{b.total}</td>
+                    <td className="p-2 border font-semibold text-center">
+                      {getStatusIcon(status)}{" "}
+                      <span className="ml-1">{status.toUpperCase()}</span>
+                    </td>
+                    <td className="p-2 border text-center">
+                      {status === "pending" && (
+                        <>
+                          <button
+                            onClick={() => updateStatus(b._id, "completed")}
+                            className="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded-md mr-2"
+                          >
+                            Complete
+                          </button>
+                          {/* <button
+                        onClick={() => deleteBooking(b._id)}
+                        className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition"
+                      >
+                        Delete
+                      </button> */}
+                        </>
+                      )}
+                      {(status === "completed" || status === "canceled") && (
+                        <button
+                          onClick={() => updateStatus(b._id, "pending")}
+                          className="bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-md"
+                        >
+                          Reset
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}

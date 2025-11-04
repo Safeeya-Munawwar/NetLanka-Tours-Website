@@ -39,12 +39,12 @@ const Blog = () => {
     >
       <div
   className="w-full relative flex flex-col justify-center items-center text-center h-[500px] md:h-[550px] lg:h-[600px] bg-cover bg-center"
-  style={{ backgroundImage: "url(/images/sigiriya3.jpeg)" }}
+  style={{ backgroundImage: "url(/images/blog.PNG)" }}
 >
-  <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
-  <div className="relative z-10 px-6 md:px-20">
-    <h1 className="text-3xl md:text-5xl font-semibold text-green-900 mb-6 text-center drop-shadow-sm">
-      Travel Wisdom from Sri Lanka
+<div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+        <div className="relative z-10 px-6 md:px-20">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
+             Travel Wisdom from Sri Lanka
             </h1>
             <p className="text-black text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
           Stay inspired with our travel blog! Discover insider tips, destination guides, adventure stories, and cultural insights from our team of passionate explorers. Learn how to make the most of your trip, find hidden gems, and get inspired for your next journey in Sri Lanka.

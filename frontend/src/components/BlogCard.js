@@ -1,4 +1,5 @@
 import React from "react";
+import { FaPenFancy } from "react-icons/fa";
 
 const BlogCard = ({ blog, showViewMore = false, latestBlogs = [] }) => {
   // ✅ Render Single Blog Card
@@ -35,9 +36,9 @@ const BlogCard = ({ blog, showViewMore = false, latestBlogs = [] }) => {
       <div className="flex justify-center mt-6 w-full">
         <button
           onClick={() => (window.location.href = "/blog")}
-          className="bg-green-900 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-green-700 transition-colors"
-        >
-          🔎 View More Blogs
+          className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
+          >
+            <FaPenFancy /> View More Blogs
         </button>
       </div>
     );

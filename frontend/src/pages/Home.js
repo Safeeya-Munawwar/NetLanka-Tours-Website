@@ -13,30 +13,31 @@ import CategoryButtons from "../components/CategoryButtons";
 import CommentsGrid from "../components/TestimonialCard";
 import ContactForm from "../components/ContactForm";
 
-import { FaHome, FaSuitcaseRolling, FaMapMarkedAlt, FaImages, FaPenFancy, FaInfoCircle, FaEnvelope } from "react-icons/fa";
+import { FaSuitcaseRolling, FaMapMarkedAlt, FaImages, FaPenFancy, FaInfoCircle, FaEnvelope, FaCarSide, FaHandsHelping, FaMapSigns } from "react-icons/fa";
 
 const API_BASE = "http://localhost:5000";
 
 const navCards = [
-  { text: <><FaHome className="mr-2" /> Home</>, label: 'Welcome Home', link: '/' },
-  { text: <><FaSuitcaseRolling className="mr-2" /> Tour Packages</>, label: 'Explore Tours', link: '/Tours' },
-  { text: <><FaMapMarkedAlt className="mr-2" /> Destinations</>, label: 'Travel Spots', link: '/Destinations' },
-  { text: <><FaImages className="mr-2" /> Gallery</>, label: 'Our Memories', link: '/Gallery' },
-  { text: <><FaPenFancy className="mr-2" /> Blog</>, label: 'Travel Stories', link: '/Blog' },
-  { text: <><FaInfoCircle className="mr-2" /> About</>, label: 'Our Journey', link: '/About' },
-  { text: <><FaEnvelope className="mr-2" /> Contact</>, label: 'Get Connected', link: '/Contact' },
+  { text: <><FaSuitcaseRolling className="mr-2" /> Tour Packages</>, label: 'Explore Tours', link: '/tours' },
+  { text: <><FaMapMarkedAlt className="mr-2" /> Destinations</>, label: 'Travel Spots', link: '/destinations' },
+  { text: <><FaMapSigns className="mr-2" /> Experiences</>, label: 'Unique Experiences', link: '/experiences' },
+  { text: <><FaCarSide className="mr-2" /> Transport</>, label: 'Vehicle & Driver Hire', link: '/transport' },
+  { text: <><FaImages className="mr-2" /> Gallery</>, label: 'Our Memories', link: '/gallery' },
+  { text: <><FaPenFancy className="mr-2" /> Blog</>, label: 'Travel Stories', link: '/blog' },
+  { text: <><FaInfoCircle className="mr-2" /> About</>, label: 'Our Journey', link: '/about' },
+  { text: <><FaHandsHelping className="mr-2" /> Support</>, label: 'Customer Support', link: '/support' },
+  { text: <><FaEnvelope className="mr-2" /> Contact</>, label: 'Get Connected', link: '/contact' },
 ];
 
 const images = [
-  '/images/sigiriya1.jpg',
-  '/images/yala7.jpg',
-  '/images/ella1.jpg',
-  '/images/galle5.jpg',
-  '/images/adam.PNG',
-  '/images/sigiriya2.jpg',
-  '/images/yala1.jpg',
-  '/images/ella2.jpg',
-  '/images/yala3.jpg'
+  '/images/home1.PNG',
+  '/images/home2.PNG',
+  '/images/home3.PNG',
+  '/images/home4.PNG',
+  '/images/home5.PNG',
+  '/images/home6.PNG',
+  '/images/home7.PNG',
+  '/images/home8.PNG'
 ];
 
 const Home = () => {

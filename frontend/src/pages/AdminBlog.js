@@ -13,20 +13,17 @@ const AdminBlog = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const [editId, setEditId] = useState(null);
-  const [message, setMessage] = useState("");
   const formRef = useRef(null);
+  const [popup, setPopup] = useState("");
+  const [popupType, setPopupType] = useState("success");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-// Add at the top inside the component
-const [popup, setPopup] = useState("");
-const [popupType, setPopupType] = useState("success");
 
-const showPopup = (message, type = "success") => {
-  setPopup(message);
-  setPopupType(type);
-  setTimeout(() => setPopup(""), 3000); // auto-hide after 3s
-};
+  const showPopup = (message, type = "success") => {
+    setPopup(message);
+    setPopupType(type);
+    setTimeout(() => setPopup(""), 3000);
+  };
 
-  // Responsive check
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
@@ -55,7 +52,7 @@ const showPopup = (message, type = "success") => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content || (!imageFile && !editId)) {
-      showPopup("Please fill all fields.");
+      showPopup("Please fill all fields.", "error");
       return;
     }
 
@@ -79,10 +76,9 @@ const showPopup = (message, type = "success") => {
       setImagePreview(null);
       setEditId(null);
       fetchBlogs();
-      setTimeout(() => setMessage(""), 3000);
     } catch (error) {
       console.error("Error saving blog:", error);
-      showPopup("Error saving blog.");
+      showPopup("Error saving blog.", "error");
     }
   };
 
@@ -92,10 +88,7 @@ const showPopup = (message, type = "success") => {
     setEditId(blog._id);
     setImagePreview(blog.imageUrl ? `http://localhost:5000${blog.imageUrl}` : null);
     setImageFile(null);
-
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    formRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleDelete = async (id) => {
@@ -104,162 +97,99 @@ const showPopup = (message, type = "success") => {
         await axios.delete(`http://localhost:5000/api/blogs/${id}`);
         showPopup("Blog deleted successfully!");
         fetchBlogs();
-        setTimeout(() => setMessage(""), 3000);
       } catch (error) {
         console.error("Delete failed:", error);
-        showPopup("Delete failed.");
+        showPopup("Delete failed.", "error");
       }
     }
   };
 
-  // Styles
-  const inputStyle = {
-    width: "100%",
-    padding: 10,
-    margin: "10px 0",
-    borderRadius: 5,
-    border: "1px solid #ccc",
-    fontSize: "1rem",
-    boxSizing: "border-box",
-  };
-
-  const buttonStyle = {
-    backgroundColor: "#2c5d30",
-    color: "white",
-    border: "none",
-    padding: "10px 20px",
-    borderRadius: 5,
-    cursor: "pointer",
-    flex: 1,
-    fontSize: "1rem",
-  };
-
-  const cancelButtonStyle = {
-    ...buttonStyle,
-    backgroundColor: "#b30000",
-  };
-
   return (
-    <div style={{ 
-      maxWidth: 1500,
-      margin: "20px",
-      fontFamily: "'Times New Roman', Times, serif" ,
-      gap: '20px',  
-      padding: '30px',
-      background: 'linear-gradient(135deg, #c8f5d9, #4caf50)',
-      borderRadius: '16px',
-      boxShadow: '0 6px 16px rgba(0, 100, 34, 0.15)',
-      transition: 'all 0.3s ease',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }}>
-     <div
-  style={{
-    display: "flex",
-    justifyContent: "center", // pushes logo to the right
-  }}
->
-  <img
-    src="/images/logo.PNG"
-    alt="NetLanka Logo"
-    style={{
-      maxWidth: "100px",
-      height: "auto",
-      objectFit: "contain",
-    }}
-  />
-</div>
-
-      <h3
-        style={{
-          textAlign: "center",
-          marginBottom: 40,
-          fontSize: isMobile ? "1.8rem" : "2.6rem",
-          fontWeight: "700",
-          letterSpacing: "0.04em",
-          color: "#2c5d30",
-        }}
-      >
+    <div className="max-w-[1500px] mx-auto my-5 p-8 bg-gradient-to-br from-green-100 to-green-500 rounded-2xl shadow-md">
+      <h3 className="text-center mb-10 font-bold text-green-900 text-3xl sm:text-4xl">
         Admin Blog Management
       </h3>
 
-      <div style={{ margin: "0 auto" }}>
-      {message && (
-        <p style={{ marginTop: 20, color: message.includes("successfully") ? "green" : "red", textAlign: "center", fontWeight: 600 }}>
-          {message}
-        </p>
-      )}
-
-      {/* Form */}
-      <div ref={formRef} style={{ display: "flex", justifyContent: "center", marginBottom: 40 }}>
+      {/* Blog Form */}
+      <div ref={formRef} className="flex justify-center mb-10">
         <form
           onSubmit={handleSubmit}
           encType="multipart/form-data"
-          style={{
-            width: isMobile ? "100%" : 600,
-            margin: 20,
-            padding: 20,
-            background: "#f9f9f9",
-            borderRadius: 10,
-            boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-            boxSizing: "border-box",
-          }}
+          className="w-full sm:w-[600px] bg-white shadow-lg rounded-lg p-6"
         >
-          <h2 style={{ color: "#064420", textAlign: "center", marginBottom: 20 }}>
+          <h2 className="text-center text-green-900 font-semibold text-2xl mb-6">
             {editId ? "Edit Blog Post" : "Add New Blog Post"}
           </h2>
 
-          <div style={{ marginBottom: 10 }}>
-            <label>Title:</label>
-            <input value={title} placeholder="Blog Title" onChange={(e) => setTitle(e.target.value)} required style={inputStyle} />
+          <div className="mb-4">
+            <label className="block font-medium mb-1">Title:</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Blog Title"
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
           </div>
 
-          <div style={{ marginBottom: 10 }}>
-            <label>Content:</label>
-            <textarea value={content} placeholder="Blog Content" onChange={(e) => setContent(e.target.value)} rows={5} required style={inputStyle} />
+          <div className="mb-4">
+            <label className="block font-medium mb-1">Content:</label>
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              rows={5}
+              placeholder="Blog Content"
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
           </div>
 
-          <div style={{ marginBottom: 10 }}>
-            <label>Image:</label>
-            <input type="file" accept="image/*" onChange={handleImageChange} style={inputStyle} />
+          <div className="mb-4">
+            <label className="block font-medium mb-1">Image:</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50"
+            />
             {imagePreview && (
               <img
                 src={imagePreview}
                 alt="Preview"
-                style={{ width: "100%", maxHeight: 250, objectFit: "cover", marginTop: 10, borderRadius: 5 }}
+                className="w-full max-h-64 object-cover rounded-md mt-3"
               />
             )}
           </div>
 
-          <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
-            <button type="submit" style={{ ...buttonStyle, width: isMobile ? "100%" : "45%" }}>
+          <div className="flex justify-center gap-4 flex-wrap mt-6">
+            <button
+              type="submit"
+              className="w-full sm:w-1/2 bg-green-900 hover:bg-green-700 text-white py-2 rounded-md font-semibold transition"
+            >
               {editId ? "Update Blog" : "Post Blog"}
             </button>
-        
-              <button
-                type="button"
-                onClick={() => {
-                  setEditId(null);
-                  setTitle("");
-                  setContent("");
-                  setImageFile(null);
-                  setImagePreview(null);
-                }}
-                style={{ ...cancelButtonStyle, width: isMobile ? "100%" : "45%" }}
-              >
-                Cancel
-              </button>
-           
+            <button
+              type="button"
+              onClick={() => {
+                setEditId(null);
+                setTitle("");
+                setContent("");
+                setImageFile(null);
+                setImagePreview(null);
+              }}
+              className="w-full sm:w-1/2 bg-red-700 hover:bg-red-600 text-white py-2 rounded-md font-semibold transition"
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>
 
-      <hr style={{ margin: "40px 0" }} />
-
-      <h3 style={{ color: "#064420", marginBottom: 20 }}>All Blogs</h3>
-
+      {/* Blog List */}
+      <h3 className="text-green-900 text-xl font-semibold mb-5">All Blogs</h3>
       {blogs.length === 0 ? (
-        <p>No blogs found.</p>
+        <p className="text-gray-700">No blogs found.</p>
       ) : isMobile ? (
         <Swiper
           modules={[Navigation, Pagination]}
@@ -270,34 +200,26 @@ const showPopup = (message, type = "success") => {
         >
           {blogs.map((blog) => (
             <SwiperSlide key={blog._id}>
-              <div style={{ background: "white", border: "3px solid #2e7d32", padding: 20, borderRadius: 8, userSelect: "none" }}>
-              <h4
-    style={{
-      marginBottom: 10,
-      color: "#2c3e50",
-      fontWeight: "bold",
-      fontSize: 18 // makes title slightly larger
-    }}
-  >
-    {blog.title}</h4>
-                <p>{blog.content}</p>
+              <div className="bg-white border-4 border-green-700 p-5 rounded-xl text-center">
+                <h4 className="font-bold text-lg text-gray-800 mb-2">{blog.title}</h4>
+                <p className="text-gray-700">{blog.content}</p>
                 {blog.imageUrl && (
                   <img
                     src={`http://localhost:5000${blog.imageUrl}`}
                     alt="blog"
-                    style={{ width: "100%", borderRadius: 4, marginTop: 10, objectFit: "cover", maxHeight: 200 }}
+                    className="w-full rounded-md mt-3 object-cover max-h-56"
                   />
                 )}
-                <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
+                <div className="flex gap-3 mt-4">
                   <button
                     onClick={() => handleEdit(blog)}
-                    style={{flex: 1, backgroundColor: "#81C784", border: "none", padding: 8, borderRadius: 6, cursor: "pointer", fontWeight: "bold", color:"black" }}
+                    className="flex-1 bg-green-300 hover:bg-green-400 py-2 rounded-md font-semibold"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(blog._id)}
-                    style={{ flex: 1, backgroundColor: "#E57373", border: "none", padding: 8, borderRadius: 6, cursor: "pointer", fontWeight: "bold", color:"black" }}
+                    className="flex-1 bg-red-300 hover:bg-red-400 py-2 rounded-md font-semibold"
                   >
                     Delete
                   </button>
@@ -307,24 +229,31 @@ const showPopup = (message, type = "success") => {
           ))}
         </Swiper>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs.map((blog) => (
-            <div key={blog._id} style={{ background: "white",  border: "3px solid #2e7d32", padding: 20, borderRadius: 8, display: "flex", flexDirection: "column" }}>
-              <h4 style={{ marginBottom: 10 }}>{blog.title}</h4>
-              <p style={{ flexGrow: 1 }}>{blog.content}</p>
+            <div
+              key={blog._id}
+              className="bg-white border-4 border-green-700 p-5 rounded-xl flex flex-col shadow"
+            >
+              <h4 className="font-bold text-lg mb-2 text-gray-800">{blog.title}</h4>
+              <p className="text-gray-700 flex-grow">{blog.content}</p>
               {blog.imageUrl && (
-                <img src={`http://localhost:5000${blog.imageUrl}`} alt="blog" style={{ width: "100%", borderRadius: 4, marginTop: 10, objectFit: "cover", maxHeight: 200 }} />
+                <img
+                  src={`http://localhost:5000${blog.imageUrl}`}
+                  alt="blog"
+                  className="w-full rounded-md mt-3 object-cover max-h-56"
+                />
               )}
-              <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
+              <div className="flex gap-3 mt-4">
                 <button
                   onClick={() => handleEdit(blog)}
-                  style={{ flex: 1, backgroundColor: "#81C784", border: "none", padding: 8, borderRadius: 6, cursor: "pointer", fontWeight: "bold", color:"black" }}
+                  className="flex-1 bg-green-300 hover:bg-green-400 py-2 rounded-md font-semibold"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(blog._id)}
-                  style={{ flex: 1, backgroundColor: "#E57373", border: "none", padding: 8, borderRadius: 6, cursor: "pointer", fontWeight: "bold", color:"black" }}
+                  className="flex-1 bg-red-300 hover:bg-red-400 py-2 rounded-md font-semibold"
                 >
                   Delete
                 </button>
@@ -333,24 +262,17 @@ const showPopup = (message, type = "success") => {
           ))}
         </div>
       )}
+
       {/* Popup */}
-{popup && (
-  <div style={{
-    position: "fixed",
-    top: 20,
-    right: 20,
-    backgroundColor: popupType === "success" ? "#4CAF50" : "#d32f2f",
-    color: "#fff",
-    padding: "12px 20px",
-    borderRadius: 6,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-    zIndex: 9999,
-    fontWeight: "bold",
-  }}>
-    {popup}
-  </div>
-)}
-</div>
+      {popup && (
+        <div
+          className={`fixed top-5 right-5 px-5 py-3 rounded-md font-bold text-white shadow-lg z-50 transition-all duration-300 ${
+            popupType === "success" ? "bg-green-600" : "bg-red-600"
+          }`}
+        >
+          {popup}
+        </div>
+      )}
     </div>
   );
 };

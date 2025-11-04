@@ -67,12 +67,12 @@ function About() {
       {/* Hero Section */}
       <div
         className="w-full h-[350px] sm:h-[400px] md:h-[450px] flex flex-col justify-center items-center text-center bg-cover bg-center relative"
-        style={{ backgroundImage: "url(/images/lessure.PNG)" }}
+        style={{ backgroundImage: "url(/images/about.PNG)" }}
       >
-        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
-        <div className="relative z-10 px-4 sm:px-6 md:px-20 text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
-            The Best Travel Agency
+<div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+        <div className="relative z-10 px-6 md:px-20">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
+             The Best Travel Agency
           </h1>
           <p className="text-black text-base sm:text-lg md:text-xl max-w-md sm:max-w-3xl mx-auto leading-relaxed mb-4">
             At Net Lanka Tours, we are dedicated to creating unforgettable travel experiences across Sri Lanka. Our mission is to provide personalized, safe, and immersive tours that showcase the island’s natural beauty, rich heritage, and warm hospitality. With years of experience and a passion for adventure, we ensure every journey is unique and memorable.

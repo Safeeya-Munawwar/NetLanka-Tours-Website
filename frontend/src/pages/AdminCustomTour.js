@@ -4,15 +4,24 @@ import axios from "axios";
 import { jsPDF } from "jspdf";
 import * as XLSX from "xlsx";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
+import {
+  FaClock,
+  FaCheckCircle,
+  FaTimesCircle,
+} from "react-icons/fa"; // ✅ Icons for statuses
 
 const AdminCustomTour = () => {
   const [customTours, setCustomTours] = useState([]);
-  const [filter, setFilter] = useState("all"); // all, pending, approved, rejected
+  const [filter, setFilter] = useState("all");
   const [editId, setEditId] = useState(null);
-  const [editForm, setEditForm] = useState({ preferences: "", duration: "", budget: "" });
+  const [editForm, setEditForm] = useState({
+    preferences: "",
+    duration: "",
+    budget: "",
+  });
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  // Window resize listener
+  // Responsive listener
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
@@ -43,7 +52,10 @@ const AdminCustomTour = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/customTours/${editId}`, editForm);
+      await axios.put(
+        `http://localhost:5000/api/customTours/${editId}`,
+        editForm
+      );
       alert("Request updated successfully!");
       fetchTours();
       closeEdit();
@@ -53,7 +65,7 @@ const AdminCustomTour = () => {
     }
   };
 
-  // Export functions
+  // Export to Excel
   const exportToExcel = () => {
     const data = customTours.map((t) => ({
       "Tour Title": t.tourId?.title || "",
@@ -71,24 +83,30 @@ const AdminCustomTour = () => {
     XLSX.writeFile(wb, "CustomTours.xlsx");
   };
 
+  // Export to PDF
   const exportToPDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(14);
     doc.text("Custom Tour Requests", 14, 15);
-
     let y = 25;
     customTours.forEach((t, idx) => {
       const status = t.status || "pending";
       doc.setFontSize(12);
       doc.text(
-        `${idx + 1}. Tour: ${t.tourId?.title || "N/A"} | Name: ${t.name} | Email: ${t.email} | Phone: ${t.phone} | Status: ${status}`,
+        `${idx + 1}. Tour: ${t.tourId?.title || "N/A"} | Name: ${
+          t.name
+        } | Email: ${t.email} | Phone: ${t.phone} | Status: ${status}`,
         14,
         y
       );
       y += 7;
       doc.text(`   Preferences: ${t.preferences || "N/A"}`, 14, y);
       y += 7;
-      doc.text(`   Duration: ${t.duration || "N/A"} | Budget: ${t.budget || "N/A"}`, 14, y);
+      doc.text(
+        `   Duration: ${t.duration || "N/A"} | Budget: ${t.budget || "N/A"}`,
+        14,
+        y
+      );
       y += 10;
       if (y > 270) {
         doc.addPage();
@@ -98,195 +116,253 @@ const AdminCustomTour = () => {
     doc.save("CustomTours.pdf");
   };
 
-  // Filtered tours
+  // Filter tours
   const filteredTours =
-    filter === "all" ? customTours : customTours.filter((t) => (t.status || "pending") === filter);
+    filter === "all"
+      ? customTours
+      : customTours.filter((t) => (t.status || "pending") === filter);
 
-  // Styles
-  const containerStyle = {
-    maxWidth: 1500,
-    margin: "20px auto",
-    fontFamily: "'Times New Roman', Times, serif",
-    gap: '20px',  
-    padding: '30px',
-    background: 'linear-gradient(135deg, #c8f5d9, #4caf50)',
-    borderRadius: '16px',
-    boxShadow: '0 6px 16px rgba(0, 100, 34, 0.15)',
-    transition: 'all 0.3s ease',
-    justifyContent: 'center',
-    alignItems: 'center'
+  // Status icons
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "approved":
+        return <FaCheckCircle className="text-green-700 inline" />;
+      case "rejected":
+        return <FaTimesCircle className="text-red-600 inline" />;
+      default:
+        return <FaClock className="text-yellow-600 inline" />;
+    }
   };
-
-  const headerStyle = {
-    textAlign: "center",
-    marginBottom: 30,
-    fontSize: isMobile ? "1.8rem" : "2.6rem",
-    fontWeight: 700,
-    color: "#2c5d30",
-  };
-
-  const filterButtonStyle = (btn) => ({
-    minWidth: 120,
-    color: "#fff",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: 5,
-    cursor: "pointer",
-    fontWeight: 600,
-    transition: "all 0.3s",
-    backgroundColor: filter === btn ? "#ffa500" : "#2c5d30",
-  });
-
-  const tableContainer = {
-    overflowX: "auto",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 12,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-  };
-
-  const tableStyle = { width: "100%", borderCollapse: "collapse", minWidth: 800 };
-  const thTdStyle = { border: "1px solid #2c5d30", padding: 10, fontSize: 14 };
-  const tableHeader = { backgroundColor: "#2c5d30", color: "#fff", fontWeight: 600 };
-  const buttonStyle = { padding: "6px 10px", margin: "2px", borderRadius: 5, border: "none", cursor: "pointer", fontWeight: "600", fontSize: 13 };
 
   return (
-    <div style={containerStyle}>
-      {/* Logo */}
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
-        <img src="/images/logo.PNG" alt="NetLanka Logo" style={{ maxWidth: 100, height: "auto" }} />
-      </div>
-
-      <h3 style={headerStyle}>Admin Custom Tour Management</h3>
+    <div className="max-w-[1500px] mx-auto p-6 my-6 rounded-2xl bg-gradient-to-br from-green-100 to-green-500 shadow-lg">
+      <h3 className="text-center text-green-900 font-extrabold mb-10 text-3xl sm:text-4xl">
+        Admin Custom Tour Management
+      </h3>
 
       {/* Filter Buttons */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
+      <div className="flex justify-center flex-wrap gap-3 mb-6">
         {["all", "pending", "approved", "rejected"].map((f) => (
-          <button key={f} style={filterButtonStyle(f)} onClick={() => setFilter(f)}>
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`min-w-[120px] py-2 px-4 rounded-md font-semibold text-white transition-all ${
+              filter === f
+                ? "bg-orange-500 scale-105"
+                : "bg-green-900 hover:bg-green-700"
+            }`}
+          >
             {f.charAt(0).toUpperCase() + f.slice(1)}
           </button>
         ))}
       </div>
 
       {/* Export Buttons */}
-      <div style={{ display: "flex", justifyContent: "flex-end", flexWrap: "wrap", gap: 10, marginBottom: 20 }}>
+      <div className="flex justify-end flex-wrap gap-3 mb-6">
         <button
           onClick={exportToExcel}
-          style={{ ...buttonStyle, backgroundColor: "#558b2f", color: "#fff", display: "flex", alignItems: "center", gap: 5, width: 180 }}
+          className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white font-semibold px-5 py-2 rounded-md"
         >
           <FaFileExcel size={18} /> Export Excel
         </button>
         <button
           onClick={exportToPDF}
-          style={{ ...buttonStyle, backgroundColor: "#ffa500", color: "#fff", display: "flex", alignItems: "center", gap: 5, width: 180 }}
+          className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2 rounded-md"
         >
           <FaFilePdf size={18} /> Export PDF
         </button>
       </div>
 
       {/* Table */}
-      <div style={tableContainer}>
-        <table style={tableStyle}>
-        <thead style={tableHeader}>
-  <tr>
-    {["Name", "Email", "Phone", "Preferences", "Duration", "Budget", "Vehicle", "Pickup Location", "Pickup Date", "Pickup Time", "Status", "Actions"].map((h) => (
-      <th key={h} style={thTdStyle}>{h}</th>
-    ))}
-  </tr>
-</thead>
-<tbody>
-  {filteredTours.length === 0 ? (
-    <tr>
-      <td colSpan={13} style={{ textAlign: "center", padding: 10 }}>No requests found.</td>
-    </tr>
-  ) : (
-    filteredTours.map((t) => {
-      const status = t.status || "pending";
-      let rowBg = "#fff3cd"; // pending
-      if (status === "approved") rowBg = "#d0f0c0";
-      if (status === "rejected") rowBg = "#f8d7da";
+      <div className="overflow-x-auto bg-white p-5 rounded-xl shadow-md">
+        <table className="w-full min-w-[900px] border-collapse">
+          <thead className="bg-green-900 text-white text-sm">
+            <tr>
+              {[
+                "Name",
+                "Email",
+                "Phone",
+                "Preferences",
+                "Duration",
+                "Budget",
+                "Vehicle",
+                "Pickup Location",
+                "Pickup Date",
+                "Pickup Time",
+                "Status",
+                "Actions",
+              ].map((h) => (
+                <th key={h} className="border border-green-800 p-3 font-semibold">
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredTours.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={12}
+                  className="text-center p-4 text-gray-700 font-medium"
+                >
+                  No requests found.
+                </td>
+              </tr>
+            ) : (
+              filteredTours.map((t) => {
+                const status = t.status || "pending";
+                const rowBg =
+                  status === "approved"
+                    ? "bg-green-100"
+                    : status === "rejected"
+                    ? "bg-red-100"
+                    : "bg-yellow-100";
 
-      return (
-        <tr key={t._id} style={{ backgroundColor: rowBg }}>
-          <td style={thTdStyle}>{t.name}</td>
-          <td style={thTdStyle}>{t.email}</td>
-          <td style={thTdStyle}>{t.phone}</td>
-          <td style={thTdStyle}>{t.preferences}</td>
-          <td style={thTdStyle}>{t.duration}</td>
-          <td style={thTdStyle}>{t.budget}</td>
-          <td style={thTdStyle}>{t.vehicle || "N/A"}</td>
-          <td style={thTdStyle}>{t.pickupLocation || "N/A"}</td>
-          <td style={thTdStyle}>{t.pickupDate ? new Date(t.pickupDate).toLocaleDateString() : "N/A"}</td>
-          <td style={thTdStyle}>{t.pickupTime || "N/A"}</td>
-          <td style={thTdStyle}>{status.toUpperCase()}</td>
-          <td style={thTdStyle}>
-  {status === "pending" && (
-    <>
-      <button
-        style={{ ...buttonStyle, backgroundColor: "#558b2f", color: "#fff", marginRight: 5 }}
-        onClick={() =>
-          axios.put(`http://localhost:5000/api/customTours/${t._id}`, { status: "approved" }).then(fetchTours)
-        }
-      >
-        Approve
-      </button>
-      <button
-        style={{ ...buttonStyle, backgroundColor: "#f44336", color: "#fff", marginRight: 5 }}
-        onClick={() =>
-          axios.put(`http://localhost:5000/api/customTours/${t._id}`, { status: "rejected" }).then(fetchTours)
-        }
-      >
-        Reject
-      </button>
-    </>
-  )}
-  {(status === "approved" || status === "rejected") && (
-    <button
-      style={{ ...buttonStyle, backgroundColor: "#f0e68c", color: "#000", marginRight: 5 }}
-      onClick={() =>
-        axios.put(`http://localhost:5000/api/customTours/${t._id}`, { status: "pending" }).then(fetchTours)
-      }
-    >
-      Reset
-    </button>
-  )}
-  {/* ✅ Delete Button */}
-  <button
-    style={{ ...buttonStyle, backgroundColor: "#d32f2f", color: "#fff" }}
-    onClick={() => {
-      if (confirm("Are you sure you want to delete this request?")) {
-        axios
-          .delete(`http://localhost:5000/api/customTours/${t._id}`)
-          .then(fetchTours)
-          .catch((err) => alert("Failed to delete request"));
-      }
-    }}
-  >
-    Delete
-  </button>
-</td>
-
-        </tr>
-      );
-    })
-  )}
-</tbody>
+                return (
+                  <tr
+                    key={t._id}
+                    className={`${rowBg} border border-green-800 text-sm`}
+                  >
+                    <td className="p-2 border">{t.name}</td>
+                    <td className="p-2 border">{t.email}</td>
+                    <td className="p-2 border">{t.phone}</td>
+                    <td className="p-2 border">{t.preferences}</td>
+                    <td className="p-2 border">{t.duration}</td>
+                    <td className="p-2 border">{t.budget}</td>
+                    <td className="p-2 border">{t.vehicle || "N/A"}</td>
+                    <td className="p-2 border">{t.pickupLocation || "N/A"}</td>
+                    <td className="p-2 border">
+                      {t.pickupDate
+                        ? new Date(t.pickupDate).toLocaleDateString()
+                        : "N/A"}
+                    </td>
+                    <td className="p-2 border">{t.pickupTime || "N/A"}</td>
+                    <td className="p-2 border font-semibold text-center">
+                      {getStatusIcon(status)}{" "}
+                      <span className="ml-1">{status.toUpperCase()}</span>
+                    </td>
+                    <td className="p-2 border text-center">
+                      {status === "pending" && (
+                        <>
+                          <button
+                            className="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded-md mr-2"
+                            onClick={() =>
+                              axios
+                                .put(
+                                  `http://localhost:5000/api/customTours/${t._id}`,
+                                  { status: "approved" }
+                                )
+                                .then(fetchTours)
+                            }
+                          >
+                            Approve
+                          </button>
+                          <button
+                            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md mr-2"
+                            onClick={() =>
+                              axios
+                                .put(
+                                  `http://localhost:5000/api/customTours/${t._id}`,
+                                  { status: "rejected" }
+                                )
+                                .then(fetchTours)
+                            }
+                          >
+                            Reject
+                          </button>
+                        </>
+                      )}
+                      {(status === "approved" || status === "rejected") && (
+                        <button
+                          className="bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-md mr-2"
+                          onClick={() =>
+                            axios
+                              .put(
+                                `http://localhost:5000/api/customTours/${t._id}`,
+                                { status: "pending" }
+                              )
+                              .then(fetchTours)
+                          }
+                        >
+                          Reset
+                        </button>
+                      )}
+                      {/* <button
+                        className="bg-red-700 hover:bg-red-800 text-white px-3 py-1 rounded-md"
+                        onClick={() => {
+                          if (
+                            confirm("Are you sure you want to delete this request?")
+                          ) {
+                            axios
+                              .delete(
+                                `http://localhost:5000/api/customTours/${t._id}`
+                              )
+                              .then(fetchTours)
+                              .catch(() => alert("Failed to delete request"));
+                          }
+                        }}
+                      >
+                        Delete
+                      </button> */}
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
         </table>
       </div>
 
       {/* Edit Modal */}
       {editId && (
-        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 }}>
-          <form onSubmit={handleEditSubmit} style={{ backgroundColor: "#fff", padding: 20, borderRadius: 12, width: isMobile ? "90%" : 400, display: "flex", flexDirection: "column" }}>
-            <h3>Edit Custom Tour Request</h3>
-            <label>Preferences</label>
-            <textarea name="preferences" value={editForm.preferences} onChange={handleEditChange} style={{ marginBottom: 10, padding: 8 }} />
-            <label>Duration</label>
-            <input type="text" name="duration" value={editForm.duration} onChange={handleEditChange} style={{ marginBottom: 10, padding: 8 }} />
-            <label>Budget</label>
-            <input type="text" name="budget" value={editForm.budget} onChange={handleEditChange} style={{ marginBottom: 10, padding: 8 }} />
-            <button type="submit" style={{ ...buttonStyle, backgroundColor: "#558b2f", color: "#fff", marginBottom: 10 }}>Save</button>
-            <button type="button" onClick={closeEdit} style={{ ...buttonStyle, backgroundColor: "#f0e68c", color: "#000" }}>Cancel</button>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+          <form
+            onSubmit={handleEditSubmit}
+            className="bg-white p-6 rounded-lg w-[90%] sm:w-[400px] shadow-lg space-y-3"
+          >
+            <h3 className="text-lg font-bold mb-2 text-green-900">
+              Edit Custom Tour Request
+            </h3>
+
+            <label className="font-semibold">Preferences</label>
+            <textarea
+              name="preferences"
+              value={editForm.preferences}
+              onChange={handleEditChange}
+              className="border border-gray-300 rounded-md p-2 w-full"
+            />
+
+            <label className="font-semibold">Duration</label>
+            <input
+              name="duration"
+              value={editForm.duration}
+              onChange={handleEditChange}
+              className="border border-gray-300 rounded-md p-2 w-full"
+            />
+
+            <label className="font-semibold">Budget</label>
+            <input
+              name="budget"
+              value={editForm.budget}
+              onChange={handleEditChange}
+              className="border border-gray-300 rounded-md p-2 w-full"
+            />
+
+            <div className="flex justify-between mt-4">
+              <button
+                type="submit"
+                className="bg-green-700 hover:bg-green-800 text-white font-semibold px-4 py-2 rounded-md"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={closeEdit}
+                className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-4 py-2 rounded-md"
+              >
+                Cancel
+              </button>
+            </div>
           </form>
         </div>
       )}

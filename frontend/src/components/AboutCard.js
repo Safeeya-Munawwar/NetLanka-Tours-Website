@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaInfoCircle } from "react-icons/fa";
 
 const LOCALSTORAGE_KEY = "mahaweli_about_data";
 
@@ -53,9 +54,9 @@ const AboutCard = () => {
         <p className="text-white mb-6 text-justify max-w-xl">{firstParagraph}</p>
         <button
           onClick={() => navigate("/about")}
-          className="bg-green-800 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition"
-        >
-          About Us
+          className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
+          >
+            <FaInfoCircle /> About Us
         </button>
       </div>
     </div>

@@ -1,5 +1,6 @@
 // src/components/TourCard.js
 import React from "react";
+import { FaSuitcaseRolling } from "react-icons/fa";
 
 const TourCard = ({ tour, showViewMore = false, popularTours = [] }) => {
   // ✅ Render Single Tour Card
@@ -29,9 +30,9 @@ const TourCard = ({ tour, showViewMore = false, popularTours = [] }) => {
       <div className="flex justify-center mt-6 w-full">
         <button
           onClick={() => (window.location.href = "/Tours")}
-          className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
-        >
-          🚀 View More Tours & Details
+          className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
+  >
+    <FaSuitcaseRolling />View More Tours & Details
         </button>
       </div>
     );

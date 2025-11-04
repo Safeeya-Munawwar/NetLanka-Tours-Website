@@ -66,10 +66,10 @@ const Support = () => {
         className="w-full relative flex flex-col justify-center items-center text-center h-[400px] md:h-[450px] lg:h-[500px] bg-cover bg-center"
         style={{ backgroundImage: "url(/images/support1.PNG)" }}
       >
-        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+<div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
         <div className="relative z-10 px-6 md:px-20">
-          <h1 className="text-3xl md:text-5xl font-semibold text-green-900 mb-6 drop-shadow-sm">
-            24/7 Travel Support & Assistance
+        <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
+             24/7 Travel Support & Assistance
           </h1>
           <p className="text-black text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
             Whether you're on an exciting journey or facing an emergency, our

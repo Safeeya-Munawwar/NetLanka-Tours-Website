@@ -8,26 +8,20 @@ const AdminCommentPage = () => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [activePage, setActivePage] = useState("all"); // default: show all
-// Add at the top inside the component
-const [popup, setPopup] = useState("");
-const [popupType, setPopupType] = useState("success");
+  const [activePage, setActivePage] = useState("all");
+  const [popup, setPopup] = useState("");
+  const [popupType, setPopupType] = useState("success");
 
-const showPopup = (message, type = "success") => {
-  setPopup(message);
-  setPopupType(type);
-  setTimeout(() => setPopup(""), 3000); // auto-hide after 3s
-};
+  const showPopup = (message, type = "success") => {
+    setPopup(message);
+    setPopupType(type);
+    setTimeout(() => setPopup(""), 3000);
+  };
 
-  // Responsive check
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    fetchComments();
   }, []);
 
-  // Fetch comments
   const fetchComments = async () => {
     setLoading(true);
     setError("");
@@ -41,217 +35,105 @@ const showPopup = (message, type = "success") => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchComments();
-  }, []);
-
-  // Delete comment
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this comment?")) return;
     try {
       await axios.delete(`${API_BASE}/api/comments/${id}`);
-      showPopup("Blog deleted successfully!");
+      showPopup("Comment deleted successfully!");
       setComments(comments.filter((c) => c._id !== id));
     } catch (err) {
       console.error(err);
-      showPopup("Failed to delete comment");
+      showPopup("Failed to delete comment", "error");
     }
   };
 
-  // Page categories
   const pageCategories = ["all", "home", "contact", "blog"];
-
-  // Group comments by page
   const groupedComments = comments.reduce((groups, comment) => {
     const page = comment.page || "unknown";
     if (!groups[page]) groups[page] = [];
     groups[page].push(comment);
     return groups;
   }, {});
-
-  // Filtered comments by active page
   const filteredComments =
     activePage === "all" ? comments : groupedComments[activePage] || [];
 
   return (
-    <div style={{
-      maxWidth: 1500,
-      margin: "20px",
-      fontFamily: "'Times New Roman', Times, serif" ,
-      gap: '20px',  
-      padding: '30px',
-      background: 'linear-gradient(135deg, #c8f5d9, #4caf50)',
-      borderRadius: '16px',
-      boxShadow: '0 6px 16px rgba(0, 100, 34, 0.15)',
-      transition: 'all 0.3s ease',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }}>
-     <div
-  style={{
-    display: "flex",
-    justifyContent: "center", // pushes logo to the right
-  }}
->
-  <img
-    src="/images/logo.PNG"
-    alt="NetLanka Logo"
-    style={{
-      maxWidth: "100px",
-      height: "auto",
-      objectFit: "contain",
-    }}
-  />
-</div>
-      <h3
-        style={{
-          textAlign: "center",
-          marginBottom: 40,
-          fontSize: isMobile ? "1.8rem" : "2.6rem",
-          fontWeight: 700,
-          color: "#2c5d30",
-          fontFamily: "'Times New Roman', Times, serif",
-        }}
-      >
+    <div className="max-w-[1500px] mx-auto my-6 p-8 rounded-2xl bg-gradient-to-br from-green-100 to-green-500 shadow-lg font-[Times_New_Roman]">
+      <h3 className="text-center mb-10 text-3xl sm:text-4xl font-bold text-green-900">
         Admin Comments Management
       </h3>
-      <div style={{ margin: "0 auto" }}>
-      {/* Category Buttons with count */}
-      <div style={styles.categoryButtons}>
+
+      {/* Category Buttons */}
+      <div className="flex flex-wrap justify-center gap-4 mb-8">
         {pageCategories.map((page) => (
           <button
             key={page}
             onClick={() => setActivePage(page)}
-            style={{
-              width: 120,
-              backgroundColor: activePage === page ? "#ffa500" : "#2c5d30",
-              color: "white",
-              border: "none",
-              padding: "10px 15px",
-              borderRadius: 5,
-              marginRight: 10,
-              marginBottom: 10,
-              cursor: "pointer",
-              fontWeight: 600,
-              fontFamily: "'Times New Roman', Times, serif",
-              transition: "all 0.3s",
-            }}
+            className={`w-36 sm:w-48 md:w-56 py-3 rounded-md font-semibold transition-all duration-300 ${
+              activePage === page
+                ? "bg-orange-500 text-white shadow-md scale-105"
+                : "bg-green-900 text-white hover:bg-green-700"
+            }`}
           >
-            {page.toUpperCase()} ({page === "all" ? comments.length : (groupedComments[page]?.length || 0)})
+            {page.toUpperCase()} (
+            {page === "all"
+              ? comments.length
+              : groupedComments[page]?.length || 0}
+            )
           </button>
         ))}
       </div>
 
-      {loading && <p style={{ fontFamily: "'Times New Roman', Times, serif" }}>Loading comments...</p>}
-      {error && <p style={{ color: "crimson", fontFamily: "'Times New Roman', Times, serif" }}>{error}</p>}
-      {!loading && filteredComments.length === 0 && <p style={{ fontFamily: "'Times New Roman', Times, serif" }}>No comments found.</p>}
+      {/* Loading / Error Messages */}
+      {loading && (
+        <p className="text-center text-lg text-green-900">Loading comments...</p>
+      )}
+      {error && <p className="text-center text-red-700">{error}</p>}
+      {!loading && filteredComments.length === 0 && (
+        <p className="text-center text-gray-700">No comments found.</p>
+      )}
 
-      {/* Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: 20,
-          alignItems: "stretch", // all cards same height
-        }}
-      >
+      {/* Comments Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {filteredComments.map((c) => (
           <div
             key={c._id}
-            style={{
-              ...styles.commentCard,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
+            className="bg-gray-100 border-2 border-green-800 rounded-xl p-5 shadow-md flex flex-col justify-between hover:shadow-lg transition-all"
           >
-            <div style={{ flexGrow: 1 }}>
-              <p style={styles.commentHeader}>
-                <FaUserCircle style={{ marginRight: 6, color: "#064420" }} />
+            <div className="flex-grow">
+              <p className="font-bold text-green-900 mb-2 text-sm sm:text-base">
+                <FaUserCircle className="inline text-green-900 mr-2" />
                 {c.name} ({c.email}) —{" "}
-                <span style={styles.commentDate}>
+                <span className="font-normal text-gray-600 text-xs">
                   {new Date(c.createdAt).toLocaleString()}
                 </span>
               </p>
-              <p style={styles.commentMessage}>{c.message}</p>
+              <p className="text-sm sm:text-base whitespace-pre-wrap mb-3 text-gray-800">
+                {c.message}
+              </p>
             </div>
-            <button style={styles.deleteButton} onClick={() => handleDelete(c._id)}>
-              <FaTrashAlt style={{ marginRight: 6 }} /> Delete
+            <button
+              onClick={() => handleDelete(c._id)}
+              className="flex items-center justify-center gap-2 bg-red-700 text-white px-4 py-2 rounded-md mt-3 hover:bg-red-800 transition"
+            >
+              <FaTrashAlt /> Delete
             </button>
           </div>
         ))}
       </div>
-      {/* Popup */}
-{popup && (
-  <div style={{
-    position: "fixed",
-    top: 20,
-    right: 20,
-    backgroundColor: popupType === "success" ? "#4CAF50" : "#d32f2f",
-    color: "#fff",
-    padding: "12px 20px",
-    borderRadius: 6,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-    zIndex: 9999,
-    fontWeight: "bold",
-  }}>
-    {popup}
-  </div>
-)}
-</div>
+
+      {/* Popup Notification */}
+      {popup && (
+        <div
+          className={`fixed top-6 right-6 px-6 py-3 rounded-lg text-white font-semibold shadow-lg transition-opacity ${
+            popupType === "success" ? "bg-green-600" : "bg-red-600"
+          }`}
+        >
+          {popup}
+        </div>
+      )}
     </div>
   );
-};
-
-const styles = {
-  categoryButtons: {
-    display: "flex",
-    justifyContent: "center",
-    gap: 10,
-    marginBottom: 30,
-    flexWrap: "wrap",
-  },
-  commentCard: {
-    padding: 20,
-    borderRadius: 12,
-    boxShadow: "0 6px 16px rgba(0,0,0,0.1)",
-    backgroundColor: "#f6f6f6",
-    border: "2px solid #064420", // Dark green border
-    fontFamily: "'Times New Roman', Times, serif",
-  },  
-  commentHeader: {
-    fontWeight: "bold",
-    fontSize: 14,
-    marginBottom: 8,
-    fontFamily: "'Times New Roman', Times, serif",
-  },
-  commentDate: {
-    fontWeight: "normal",
-    color: "#555",
-    fontSize: 12,
-    fontFamily: "'Times New Roman', Times, serif",
-  },
-  commentMessage: {
-    fontSize: 15,
-    whiteSpace: "pre-wrap",
-    marginBottom: 12,
-    fontFamily: "'Times New Roman', Times, serif",
-  },
-  deleteButton: {
-    backgroundColor: "#b71c1c",
-    color: "white",
-    border: "none",
-    padding: "8px 12px",
-    borderRadius: 8,
-    cursor: "pointer",
-    fontWeight: 600,
-    fontSize: 14,
-    display: "flex",
-    alignItems: "center",       // vertical alignment
-    justifyContent: "center",   // horizontal alignment (centers text/icon)
-    marginTop: 10,
-    fontFamily: "'Times New Roman', Times, serif",
-  }  
 };
 
 export default AdminCommentPage;

@@ -64,18 +64,23 @@ const experiences = [
 
 const Experiences = () => {
   return (
-    <section className=" bg-white">
-      {/* Title section */}
-      <div className="text-center mb-12 relative">
-        <img
-          src="/images/adam.PNG"
-          alt="Ella"
-          className="w-full h-[500px] rounded-lg"
-        />
-        <h2 className="absolute inset-0 flex items-center justify-center text-4xl md:text-5xl font-bold font-serif text-white bg-black/40">
-          Experiences
-        </h2>
+
+    <div className="font-serif bg-[#f8fdf8] text-gray-800" style={{ fontFamily: "'Times New Roman', Times, serif" }}>
+    {/* Hero Section */}
+    <div
+      className="w-full h-[400px] md:h-[450px] lg:h-[500px] relative flex items-center justify-center text-center bg-cover bg-center"
+      style={{ backgroundImage: "url(/images/experience.PNG)" }}
+    >
+<div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+        <div className="relative z-10 px-6 md:px-20">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
+             Discover Unique Experiences Across Sri Lanka
+        </h1>
+        <p className="text-black text-base md:text-lg leading-relaxed">
+        Discover unforgettable adventures with our curated experiences across Sri Lanka - from cultural immersions and wildlife safaris to scenic hikes and local culinary tours. Each experience is designed to create lasting memories and unique stories.</p>
+      
       </div>
+    </div>
 
       {/* Experience Cards */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-6 py-6">
@@ -99,7 +104,7 @@ const Experiences = () => {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 

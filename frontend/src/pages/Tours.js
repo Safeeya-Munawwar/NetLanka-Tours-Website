@@ -603,15 +603,12 @@ const Tours = () => {
   className="w-full relative flex flex-col justify-center items-center text-center 
              h-[620px] sm:h-[520px] md:h-[550px] lg:h-[600px] bg-cover bg-center 
              pt-8 sm:pt-4" // ✅ slightly reduced top padding on mobile
-  style={{ backgroundImage: "url(/images/adam.png)" }}
+  style={{ backgroundImage: "url(/images/tour.png)" }}
 >
-  <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
-
-  {/* Text content */}
-  <div className="relative z-10 px-6 md:px-20 mt-[-10px] sm:mt-0"> 
-    {/* ✅ lift content slightly up on mobile */}
-    <h1 className="text-3xl md:text-5xl font-semibold text-green-900 mb-3 sm:mb-4 text-center drop-shadow-sm">
-      Handpicked Tours across Sri Lanka
+<div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+        <div className="relative z-10 px-6 md:px-20">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
+             Handpicked Tours across Sri Lanka
     </h1>
     <p className="text-black text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
       Discover the best of Sri Lanka with our curated day and round tours. From serene beaches to lush forests, cultural landmarks, and thrilling adventures, we offer experiences that cater to every traveler. Choose from guided tours, adventure packages, or custom itineraries and create memories that last a lifetime.

@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Leaflet marker icon
+// Marker icon
 const officeIcon = new L.Icon({
   iconUrl: require("leaflet/dist/images/marker-icon.png"),
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
@@ -27,7 +27,14 @@ function DraggableMarker({ position, setPosition }) {
   };
 
   if (!markerPos) return null;
-  return <Marker draggable position={markerPos} eventHandlers={{ dragend: handleDragEnd }} icon={officeIcon} />;
+  return (
+    <Marker
+      draggable
+      position={markerPos}
+      eventHandlers={{ dragend: handleDragEnd }}
+      icon={officeIcon}
+    />
+  );
 }
 
 // Debounce hook
@@ -40,7 +47,7 @@ function useDebounce(value, delay) {
   return debounced;
 }
 
-// Geocode using OpenStreetMap Nominatim
+// Geocoding with OpenStreetMap
 const geocodeAddress = async (address, setCoordsCallback) => {
   if (!address) return;
   try {
@@ -61,7 +68,7 @@ export default function AdminContact() {
   const [editing, setEditing] = useState(false);
   const [popup, setPopup] = useState("");
   const [popupType, setPopupType] = useState("success");
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [, setIsMobile] = useState(window.innerWidth <= 768);
 
   const showPopup = (message, type = "success") => {
     setPopup(message);
@@ -104,7 +111,7 @@ export default function AdminContact() {
   };
 
   const handleAddressChange = (field, value) => {
-    setContactInfo(prev => ({ ...prev, [field]: value }));
+    setContactInfo((prev) => ({ ...prev, [field]: value }));
   };
 
   const debouncedCorporate = useDebounce(contactInfo?.corporateOffice, 500);
@@ -113,8 +120,8 @@ export default function AdminContact() {
   useEffect(() => {
     if (!editing) return;
     if (debouncedCorporate) {
-      geocodeAddress(debouncedCorporate, coords =>
-        setContactInfo(prev => ({ ...prev, corporateCoords: coords }))
+      geocodeAddress(debouncedCorporate, (coords) =>
+        setContactInfo((prev) => ({ ...prev, corporateCoords: coords }))
       );
     }
   }, [debouncedCorporate, editing]);
@@ -122,8 +129,8 @@ export default function AdminContact() {
   useEffect(() => {
     if (!editing) return;
     if (debouncedRegional) {
-      geocodeAddress(debouncedRegional, coords =>
-        setContactInfo(prev => ({ ...prev, regionalCoords: coords }))
+      geocodeAddress(debouncedRegional, (coords) =>
+        setContactInfo((prev) => ({ ...prev, regionalCoords: coords }))
       );
     }
   }, [debouncedRegional, editing]);
@@ -140,7 +147,8 @@ export default function AdminContact() {
   };
 
   const handleReset = async () => {
-    if (!window.confirm("Are you sure you want to reset to default values?")) return;
+    if (!window.confirm("Are you sure you want to reset to default values?"))
+      return;
     try {
       const res = await axios.post("/api/contact/reset");
       setContactInfo(res.data.contact);
@@ -155,160 +163,240 @@ export default function AdminContact() {
   if (!contactInfo) return <div>Loading...</div>;
 
   return (
-    <div style={container}>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <img src="/images/logo.PNG" alt="NetLanka Logo" style={logoStyle} />
-      </div>
-
-      <h3 style={{ ...heading, fontSize: isMobile ? "1.8rem" : "2.6rem" }}>
+    <div className="max-w-[1500px] mx-auto my-5 p-8 bg-gradient-to-br from-green-100 to-green-500 rounded-2xl shadow-md">
+      <h3 className="text-center text-green-900 font-extrabold text-3xl sm:text-4xl mb-10">
         Admin Contact Management
       </h3>
 
-      <div style={card}>
-<div style={row}>
-  <label style={labelStyle}>Phone:</label>
-  <input name="phone" value={contactInfo.phone} onChange={handleChange} disabled={!editing} style={input} />
-</div>
+      <div className="bg-green-50 rounded-xl p-6 shadow-md border border-green-200">
+        {/* Phone */}
+        <div className="mb-5">
+          <label className="block font-semibold text-green-900 mb-2">Phone:</label>
+          <input
+            name="phone"
+            value={contactInfo.phone}
+            onChange={handleChange}
+            disabled={!editing}
+            className="w-full p-3 border-2 border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-100"
+          />
+        </div>
 
-<div style={row}>
-  <label style={labelStyle}>Email:</label>
-  <input name="email" value={contactInfo.email} onChange={handleChange} disabled={!editing} style={input} />
-</div>
+        {/* Email */}
+        <div className="mb-5">
+          <label className="block font-semibold text-green-900 mb-2">Email:</label>
+          <input
+            name="email"
+            value={contactInfo.email}
+            onChange={handleChange}
+            disabled={!editing}
+            className="w-full p-3 border-2 border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-100"
+          />
+        </div>
 
-
-        <label>
-          Corporate Office:
+        {/* Corporate Office */}
+        <div className="mb-5">
+          <label className="block font-semibold text-green-900 mb-2">
+            Corporate Office:
+          </label>
           <textarea
             name="corporateOffice"
             value={contactInfo.corporateOffice}
-            onChange={(e) => handleAddressChange("corporateOffice", e.target.value)}
+            onChange={(e) =>
+              handleAddressChange("corporateOffice", e.target.value)
+            }
             disabled={!editing}
             rows={3}
-            style={input}
+            className="w-full p-3 border-2 border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-100"
           />
-        </label>
+        </div>
 
-        <label>
-          Regional Office:
+        {/* Regional Office */}
+        <div className="mb-5">
+          <label className="block font-semibold text-green-900 mb-2">
+            Regional Office:
+          </label>
           <textarea
             name="regionalOffice"
             value={contactInfo.regionalOffice}
-            onChange={(e) => handleAddressChange("regionalOffice", e.target.value)}
+            onChange={(e) =>
+              handleAddressChange("regionalOffice", e.target.value)
+            }
             disabled={!editing}
             rows={3}
-            style={input}
+            className="w-full p-3 border-2 border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-100"
           />
-        </label>
+        </div>
 
-        <fieldset style={fieldset}>
-          <legend style={legend}>Social Media Links</legend>
+        {/* Social Media */}
+        <fieldset className="border border-green-300 rounded-lg p-4 mb-6">
+          <legend className="font-semibold text-green-800 px-2">
+            Social Media Links
+          </legend>
           {Object.entries(contactInfo.socialMedia).map(([platform, url]) => (
-            <div key={platform}>
-              <label style={socialLabel}>
+            <div key={platform} className="mb-3">
+              <label className="block font-semibold text-green-900 mb-2">
                 {platform} URL:
-                <input
-                  type="text"
-                  value={url}
-                  onChange={(e) => handleSocialChange(platform, e.target.value)}
-                  disabled={!editing}
-                  style={input}
-                />
               </label>
+              <input
+                type="text"
+                value={url}
+                onChange={(e) => handleSocialChange(platform, e.target.value)}
+                disabled={!editing}
+                className="w-full p-3 border-2 border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-100"
+              />
             </div>
           ))}
         </fieldset>
 
- {/* Coordinates Section */}
-{/* Coordinates */}
-<div style={{ ...row, display: "flex", gap: 20, paddingTop: 20 }}>
-  <div style={{ flex: "1 1 50%" }}>
-    <label style={labelStyle}>Corporate Latitude:</label>
-    <input
-      type="number"
-      value={contactInfo.corporateCoords[0]}
-      onChange={(e) =>
-        setContactInfo((prev) => ({
-          ...prev,
-          corporateCoords: [parseFloat(e.target.value), prev.corporateCoords[1]],
-        }))
-      }
-      disabled={!editing}
-      style={{ ...input, width: "100%" }}
-    />
-  </div>
-  <div style={{ flex: "1 1 50%" }}>
-    <label style={labelStyle}>Corporate Longitude:</label>
-    <input
-      type="number"
-      value={contactInfo.corporateCoords[1]}
-      onChange={(e) =>
-        setContactInfo((prev) => ({
-          ...prev,
-          corporateCoords: [prev.corporateCoords[0], parseFloat(e.target.value)],
-        }))
-      }
-      disabled={!editing}
-      style={{ ...input, width: "100%" }}
-    />
-  </div>
-</div>
+        {/* Coordinates */}
+        <div className="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label className="block font-semibold text-green-900 mb-2">
+              Corporate Latitude:
+            </label>
+            <input
+              type="number"
+              value={contactInfo.corporateCoords[0]}
+              onChange={(e) =>
+                setContactInfo((prev) => ({
+                  ...prev,
+                  corporateCoords: [
+                    parseFloat(e.target.value),
+                    prev.corporateCoords[1],
+                  ],
+                }))
+              }
+              disabled={!editing}
+              className="w-full p-3 border-2 border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-100"
+            />
+          </div>
+          <div>
+            <label className="block font-semibold text-green-900 mb-2">
+              Corporate Longitude:
+            </label>
+            <input
+              type="number"
+              value={contactInfo.corporateCoords[1]}
+              onChange={(e) =>
+                setContactInfo((prev) => ({
+                  ...prev,
+                  corporateCoords: [
+                    prev.corporateCoords[0],
+                    parseFloat(e.target.value),
+                  ],
+                }))
+              }
+              disabled={!editing}
+              className="w-full p-3 border-2 border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-100"
+            />
+          </div>
+        </div>
 
-<div style={{ ...row, display: "flex", gap: 20 }}>
-  <div style={{ flex: "1 1 50%" }}>
-    <label style={labelStyle}>Regional Latitude:</label>
-    <input
-      type="number"
-      value={contactInfo.regionalCoords[0]}
-      onChange={(e) =>
-        setContactInfo((prev) => ({
-          ...prev,
-          regionalCoords: [parseFloat(e.target.value), prev.regionalCoords[1]],
-        }))
-      }
-      disabled={!editing}
-      style={{ ...input, width: "100%" }}
-    />
-  </div>
-  <div style={{ flex: "1 1 50%" }}>
-    <label style={labelStyle}>Regional Longitude:</label>
-    <input
-      type="number"
-      value={contactInfo.regionalCoords[1]}
-      onChange={(e) =>
-        setContactInfo((prev) => ({
-          ...prev,
-          regionalCoords: [prev.regionalCoords[0], parseFloat(e.target.value)],
-        }))
-      }
-      disabled={!editing}
-      style={{ ...input, width: "100%" }}
-    />
-  </div>
-</div>
-
+        <div className="grid sm:grid-cols-2 gap-5 mt-5">
+          <div>
+            <label className="block font-semibold text-green-900 mb-2">
+              Regional Latitude:
+            </label>
+            <input
+              type="number"
+              value={contactInfo.regionalCoords[0]}
+              onChange={(e) =>
+                setContactInfo((prev) => ({
+                  ...prev,
+                  regionalCoords: [
+                    parseFloat(e.target.value),
+                    prev.regionalCoords[1],
+                  ],
+                }))
+              }
+              disabled={!editing}
+              className="w-full p-3 border-2 border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-100"
+            />
+          </div>
+          <div>
+            <label className="block font-semibold text-green-900 mb-2">
+              Regional Longitude:
+            </label>
+            <input
+              type="number"
+              value={contactInfo.regionalCoords[1]}
+              onChange={(e) =>
+                setContactInfo((prev) => ({
+                  ...prev,
+                  regionalCoords: [
+                    prev.regionalCoords[0],
+                    parseFloat(e.target.value),
+                  ],
+                }))
+              }
+              disabled={!editing}
+              className="w-full p-3 border-2 border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 disabled:bg-gray-100"
+            />
+          </div>
+        </div>
 
         {/* Map */}
         {contactInfo.corporateCoords && contactInfo.regionalCoords && (
-          <div style={mapContainer}>
-            <MapContainer center={contactInfo.regionalCoords} zoom={8} style={{ height: "100%", width: "100%" }}>
+          <div className="h-[400px] mt-6 border-2 border-green-300 rounded-xl overflow-hidden">
+            <MapContainer
+              center={contactInfo.regionalCoords}
+              zoom={8}
+              className="w-full h-full"
+            >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <DraggableMarker position={contactInfo.corporateCoords} setPosition={pos => setContactInfo(prev => ({ ...prev, corporateCoords: pos }))} />
-              <DraggableMarker position={contactInfo.regionalCoords} setPosition={pos => setContactInfo(prev => ({ ...prev, regionalCoords: pos }))} />
+              <DraggableMarker
+                position={contactInfo.corporateCoords}
+                setPosition={(pos) =>
+                  setContactInfo((prev) => ({
+                    ...prev,
+                    corporateCoords: pos,
+                  }))
+                }
+              />
+              <DraggableMarker
+                position={contactInfo.regionalCoords}
+                setPosition={(pos) =>
+                  setContactInfo((prev) => ({
+                    ...prev,
+                    regionalCoords: pos,
+                  }))
+                }
+              />
             </MapContainer>
           </div>
         )}
 
         {/* Buttons */}
-        <div style={buttonRow}>
+        <div className="flex justify-center flex-wrap gap-4 mt-8">
           {!editing ? (
             <>
-              <button style={button("#007bff")} onClick={() => setEditing(true)}>Edit</button>
-              <button style={button("#dc3545")} onClick={handleReset}>Reset</button>
+              <button
+                onClick={() => setEditing(true)}
+                className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleReset}
+                className="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold shadow-md hover:bg-red-700 transition"
+              >
+                Reset
+              </button>
             </>
           ) : (
             <>
-              <button style={button("#28a745")} onClick={handleSave}>Save</button>
-              <button style={button("#6c757d")} onClick={() => setEditing(false)}>Cancel</button>
+              <button
+                onClick={handleSave}
+                className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold shadow-md hover:bg-green-700 transition"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setEditing(false)}
+                className="bg-gray-600 text-white px-8 py-3 rounded-lg font-semibold shadow-md hover:bg-gray-700 transition"
+              >
+                Cancel
+              </button>
             </>
           )}
         </div>
@@ -316,65 +404,14 @@ export default function AdminContact() {
 
       {/* Popup */}
       {popup && (
-        <div style={{
-          position: "fixed",
-          top: 20,
-          right: 20,
-          backgroundColor: popupType === "success" ? "#4CAF50" : "#d32f2f",
-          color: "#fff",
-          padding: "12px 20px",
-          borderRadius: 6,
-          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-          zIndex: 9999,
-          fontWeight: "bold",
-        }}>{popup}</div>
+        <div
+          className={`fixed top-5 right-5 px-6 py-3 rounded-lg shadow-lg font-semibold text-white ${
+            popupType === "success" ? "bg-green-600" : "bg-red-600"
+          }`}
+        >
+          {popup}
+        </div>
       )}
     </div>
   );
 }
-
-// Styles
-const container = {
-  maxWidth: 1500,
-  margin: "20px auto",
-  fontFamily: "'Times New Roman', Times, serif",
-  gap: 20,
-  padding: 30,
-  background: 'linear-gradient(135deg, #c8f5d9, #4caf50)',
-  borderRadius: 16,
-  boxShadow: '0 6px 16px rgba(0, 100, 34, 0.15)',
-};
-
-const logoStyle = { maxWidth: 100, height: "auto", objectFit: "contain" };
-const heading = { textAlign: "center", marginBottom: 40, fontWeight: 700, letterSpacing: "0.04em", color: "#2c5d30" };
-const card = { background: "#f4f9f4", borderRadius: 12, padding: 24, boxShadow: "0 6px 14px rgba(0, 128, 0, 0.12)" };
-// Remove flex for rows
-const row = { display: "block", marginBottom: 20 };
-
-// Update input so it spans full width
-const input = { 
-  width: "100%", 
-  padding: 12, 
-  marginTop: 6, 
-  borderRadius: 10, 
-  border: "2px solid #a4d4a5", 
-  fontSize: 16, 
-  fontFamily: "'Times New Roman', Times, serif", 
-  boxSizing: "border-box", 
-  transition: "border-color 0.3s ease" 
-};
-
-// Add consistent label styling
-const labelStyle = { 
-  display: "block", 
-  fontWeight: 600, 
-  marginBottom: 6, 
-  color: "#064420" 
-};
-
-const fieldset = { border: "1.5px solid #a4d4a5", borderRadius: 8, padding: 15, marginTop: 20 };
-const legend = { fontWeight: 600, color: "#2c5d30" };
-const socialLabel = { display: "block", fontWeight: 600, color: "#064420", marginBottom: 12 };
-const mapContainer = { height: 400, marginTop: 20, border: "2px solid #a4d4a5", borderRadius: 12, overflow: "hidden" };
-const buttonRow = { display: "flex", justifyContent: "center", gap: 12, marginTop: 24, flexWrap: "wrap" };
-const button = (bg) => ({ backgroundColor: bg, color: "#fff", padding: "12px 28px", border: "none", borderRadius: 10, cursor: "pointer", fontWeight: 700, fontSize: 16, boxShadow: `0 4px 12px ${bg}80`, transition: "all 0.3s ease", width: 400 });

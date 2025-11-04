@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
+import { FaMapMarkerAlt, FaStar, FaMapMarkedAlt } from "react-icons/fa";
 
 const DestinationCard = () => {
   const [tours, setTours] = useState([]);
@@ -24,9 +24,9 @@ const DestinationCard = () => {
     <div className="px-5 md:px-12 py-10 max-w-[1400px] mx-auto">
       <div className="text-center mb-10">
         <h2 className="text-3xl md:text-4xl font-bold text-green-900">
-          Discover Destinations
+        Explore Our Exclusive Destinations
         </h2>
-        <p className="text-lg text-gray-600 mt-2">Where do you wanna go?</p>
+        <p className="text-lg text-gray-600 mt-2">Enjoy a stress-free vacation with all your needs covered.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -61,14 +61,15 @@ const DestinationCard = () => {
         ))}
       </div>
 
-      <div className="text-center mt-8">
-        <button
-          onClick={() => (window.location.href = "/destinations")}
-          className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
-        >
-          View More Destinations
-        </button>
-      </div>
+      <div className="flex justify-center mt-8">
+  <button
+    onClick={() => (window.location.href = "/destinations")}
+    className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
+  >
+    <FaMapMarkedAlt /> View More Destinations
+  </button>
+</div>
+
     </div>
   );
 };
