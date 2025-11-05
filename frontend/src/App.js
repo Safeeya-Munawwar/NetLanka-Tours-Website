@@ -37,6 +37,7 @@ import LandingPage from "./pages/LandingPage";
 import Experiences from "./components/Experiences";
 import AdminCommentsPage from "./pages/AdminCommentPage";
 import AdminTransport from "./pages/AdminTransport";
+import AdminExperience from "./pages/AdminExperience";
 
 function App() {
   const location = useLocation();
@@ -68,6 +69,8 @@ function App() {
             <Route path="/admin-customiseTour" element={<AdminCustomTour />} />
             <Route path="/admin-about" element={<AdminAbout />} />
             <Route path="/admin-contact" element={<AdminContact />} />
+            <Route path="/admin-experiences" element={<AdminExperience />} />
+
             <Route path="/admin-comments" element={<AdminCommentsPage />} />
           </Routes>
         </AdminLayout>
@@ -77,7 +80,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/tours" element={<Tours />} />
           <Route path="/experiences" element={<Experiences/>} />
-          <Route path="/" element={<LandingPage />} />
+ 
           <Route path="/destinations" element={<Destinations />} /> 
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/blog" element={<Blog />} />

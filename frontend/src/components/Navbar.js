@@ -45,7 +45,7 @@ function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          className="flex items-center gap-2 text-[#e8f5e9] font-bold text-xl"
+          className="flex items-center gap-2 text-[#e8f5e9] font-bold text-sm"
           style={fontStyle}
         >
           <img src="/images/logo.PNG" alt="Net Lanka Logo" className="h-10 w-auto" />

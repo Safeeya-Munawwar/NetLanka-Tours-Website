@@ -32,59 +32,22 @@ const AdminLayout = ({ children }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleGroup = (group) => {
-    setOpenGroup(openGroup === group ? null : group);
-  };
+  const links = [
+    { label: "Dashboard", to: "/admin-dashboard", icon: <FaTachometerAlt /> },
+    { label: "Home", to: "/admin-home", icon: <FaHome /> },
+    { label: "Transports", to: "/admin-transport", icon: <FaCar /> },
+    { label: "Tour Packages", to: "/admin-tours", icon: <MdTour /> },
+    { label: "Destinations", to: "/admin-destination", icon: <FaMapMarkedAlt /> },
+    { label: "Gallery", to: "/admin-gallery", icon: <FaImages /> },
+    { label: "Blog", to: "/admin-blog", icon: <FaBlog /> },
+    { label: "Bookings", to: "/admin-bookings", icon: <FaBook /> },
+    { label: "Customize Tour", to: "/admin-customiseTour", icon: <FaCogs /> },
+    { label: "Comments", to: "/admin-comments", icon: <FaCommentDots /> },
+    { label: "About", to: "/admin-about", icon: <FaUserAlt /> },
+    { label: "Contact", to: "/admin-contact", icon: <FaPhoneAlt /> },
+    { label: "Experiences", to: "/admin-experiences", icon: <FaPhoneAlt /> },
 
-  const groupedLinks = [
-    {
-      group: "Main",
-      icon: <FaTachometerAlt />,
-      links: [
-        { label: "Dashboard", to: "/admin-dashboard", icon: <FaTachometerAlt /> },
-        { label: "Home", to: "/admin-home", icon: <FaHome /> },
-      ],
-    },
-    {
-      group: "Tours & Transport",
-      icon: <MdTour />,
-      links: [
-        { label: "Tour Packages", to: "/admin-tours", icon: <MdTour /> },
-        { label: "Transports", to: "/admin-transport", icon: <FaCar /> },
-        { label: "Customize Tour", to: "/admin-customiseTour", icon: <FaCogs /> },
-      ],
-    },
-    {
-      group: "Destinations & Experience",
-      icon: <FaMapMarkedAlt />,
-      links: [
-        { label: "Destinations", to: "/admin-destination", icon: <FaMapMarkedAlt /> },
-        { label: "Experience", to: "/admin-experience", icon: <FaImages /> },
-      ],
-    },
-    {
-      group: "Content Management",
-      icon: <FaImages />,
-      links: [
-        { label: "Gallery", to: "/admin-gallery", icon: <FaImages /> },
-        { label: "Blog", to: "/admin-blog", icon: <FaBlog /> },
-        { label: "Comments", to: "/admin-comments", icon: <FaCommentDots /> },
-      ],
-    },
-    {
-      group: "Users & Info",
-      icon: <FaUserAlt />,
-      links: [
-        { label: "About", to: "/admin-about", icon: <FaUserAlt /> },
-        { label: "Contact", to: "/admin-contact", icon: <FaPhoneAlt /> },
-        { label: "Bookings", to: "/admin-bookings", icon: <FaBook /> },
-      ],
-    },
-    {
-      group: "Account",
-      icon: <FaSignOutAlt />,
-      links: [{ label: "Logout", to: "/admin-login", icon: <FaSignOutAlt /> }],
-    },
+    { label: "Logout", to: "/admin-login", icon: <FaSignOutAlt /> },
   ];
 
   return (
