@@ -171,7 +171,7 @@ function Navbar() {
           >
             Admin
           </Link>
-        </div>
+        </div> 
       </div>
     </nav>
   );

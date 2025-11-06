@@ -17,7 +17,7 @@ const AdminExperience = () => {
   const showPopup = (message, type = "success") => {
     setPopup(message);
     setPopupType(type);
-    setTimeout(() => setPopup(""), 2000);
+    setTimeout(() => setPopup(""), 2500);
   };
 
   const fetchExperiences = async () => {
@@ -51,15 +51,17 @@ const AdminExperience = () => {
 
     try {
       if (editing) {
-        await axios.put(`http://localhost:5000/api/experiences/${formData.id}`, data, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        showPopup("Experience Updated!", "success");
+        await axios.put(
+          `http://localhost:5000/api/experiences/${formData.id}`,
+          data,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        showPopup("Experience updated successfully!", "success");
       } else {
         await axios.post("http://localhost:5000/api/experiences", data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        showPopup("Experience Added!", "success");
+        showPopup("Experience added successfully!", "success");
       }
       setFormData({ id: "", title: "", description: "", image: null });
       setEditing(false);
@@ -82,94 +84,143 @@ const AdminExperience = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this experience?")) return;
+    if (!window.confirm("Are you sure you want to delete this experience?"))
+      return;
     try {
       await axios.delete(`http://localhost:5000/api/experiences/${id}`);
       fetchExperiences();
-      showPopup("Experience Deleted!", "success");
+      showPopup("Experience deleted successfully!", "success");
     } catch (err) {
       console.error(err);
       showPopup("Delete failed.", "error");
     }
   };
 
-  const styles = {
-    form: {
-      maxWidth: 600,
-      margin: "20px auto",
-      padding: 20,
-      background: "#f9f9f9",
-      borderRadius: 10,
-      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-    },
-    input: {
-      width: "100%",
-      padding: 10,
-      margin: "10px 0",
-      borderRadius: 5,
-      border: "1px solid #ccc",
-      fontSize: "1rem",
-      boxSizing: "border-box",
-    },
-    button: {
-      backgroundColor: "#1b5e20",
-      color: "#fff",
-      padding: "10px 15px",
-      borderRadius: 6,
-      border: "none",
-      cursor: "pointer",
-      fontWeight: "bold",
-      marginRight: 10,
-      width: 200,
-    },
-    cancelButton: {
-      backgroundColor: "#c0392b",
-      color: "#fff",
-      padding: "10px 15px",
-      borderRadius: 6,
-      border: "none",
-      cursor: "pointer",
-      fontWeight: "bold",
-      width: 200,
-    },
-  };
-
   return (
-    <div style={{ maxWidth: 1500, margin: "20px", fontFamily: "Times New Roman", padding: "30px", background: "linear-gradient(135deg, #d7e8ff, #2196f3)", borderRadius: 16 }}>
-      <h3 style={{ textAlign: "center", marginBottom: 40, fontSize: "2.6rem", color: "#0d47a1" }}>
+    <div className="max-w-[1500px] mx-auto my-5 p-8 rounded-2xl bg-gradient-to-tr from-green-100 to-green-500">
+      <h3 className="text-center mb-10 text-3xl sm:text-4xl font-bold text-green-900">
         Admin Experience Management
       </h3>
 
       {/* Form */}
-      <form ref={formRef} onSubmit={handleSubmit} style={styles.form}>
-        <h2 style={{ textAlign: "center", color: "#0d47a1" }}>
-          {editing ? "Edit Experience" : "Add New Experience"}
-        </h2>
-        <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Experience Title" required style={styles.input} />
-        <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description" rows="3" style={styles.input} />
-        <input type="file" name="image" onChange={handleChange} style={{ marginBottom: 10 }} />
-        <div style={{ textAlign: "center", marginTop: 10, display: "flex", justifyContent: "center", gap: 10 }}>
-          <button type="submit" style={styles.button}>{editing ? "Update" : "Add"}</button>
-          <button type="button" onClick={() => { setEditing(false); setFormData({ id: "", title: "", description: "", image: null }); }} style={styles.cancelButton}>Cancel</button>
-        </div>
-      </form>
+      <div
+        ref={formRef}
+        className="flex justify-center mb-10 font-serif"
+      >
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-lg bg-white p-6 rounded-xl shadow-md"
+        >
+          <h2 className="text-center text-green-900 font-semibold text-2xl mb-4">
+            {editing ? "Edit Experience" : "Add New Experience"}
+          </h2>
 
-      {/* Experiences Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px", marginTop: 20 }}>
-        {experiences.map((exp) => (
-          <div key={exp._id} style={{ background: "#fff", padding: 15, borderRadius: 10, border: "3px solid #1565c0", textAlign: "center" }}>
-            {exp.imageUrl && <img src={`http://localhost:5000${exp.imageUrl}`} alt={exp.title} style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8, marginBottom: 10 }} />}
-            <h3 style={{ fontSize: 18 }}>{exp.title}</h3>
-            <p style={{ fontSize: 14, color: "#555" }}>{exp.description}</p>
-            <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-              <button onClick={() => handleEdit(exp)} style={{ flex: 1, backgroundColor: "#64b5f6", border: "none", padding: 8, borderRadius: 6, cursor: "pointer", fontWeight: "bold" }}>Edit</button>
-              <button onClick={() => handleDelete(exp._id)} style={{ flex: 1, backgroundColor: "#ef5350", border: "none", padding: 8, borderRadius: 6, cursor: "pointer", fontWeight: "bold" }}>Delete</button>
-            </div>
+          <label className="font-semibold">Experience Title:</label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="Experience Title"
+            required
+            className="w-full border border-gray-300 rounded-md p-2 mt-2 mb-4 focus:ring-2 focus:ring-green-400"
+          />
+
+          <label className="font-semibold">Description:</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Description"
+            rows="3"
+            className="w-full border border-gray-300 rounded-md p-2 mt-2 mb-4 focus:ring-2 focus:ring-green-400"
+          />
+
+          <label className="font-semibold">Image:</label>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-md p-2 mt-2 mb-4 focus:ring-2 focus:ring-green-400"
+          />
+
+          <div className="flex flex-wrap gap-3 justify-center mt-4">
+            <button
+              type="submit"
+              className="bg-green-800 text-white px-6 py-2 rounded-md font-semibold hover:bg-green-700 w-full sm:w-auto"
+            >
+              {editing ? "Update Experience" : "Add Experience"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditing(false);
+                setFormData({ id: "", title: "", description: "", image: null });
+              }}
+              className="bg-red-700 text-white px-6 py-2 rounded-md font-semibold hover:bg-red-600 w-full sm:w-auto"
+            >
+              Cancel
+            </button>
           </div>
-        ))}
+        </form>
       </div>
 
-      {popup && <div style={{ position: "fixed", top: 20, right: 20, backgroundColor: popupType === "success" ? "#4CAF50" : "#d32f2f", color: "#fff", padding: "12px 20px", borderRadius: 6, zIndex: 9999, fontWeight: "bold" }}>{popup}</div>}
+      <hr className="my-10 border-gray-400" />
+
+      {/* Experience List */}
+      <h3 className="text-green-900 font-bold mb-5 text-lg sm:text-xl">
+        All Experiences
+      </h3>
+
+      {experiences.length === 0 ? (
+        <p>No experiences found.</p>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 font-serif">
+          {experiences.map((exp) => (
+            <div
+              key={exp._id}
+              className="bg-white border-4 border-green-700 p-4 rounded-lg flex flex-col"
+            >
+              {exp.imageUrl && (
+                <img
+                  src={`http://localhost:5000${exp.imageUrl}`}
+                  alt={exp.title}
+                  className="w-full h-48 object-cover rounded-md mb-3"
+                />
+              )}
+              <h4 className="font-bold mb-2 text-lg">{exp.title}</h4>
+              <p className="text-gray-700 text-sm mb-3">{exp.description}</p>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleEdit(exp)}
+                  className="flex-1 bg-green-400 text-black font-semibold py-2 rounded hover:bg-green-500"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(exp._id)}
+                  className="flex-1 bg-red-500 text-white font-semibold py-2 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Popup Notification */}
+      {popup && (
+        <div
+          className={`fixed top-5 right-5 px-5 py-3 rounded-lg shadow-lg font-semibold text-white ${
+            popupType === "success" ? "bg-green-600" : "bg-red-600"
+          }`}
+        >
+          {popup}
+        </div>
+      )}
     </div>
   );
 };

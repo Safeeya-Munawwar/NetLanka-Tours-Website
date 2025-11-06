@@ -1,57 +1,177 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+const BACKEND_URL = "http://localhost:5000";
 
 const Experiences = () => {
   const [experiences, setExperiences] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filtered, setFiltered] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/experiences")
-      .then((res) => setExperiences(res.data))
+      .get(`${BACKEND_URL}/api/experiences`)
+      .then((res) => {
+        setExperiences(res.data);
+        setFiltered(res.data);
+      })
       .catch((err) => console.error(err));
+
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const results = experiences.filter((exp) =>
+      exp.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFiltered(results);
+  }, [searchTerm, experiences]);
+
   return (
-
-    <div className="font-serif bg-[#f8fdf8] text-gray-800" style={{ fontFamily: "'Times New Roman', Times, serif" }}>
-    {/* Hero Section */}
     <div
-      className="w-full h-[400px] md:h-[450px] lg:h-[500px] relative flex items-center justify-center text-center bg-cover bg-center"
-      style={{ backgroundImage: "url(/images/experience.PNG)" }}
+      className="flex flex-col items-center font-serif"
+      style={{ fontFamily: "'Times New Roman', Times, serif" }}
     >
-<div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
-        <div className="relative z-10 px-6 md:px-20">
-        <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
-             Discover Unique Experiences Across Sri Lanka
-        </h1>
-        <p className="text-black text-base md:text-lg leading-relaxed">
-        Discover unforgettable adventures with our curated experiences across Sri Lanka - from cultural immersions and wildlife safaris to scenic hikes and local culinary tours. Each experience is designed to create lasting memories and unique stories.</p>
-      
-      </div>
-    </div>
+      {/* Hero Section */}
+      <div
+        className="w-full relative flex flex-col justify-center items-center text-center h-[400px] md:h-[450px] lg:h-[500px] bg-cover bg-center"
+        style={{ backgroundImage: "url(/images/experience.PNG)" }}
+      >
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
 
-      {/* Experience Cards */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-6 py-6">
-        {experiences.map((exp) => (
-          <div
-            key={exp._id}
-            className="bg-[#eaeff7] p-3 shadow-lg rounded-md border-4 border-[#d4e6f3] hover:scale-105 transition-transform duration-300"
-          >
-            <div className="bg-white shadow-inner rounded-sm p-2">
-              <img
-                src={`http://localhost:5000${exp.imageUrl}`}
-                alt={exp.title}
-                className="w-full h-56 object-cover rounded-sm"
-              />
-            </div>
-            <div className="text-center py-4">
-              <h3 className="text-lg md:text-xl font-bold text-[#1a457a] font-serif">
-                {exp.title}
-              </h3>
-              <p className="text-gray-700">{exp.description}</p>
-            </div>
+        <div className="relative z-10 px-6 md:px-20">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
+            Discover Unique Experiences Across Sri Lanka
+          </h1>
+          <p className="text-black text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
+            Discover unforgettable adventures with our curated experiences —
+            from cultural immersions and wildlife safaris to scenic hikes and
+            beach escapes. Each one is crafted to create lasting memories.
+          </p>
+        </div>
+
+        {/* Search Bar */}
+        <div className="flex items-center w-[80%] sm:w-[70%] max-w-md mx-auto mt-4 sm:mt-5 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 z-10">
+          <div className="flex items-center flex-1 bg-white px-5 sm:px-6 h-12 sm:h-14">
+            <i className="fa-solid fa-magnifying-glass text-gray-400 text-base sm:text-lg mr-3 sm:mr-4"></i>
+            <input
+              type="text"
+              placeholder="Search experiences..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1 text-sm sm:text-base text-gray-700 placeholder-gray-400 
+              bg-transparent border-none focus:outline-none focus:ring-0 pt-5"
+            />
           </div>
-        ))}
+          <button
+            onClick={() => console.log("Searching for:", searchTerm)}
+            className="h-12 sm:h-14 px-6 sm:px-8 bg-green-700 text-white 
+              font-medium text-sm sm:text-base 
+              hover:bg-green-800 active:scale-95 
+              transition-all duration-200"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      {/* Experiences Section */}
+      <div className="bg-green-50 w-full max-w-[1500px] p-6 sm:p-8 rounded-xl mt-10 shadow-lg">
+        {filtered.length === 0 ? (
+          <p className="text-center text-gray-500">
+            {experiences.length === 0
+              ? "No experiences available."
+              : "No experiences match your search."}
+          </p>
+        ) : isMobile ? (
+          <Swiper
+            modules={[Navigation, Pagination]}
+            navigation
+            pagination={{ clickable: true }}
+            spaceBetween={20}
+            slidesPerView={1}
+          >
+            {filtered.map((exp) => (
+              <SwiperSlide key={exp._id}>
+                <div
+                  className="bg-yellow-50 rounded-xl overflow-hidden shadow-md border-2 border-green-900 cursor-pointer transform transition hover:scale-105 hover:shadow-lg"
+                  onClick={() =>
+                    setSelectedImage(`${BACKEND_URL}${exp.imageUrl}`)
+                  }
+                >
+                  <img
+                    src={`${BACKEND_URL}${exp.imageUrl}`}
+                    alt={exp.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4 text-center">
+                    <h3 className="text-green-900 text-lg font-medium mb-2">
+                      {exp.title}
+                    </h3>
+                    <p className="text-gray-700 text-sm leading-relaxed">
+                      {exp.description}
+                    </p>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {filtered.map((exp) => (
+              <div
+                key={exp._id}
+                className="bg-yellow-50 rounded-xl overflow-hidden shadow-md border-2 border-green-900 cursor-pointer transform transition hover:scale-105 hover:shadow-lg"
+                onClick={() =>
+                  setSelectedImage(`${BACKEND_URL}${exp.imageUrl}`)
+                }
+              >
+                <img
+                  src={`${BACKEND_URL}${exp.imageUrl}`}
+                  alt={exp.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4 text-center">
+                  <h3 className="text-green-900 text-lg font-medium mb-2">
+                    {exp.title}
+                  </h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {exp.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Modal View */}
+        {selectedImage && (
+          <div
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 bg-black/70 flex justify-center items-center z-50"
+          >
+            <img
+              src={selectedImage}
+              alt="Large View"
+              className="max-h-[90%] max-w-[90%] rounded-lg shadow-2xl"
+            />
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-8 right-10 text-white text-4xl font-bold"
+            >
+              &times;
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
