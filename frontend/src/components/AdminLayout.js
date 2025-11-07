@@ -32,46 +32,63 @@ const AdminLayout = ({ children }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const links = [
-    { label: "Dashboard", to: "/admin-dashboard", icon: <FaTachometerAlt /> },
-    { label: "Home", to: "/admin-home", icon: <FaHome /> },
-    { label: "Transports", to: "/admin-transport", icon: <FaCar /> },
-    { label: "Tour Packages", to: "/admin-tours", icon: <MdTour /> },
-    { label: "Destinations", to: "/admin-destination", icon: <FaMapMarkedAlt /> },
-    { label: "Gallery", to: "/admin-gallery", icon: <FaImages /> },
-    { label: "Blog", to: "/admin-blog", icon: <FaBlog /> },
-    { label: "Bookings", to: "/admin-bookings", icon: <FaBook /> },
-    { label: "Customize Tour", to: "/admin-customiseTour", icon: <FaCogs /> },
-    { label: "Comments", to: "/admin-comments", icon: <FaCommentDots /> },
-    { label: "About", to: "/admin-about", icon: <FaUserAlt /> },
-    { label: "Contact", to: "/admin-contact", icon: <FaPhoneAlt /> },
-    { label: "Experiences", to: "/admin-experiences", icon: <FaPhoneAlt /> },
-    { label: "Logout", to: "/admin-login", icon: <FaSignOutAlt /> },
-  ];
+  const toggleGroup = (group) => {
+    setOpenGroup(openGroup === group ? null : group);
+  };
 
-  // ✅ Define groupedLinks here (optional grouping)
   const groupedLinks = [
     {
-      group: "Main",
+      group: "Dashboard",
       icon: <FaTachometerAlt />,
-      links: links.slice(0, 5), // Dashboard → Destinations
+      links: [
+        { label: "Overview", to: "/admin-dashboard", icon: <FaTachometerAlt /> },
+      ],
+    },
+    {
+      group: "Site Management",
+      icon: <FaCogs />,
+      links: [
+        { label: "Home", to: "/admin-home", icon: <FaHome /> },
+        { label: "Tour Packages", to: "/admin-tours", icon: <MdTour /> },
+        { label: "Destinations", to: "/admin-destination", icon: <FaMapMarkedAlt /> },
+        { label: "Transports", to: "/admin-transport", icon: <FaCar /> },
+      ],
+    },
+    {
+      group: "User Tours",
+      icon: <FaBook />,
+      links: [
+        { label: "Bookings", to: "/admin-bookings", icon: <FaBook /> },
+        { label: "Customize Tour", to: "/admin-customiseTour", icon: <FaCogs /> },
+      ],
     },
     {
       group: "Content",
       icon: <FaImages />,
-      links: links.slice(5, 11), // Gallery → Contact
+      links: [
+        { label: "Gallery", to: "/admin-gallery", icon: <FaImages /> },
+        { label: "Blog", to: "/admin-blog", icon: <FaBlog /> },
+        { label: "Experiences", to: "/admin-experiences", icon: <FaBook /> },
+      ],
     },
     {
-      group: "Other",
-      icon: <FaCogs />,
-      links: links.slice(11), // Experiences → Logout
+      group: "Information",
+      icon: <FaUserAlt />,
+      links: [
+        { label: "About", to: "/admin-about", icon: <FaUserAlt /> },
+        { label: "Contact", to: "/admin-contact", icon: <FaPhoneAlt /> },
+        { label: "Comments", to: "/admin-comments", icon: <FaCommentDots /> },
+      ],
+    },
+    {
+      group: "Account",
+      icon: <FaSignOutAlt />,
+      links: [
+        { label: "Logout", to: "/admin-login", icon: <FaSignOutAlt /> },
+      ],
     },
   ];
-
-  // ✅ Define toggleGroup function
-  const toggleGroup = (group) => {
-    setOpenGroup(openGroup === group ? null : group);
-  };
+  
 
   return (
     <div className="flex min-h-screen bg-gray-100 font-poppins">
@@ -93,7 +110,7 @@ const AdminLayout = ({ children }) => {
           >
             {isCollapsed ? "→" : "←"}
           </button>
-        </div>
+        </div> 
 
         {/* Grouped Nav Links */}
         <nav className="flex-1 mt-4">

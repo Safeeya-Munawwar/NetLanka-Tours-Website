@@ -70,7 +70,6 @@ function App() {
             <Route path="/admin-about" element={<AdminAbout />} />
             <Route path="/admin-contact" element={<AdminContact />} />
             <Route path="/admin-experiences" element={<AdminExperience />} />
-
             <Route path="/admin-comments" element={<AdminCommentsPage />} />
           </Routes>
         </AdminLayout>
