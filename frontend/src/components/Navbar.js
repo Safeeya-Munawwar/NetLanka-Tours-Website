@@ -1,178 +1,196 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState({});
+  const [contact, setContact] = useState({
+    phone: "",
+    email: "",
+    facebook: "",
+    instagram: "",
+    youtube: "",
+  });
+
   const location = useLocation();
+  const isLandingPage = location.pathname === "/";
 
   const fontStyle = { fontFamily: "'Times New Roman', Times, serif" };
 
-  const navLinks = [
-    { to: "/home", label: "Home" },
-    { to: "/about", label: "About" },
-    {
-      to: "/tours",
-      label: "Tours & Destinations",
-      dropdown: [
-        { to: "/tours", label: "Tour Packages" },
-        { to: "/destinations", label: "Destinations" },
-        { to: "/experiences", label: "Experiences" },
-        { to: "/transport", label: "Transport" },
-      ],
-    },
-    { to: "/gallery", label: "Gallery" },
-    { to: "/blog", label: "Blog" },
-    {
-      to: "/contact",
-      label: "Contact",
-      dropdown: [
-        { to: "/contact", label: "Contact" },
-        { to: "/support", label: "Support" },
-      ],
-    },
-  ];
+  // ✅ Fetch contact details from backend
+  useEffect(() => {
+    const fetchContact = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/contact");
+        setContact(res.data);
+      } catch (err) {
+        console.error("Error fetching contact info:", err);
+      }
+    };
+    fetchContact();
+  }, []);
 
-  const isActive = (to) => location.pathname === to;
-
-  const toggleDropdown = (label) => {
-    setDropdownOpen((prev) => ({ ...prev, [label]: !prev[label] }));
-  };
+  // Close mobile menu when a link is clicked
+  const closeMenu = () => setMenuOpen(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#064420] shadow-md">
-      <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
-        {/* Logo */}
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-[#e8f5e9] font-bold text-sm"
-          style={fontStyle}
-        >
-          <img src="/images/logo.PNG" alt="Net Lanka Logo" className="h-10 w-auto" />
-          <span>Net Lanka Tours</span>
-        </Link>
+    <nav
+      className={`w-full z-50 transition-all duration-300 ${
+        isLandingPage
+          ? "absolute top-0 left-0 bg-transparent text-white"
+          : "bg-white text-black shadow-md"
+      }`}
+    >
+      {/* ---------- TOP BAR ---------- */}
+      <div
+        className={`w-full flex flex-col sm:flex-row justify-between items-center px-6 md:px-20 py-2 text-[15px] gap-1 ${
+          isLandingPage ? "bg-transparent" : "bg-gray-100"
+        }`}
+        style={fontStyle}
+      >
+        {/* LEFT - CONTACT INFO */}
+        <div className="flex flex-col sm:flex-row sm:space-x-4 font-medium text-center sm:text-left">
+          {contact.phone && <span>📞 {contact.phone}</span>}
+          {contact.email && <span>✉️ {contact.email}</span>}
+        </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center">
-          {navLinks.map(({ to, label, dropdown }, index) => (
-            <React.Fragment key={to}>
-              <div className="relative group">
-                {dropdown ? (
-                  <>
-                    <button
-                      className={`text-[#e8f5e9] font-semibold px-3 py-2 transition-colors hover:text-[#81c784]`}
-                      style={fontStyle}
-                    >
-                      {label}
-                    </button>
-                    {/* Desktop Dropdown with fade + slide */}
-                    <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 group-hover:translate-y-1 transform transition-all duration-300 z-50">
-                      {dropdown.map((item) => (
-                        <Link
-                          key={item.to}
-                          to={item.to}
-                          className="block px-4 py-2 text-gray-800 hover:bg-[#e0f2f1] font-serif"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <Link
-                    to={to}
-                    className={`text-[#e8f5e9] font-semibold px-3 py-2 transition-colors ${
-                      isActive(to) ? "text-[#81c784]" : "hover:text-[#81c784]"
-                    }`}
-                    style={fontStyle}
-                  >
-                    {label}
-                  </Link>
-                )}
-              </div>
-              {/* Divider */}
-              {index !== navLinks.length - 1 && (
-                <span className="h-6 w-[1px] bg-[#81c784] mx-1" />
-              )}
-            </React.Fragment>
-          ))}
+        {/* RIGHT - SOCIALS + BUTTONS */}
+        <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 mt-1 sm:mt-0">
+          {contact.facebook && (
+            <a
+              href={contact.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-500"
+            >
+              <FaFacebookF size={18} />
+            </a>
+          )}
+          {contact.instagram && (
+            <a
+              href={contact.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-pink-500"
+            >
+              <FaInstagram size={18} />
+            </a>
+          )}
+          {contact.youtube && (
+            <a
+              href={contact.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-red-600"
+            >
+              <FaYoutube size={18} />
+            </a>
+          )}
+
+          <Link
+            to="/contact"
+            className="px-3 py-1.5 rounded font-semibold bg-orange-500 text-white hover:bg-orange-600 text-[14px]"
+          >
+            Inquiry
+          </Link>
+
           <Link
             to="/admin-login"
-            className="ml-4 bg-[#1b5e20] text-white px-4 py-2 rounded-md font-bold hover:bg-[#2e7d32] transition"
-            style={fontStyle}
+            className={`px-3 py-1.5 border rounded font-semibold transition text-[14px] ${
+              isLandingPage
+                ? "text-white hover:bg-orange-500 hover:text-white border-white"
+                : "text-orange-500 border-orange-500 hover:bg-orange-500 hover:text-white"
+            }`}
           >
             Admin
           </Link>
         </div>
+      </div>
 
-        {/* Mobile Hamburger */}
+      {/* ---------- MAIN NAV ---------- */}
+      <div
+        className={`flex justify-between items-center px-6 md:px-20 py-3 ${
+          isLandingPage ? "text-white" : "text-black"
+        }`}
+        style={fontStyle}
+      >
+        {/* Logo */}
+        <Link to="/">
+          <img
+            src={isLandingPage ? "/images/logo.png" : "/images/logo.png"}
+            alt="Logo"
+            className="w-24 md:w-32 object-contain"
+          />
+        </Link>
+
+        {/* Desktop Links */}
+        <div className="hidden md:flex space-x-8 font-semibold text-[17px]">
+          {[
+            "home",
+            "tours",
+            "destinations",
+            "experiences",
+            "gallery",
+            "transport",
+            "blog",
+            "about",
+            "contact",
+            "support",
+          ].map((item) => (
+            <Link
+              key={item}
+              to={`/${item}`}
+              className={`hover:text-orange-500 ${
+                isLandingPage ? "hover:text-orange-400" : ""
+              }`}
+            >
+              {item.charAt(0).toUpperCase() + item.slice(1)}
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile Menu Button */}
         <button
-          className="md:hidden flex flex-col gap-1.5 focus:outline-none"
+          className={`md:hidden text-2xl ${
+            isLandingPage ? "text-white" : "text-black"
+          }`}
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          <span className="w-6 h-0.5 bg-white rounded transition-all"></span>
-          <span className="w-6 h-0.5 bg-white rounded transition-all"></span>
-          <span className="w-6 h-0.5 bg-white rounded transition-all"></span>
+          {menuOpen ? "✖" : "☰"}
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      <div
-        className={`md:hidden bg-[#f4f9f9] overflow-hidden transition-all duration-300 ${
-          menuOpen ? "max-h-[1000px]" : "max-h-0"
-        }`}
-      >
-        <div className="flex flex-col px-5 py-4 gap-3">
-          {navLinks.map(({ to, label, dropdown }) => (
-            <div key={to} className="flex flex-col">
-              {dropdown ? (
-                <>
-                  <button
-                    className="text-[#064420] font-semibold font-serif text-left px-2 py-2 w-full flex justify-between items-center"
-                    onClick={() => toggleDropdown(label)}
-                  >
-                    {label}
-                    <span className="ml-2">{dropdownOpen[label] ? "▲" : "▼"}</span>
-                  </button>
-                  <div
-                    className={`flex flex-col ml-4 mt-1 gap-1 overflow-hidden transition-all duration-300 ${
-                      dropdownOpen[label] ? "max-h-96" : "max-h-0"
-                    }`}
-                  >
-                    {dropdown.map((item) => (
-                      <Link
-                        key={item.to}
-                        to={item.to}
-                        onClick={() => setMenuOpen(false)}
-                        className="text-[#064420] hover:text-[#1b5e20] font-serif px-2 py-1"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <Link
-                  to={to}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-[#064420] hover:text-[#1b5e20] font-serif font-semibold px-2 py-2"
-                >
-                  {label}
-                </Link>
-              )}
-              {/* Divider for mobile */}
-              <div className="h-[1px] w-full bg-[#064420] my-1" />
-            </div>
+      {/* ---------- MOBILE MENU ---------- */}
+      {menuOpen && (
+        <div
+          className={`md:hidden flex flex-col items-center space-y-3 py-4 font-semibold text-[17px] transition-all ${
+            isLandingPage ? "bg-black/70 text-white" : "bg-white text-black"
+          }`}
+        >
+          {[
+            "home",
+            "tours",
+            "destinations",
+            "experiences",
+            "gallery",
+            "transport",
+            "blog",
+            "about",
+            "contact",
+            "support",
+          ].map((item) => (
+            <Link
+              key={item}
+              to={`/${item}`}
+              onClick={closeMenu}
+              className="hover:text-orange-500"
+            >
+              {item.charAt(0).toUpperCase() + item.slice(1)}
+            </Link>
           ))}
-          <Link
-            to="/admin-login"
-            onClick={() => setMenuOpen(false)}
-            className="mt-2 bg-[#1b5e20] text-white text-center font-bold px-4 py-2 rounded-md hover:bg-[#2e7d32] transition"
-          >
-            Admin
-          </Link>
-        </div> 
-      </div>
+        </div>
+      )}
     </nav>
   );
 }

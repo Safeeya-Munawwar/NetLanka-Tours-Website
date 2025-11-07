@@ -19,8 +19,8 @@ import { MdTour } from "react-icons/md";
 const AdminLayout = ({ children }) => {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [, setIsMobile] = useState(window.innerWidth <= 768);
+  const [, setMenuOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState(null); // For collapsible groups
 
   useEffect(() => {

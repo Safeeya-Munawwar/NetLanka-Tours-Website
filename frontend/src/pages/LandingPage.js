@@ -39,7 +39,7 @@ export default function LandingPage() {
       >
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b3d2e]/80 via-[#1f513f]/50 to-transparent"></div>
 
-        <div className="relative z-10 max-w-[90%] sm:max-w-[80%] lg:max-w-4xl">
+        <div className="relative z-10 max-w-[90%] sm:max-w-[80%] lg:max-w-4xl mt-48">
 
           <p className="text-xs sm:text-sm tracking-widest mb-2 sm:mb-3 break-words font-serif">
             netlankatours.com
