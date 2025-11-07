@@ -1,207 +1,187 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import emailjs from "@emailjs/browser";
 import {
-  FaYoutubeSquare,
-  FaTripadvisor,
-  FaPinterestSquare,
-  FaInstagramSquare,
-  FaGooglePlusSquare,
   FaFacebookSquare,
-  FaMapMarkerAlt,
+  FaInstagramSquare,
+  FaYoutubeSquare,
+  FaWhatsappSquare,
   FaPhoneSquare,
   FaEnvelopeSquare,
 } from "react-icons/fa";
-import axios from "axios";
-
-const iconBoxStyle = {
-  width: 42,
-  height: 42,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: "#1b5e20",
-  borderRadius: "50%",
-  flexShrink: 0,
-};
 
 const Footer = () => {
-  const [contactInfo, setContactInfo] = useState(null);
+  const [dayTours, setDayTours] = useState([]);
+  const [itineraries, setItineraries] = useState([]);
+  const formRef = useRef();
 
   useEffect(() => {
-    const fetchContactInfo = async () => {
+    const fetchTours = async () => {
       try {
-        const res = await axios.get("/api/contact");
-        setContactInfo(res.data);
+        const res = await axios.get("http://localhost:5000/api/tours");
+        const tours = res.data || [];
+        setDayTours(tours.filter((t) => t.type?.toLowerCase() === "day").slice(0, 5));
+        setItineraries(tours.filter((t) => t.itinerary?.length > 0).slice(0, 5));
       } catch (err) {
-        console.error("Failed to fetch contact info:", err);
+        console.error("Error fetching tours:", err);
       }
     };
-
-    fetchContactInfo();
+    fetchTours();
   }, []);
 
-  if (!contactInfo) return <p className="text-center mt-10 text-white">Loading Footer...</p>;
-
-  const socialMediaMap = {
-    Facebook: { url: contactInfo.socialMedia.Facebook, icon: <FaFacebookSquare size={38} /> },
-    Youtube: { url: contactInfo.socialMedia.Youtube, icon: <FaYoutubeSquare size={38} /> },
-    Tripadvisor: { url: contactInfo.socialMedia.Tripadvisor, icon: <FaTripadvisor size={38} /> },
-    Pinterest: { url: contactInfo.socialMedia.Pinterest, icon: <FaPinterestSquare size={38} /> },
-    Instagram: { url: contactInfo.socialMedia.Instagram, icon: <FaInstagramSquare size={38} /> },
-    Google: { url: contactInfo.socialMedia.Google, icon: <FaGooglePlusSquare size={38} /> },
+  // Newsletter submission
+  const sendEmail = (e) => {
+    e.preventDefault();
+    emailjs
+      .sendForm(
+        "service_m1nq6ia",
+        "template_4ktdqfu",
+        formRef.current,
+        "T3hp3B0HtjL9hMquH"
+      )
+      .then(() => alert("Subscribed successfully!"))
+      .catch(() => alert("Subscription failed. Please try again."));
+    e.target.reset();
   };
 
-  const Divider = () => (
-    <div
-      style={{
-        width: "2px",
-        background: "linear-gradient(to bottom, #4caf50, #81c784)",
-        borderRadius: 2,
-        margin: "0 20px",
-        alignSelf: "stretch",
-      }}
-    />
-  );
-
   return (
-    <footer
-      style={{
-        padding: "40px 20px 30px",
-        backgroundColor: "#064420",
-        color: "#e8f5e9",
-        fontFamily: "'Times New Roman', Times, serif",
-        borderTop: "5px solid transparent",
-        borderImage: "linear-gradient(to right, #4caf50, #81c784)",
-        borderImageSlice: 1,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "40px",
-          maxWidth: 1200,
-          margin: "0 auto",
-          textAlign: "center",
-          justifyContent: "center",
-        }}
+    <footer className="bg-white text-gray-800 ">
+     {/* Upper section */}
+<div className="border-b border-gray-300 py-10  max-w-7xl mx-auto px-6 md:px-12">
+  <div className="flex flex-col md:flex-row justify-center items-center text-center md:text-left gap-16">
+    
+    {/* Left: Logo + socials */}
+    <div className="flex flex-col items-center md:items-center">
+      <img
+        src="/images/logo.png"
+        alt="Company Logo"
+        className= "w-52 mb-4"
+      />
+      <div className="flex space-x-4 text-2xl text-gray-700">
+        <a href="/" className="hover:text-[#1b5e20]"><FaFacebookSquare /></a>
+        <a href="/" className="hover:text-[#1b5e20]"><FaInstagramSquare /></a>
+        <a href="/" className="hover:text-[#1b5e20]"><FaYoutubeSquare /></a>
+      </div>
+    </div>
+
+    {/* Right: Newsletter */}
+    <div className="flex flex-col items-center md:items-start">
+      <h3 className="text-lg font-semibold mb-3 uppercase tracking-wide">
+        Receive Travel Inspirations
+      </h3>
+      <form
+        ref={formRef}
+        onSubmit={sendEmail}
+        className="flex items-center border-b border-gray-500 pb-2"
       >
-        {/* Logo & Description */}
-        <div style={{ flex: "1 1 250px", minWidth: 220 }}>
-          <img
-            src="/images/logo.PNG"
-            alt="Logo"
-            style={{ width: 120, margin: "0 auto 12px", display: "block" }}
-          />
-          <p style={{ fontSize: 15, lineHeight: 1.7, maxWidth: 250, margin: "0 auto" }}>
-            Explore the best tours and holidays with Net Lanka Tours. Creating memorable journeys
-            across Sri Lanka.
-          </p>
-        </div>
-
-        {/* Divider */}
-        <div className="hidden md:flex">
-          <Divider />
-        </div>
-
-        {/* Quick Links */}
-        <div style={{ flex: "1 1 180px", minWidth: 150 }}>
-          <h3 style={{ fontSize: 18, marginBottom: 12 }}>Quick Links</h3>
-          <ul style={{ listStyle: "none", padding: 0, lineHeight: 1.8 }}>
-            {["Home", "Tour Packages", "Destinations", "Gallery", "Blog", "About", "Contact"].map(
-              (page) => (
-                <li key={page}>
-                  <a
-                    href={`/${page === "Home" ? "" : page.toLowerCase().replace(" ", "")}`}
-                    style={{ color: "#e8f5e9", textDecoration: "none", fontSize: 15 }}
-                  >
-                    {page}
-                  </a>
-                </li>
-              )
-            )}
-          </ul>
-        </div>
-
-        <div className="hidden md:flex">
-          <Divider />
-        </div>
-
-{/* Contact Info */}
-<div style={{ flex: "1 1 250px", minWidth: 200 }}>
-  <h3 style={{ fontSize: 18, marginBottom: 16, color: "#e8f5e9", textAlign: "center" }}>Contact Us</h3>
-
-  <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "center" }}>
-    {/* Phone */}
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-      <span style={{ ...iconBoxStyle, backgroundColor: "#2e7d32" }}>
-        <FaPhoneSquare style={{ fontSize: 20, color: "#fff" }} />
-      </span>
-      <span style={{ fontSize: 15, color: "#e8f5e9", textAlign: "center" }}>{contactInfo.phone}</span>
+        <input
+          type="email"
+          name="user_email"
+          placeholder="Your email address *"
+          required
+          className="w-64 md:w-80 text-sm outline-none border-none placeholder-gray-500 text-center md:text-left"
+        />
+        <button
+          type="submit"
+          className="ml-3 text-xl font-bold text-[#1b5e20] hover:text-lime-600"
+        >
+          ➤
+        </button>
+      </form>
     </div>
+  </div>
 
-    {/* Email */}
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-      <span style={{ ...iconBoxStyle, backgroundColor: "#2e7d32" }}>
-        <FaEnvelopeSquare style={{ fontSize: 20, color: "#fff" }} />
-      </span>
-      <span style={{ fontSize: 15, color: "#e8f5e9", textAlign: "center" }}>{contactInfo.email}</span>
+  {/* Contact Row */}
+  <div className="flex flex-col md:flex-row justify-center items-center gap-6 mt-10 text-sm">
+    <div className="flex items-center gap-2 text-[#25D366]">
+      <FaWhatsappSquare className="text-2xl" />
+      <span>(+94) 777 300 852</span>
     </div>
+    <div className="flex items-center gap-2 text-[#2196F3]">
+      <FaPhoneSquare className="text-2xl" />
+      <span>(+94) 777 300 852</span>
+    </div>
+    <div className="flex items-center gap-2 text-[#E53935]">
+      <FaEnvelopeSquare className="text-2xl" />
+      <span>letstravel@yourtravel.com</span>
+    </div>
+  </div>
 
-    {/* Address */}
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-      <span style={{ ...iconBoxStyle, backgroundColor: "#2e7d32" }}>
-        <FaMapMarkerAlt style={{ fontSize: 20, color: "#fff" }} />
-      </span>
-      <span style={{ fontSize: 15, color: "#e8f5e9", textAlign: "center", lineHeight: 1.5 }}>
-        {contactInfo.corporateOffice}
-      </span>
-    </div>
+  {/* Award Row */}
+  <div className="flex justify-center items-center gap-6 mt-8 flex-wrap">
+    <img src="/45.png" alt="award" className="h-20" />
+    <img src="/48.png" alt="award" className="h-20" />
+    <img src="/46.png" alt="award" className="h-20" />
+    <img src="/47.png" alt="award" className="h-20" />
+    <img src="/44.png" alt="award" className="h-20" />
+
+   
   </div>
 </div>
 
-        {/* Social Media */}
-        <div style={{ flex: "1 1 250px", minWidth: 200 }}>
-          <h3 style={{ fontSize: 18, marginBottom: 12 }}>Follow Us</h3>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 12,
-              flexWrap: "wrap",
-            }}
-          >
-            {Object.entries(socialMediaMap).map(([platform, { url, icon }]) => (
-              <a
-                key={platform}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={platform}
-                style={{
-                  transition: "transform 0.3s, opacity 0.3s",
-                  color: "#e8f5e9",
-                  opacity: 0.85,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "scale(1.2)";
-                  e.currentTarget.style.opacity = "1";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "scale(1)";
-                  e.currentTarget.style.opacity = "0.85";
-                }}
-              >
-                {icon}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
+{/* Lower section */}
+<div className="border-b border-gray-300 py-10">
+  <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+    
+    {/* Explore */}
+    <div>
+      <h4 className="font-semibold text-lg mb-4">Explore The Site</h4>
+      <ul className="space-y-2 text-sm">
+        <li><a href="/home" className="hover:text-[#1b5e20]">Home</a></li>
+        <li><a href="/tours" className="hover:text-[#1b5e20]">Tours</a></li>
+        <li><a href="/destinations" className="hover:text-[#1b5e20]">Destinations</a></li>
+        <li><a href="/about" className="hover:text-[#1b5e20]">About Us</a></li>
+        <li><a href="/contact" className="hover:text-[#1b5e20]">Contact</a></li>
+      </ul>
+    </div>
 
-      {/* Bottom Copyright */}
-      <p style={{ marginTop: 40, fontSize: 13, textAlign: "center", userSelect: "none" }}>
-        ©2025 Net Lanka Tours. All rights reserved | Developed By: NetIT Technology
-      </p>
+    {/* Day Tours */}
+    <div>
+      <h4 className="font-semibold text-lg mb-4">Day Tours</h4>
+      <ul className="space-y-2 text-sm">
+        {dayTours.map((tour) => (
+          <li key={tour._id}>
+            <a href={`/tours/${tour._id}`} className="hover:text-[#1b5e20]">
+              {tour.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Itineraries */}
+    <div>
+      <h4 className="font-semibold text-lg mb-4">Itineraries</h4>
+      <ul className="space-y-2 text-sm">
+        {itineraries.map((tour) => (
+          <li key={tour._id}>
+            <a href={`/tours/${tour._id}`} className="hover:text-[#1b5e20]">
+              {tour.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Social Links */}
+    <div>
+      <h4 className="font-semibold text-lg mb-4">Connect With Us</h4>
+      <div className="flex space-x-4 text-2xl text-gray-700">
+        <a href="#" className="hover:text-[#1b5e20]"><FaFacebookSquare /></a>
+        <a href="#" className="hover:text-[#1b5e20]"><FaInstagramSquare /></a>
+        <a href="#" className="hover:text-[#1b5e20]"><FaYoutubeSquare /></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+      {/* Bottom bar */}
+      <div className="py-4 text-center text-sm text-gray-600">
+        © {new Date().getFullYear()} YourTravel. All Rights Reserved.
+      </div>
     </footer>
   );
 };

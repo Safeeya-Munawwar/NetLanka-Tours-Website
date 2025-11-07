@@ -46,9 +46,32 @@ const AdminLayout = ({ children }) => {
     { label: "About", to: "/admin-about", icon: <FaUserAlt /> },
     { label: "Contact", to: "/admin-contact", icon: <FaPhoneAlt /> },
     { label: "Experiences", to: "/admin-experiences", icon: <FaPhoneAlt /> },
-
     { label: "Logout", to: "/admin-login", icon: <FaSignOutAlt /> },
   ];
+
+  // ✅ Define groupedLinks here (optional grouping)
+  const groupedLinks = [
+    {
+      group: "Main",
+      icon: <FaTachometerAlt />,
+      links: links.slice(0, 5), // Dashboard → Destinations
+    },
+    {
+      group: "Content",
+      icon: <FaImages />,
+      links: links.slice(5, 11), // Gallery → Contact
+    },
+    {
+      group: "Other",
+      icon: <FaCogs />,
+      links: links.slice(11), // Experiences → Logout
+    },
+  ];
+
+  // ✅ Define toggleGroup function
+  const toggleGroup = (group) => {
+    setOpenGroup(openGroup === group ? null : group);
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100 font-poppins">
@@ -98,7 +121,9 @@ const AdminLayout = ({ children }) => {
                       key={to}
                       to={to}
                       className={`flex items-center gap-3 px-3 py-2 text-sm font-medium hover:text-green-200 transition-all ${
-                        location.pathname === to ? "text-green-300 font-semibold" : "text-green-100"
+                        location.pathname === to
+                          ? "text-green-300 font-semibold"
+                          : "text-green-100"
                       }`}
                     >
                       <span className="text-base">{icon}</span>
@@ -120,84 +145,6 @@ const AdminLayout = ({ children }) => {
       >
         {children}
       </main>
-
-      {/* Mobile Sidebar Overlay */}
-      {isMobile && (
-        <>
-          <button
-            className="fixed top-4 left-4 z-50 bg-green-800 text-white p-2 rounded-md"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            ☰
-          </button>
-
-          {menuOpen && (
-            <div
-              className="fixed inset-0 bg-black bg-opacity-40 z-40"
-              onClick={() => setMenuOpen(false)}
-            ></div>
-          )}
-
-          <aside
-            className={`fixed top-0 left-0 bg-green-900 text-white h-full w-64 transition-transform duration-300 z-50 overflow-y-auto ${
-              menuOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
-          >
-            <div className="flex items-center justify-between p-4 border-b border-green-700">
-              <div className="flex items-center gap-2">
-                <img src="/images/logo.PNG" alt="NetLanka" className="h-10" />
-                <h2 className="text-lg font-semibold">Admin</h2>
-              </div>
-              <button
-                className="text-white hover:text-green-300"
-                onClick={() => setMenuOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Mobile Menu Links */}
-            <nav className="mt-4">
-              {groupedLinks.map(({ group, icon, links }) => (
-                <div key={group}>
-                  <button
-                    onClick={() => toggleGroup(group)}
-                    className={`flex items-center justify-between w-full px-5 py-3 text-sm font-semibold hover:bg-green-800 transition-all ${
-                      openGroup === group ? "bg-green-800" : ""
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">{icon}</span>
-                      <span>{group}</span>
-                    </div>
-                    <span className="text-xs">{openGroup === group ? "▲" : "▼"}</span>
-                  </button>
-
-                  {openGroup === group && (
-                    <div className="ml-10 border-l border-green-700">
-                      {links.map(({ label, to, icon }) => (
-                        <Link
-                          key={to}
-                          to={to}
-                          className={`flex items-center gap-3 px-3 py-2 text-sm font-medium hover:text-green-200 transition-all ${
-                            location.pathname === to
-                              ? "text-green-300 font-semibold"
-                              : "text-green-100"
-                          }`}
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          <span className="text-base">{icon}</span>
-                          <span>{label}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </nav>
-          </aside>
-        </>
-      )}
     </div>
   );
 };
