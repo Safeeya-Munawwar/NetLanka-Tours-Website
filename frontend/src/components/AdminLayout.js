@@ -101,7 +101,7 @@ const AdminLayout = ({ children }) => {
         {/* Logo & Toggle */}
         <div className="flex items-center justify-between p-4 border-b border-green-700">
           <div className="flex items-center gap-2">
-            <img src="/images/logo.PNG" alt="NetLanka" className="h-10" />
+            <img src="/images/logo-1.PNG" alt="NetLanka" className="h-10" />
             {!isCollapsed && <h2 className="text-lg font-semibold">Admin Panel</h2>}
           </div>
           <button

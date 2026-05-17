@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { CSSTransition } from "react-transition-group";
 
 const AdminTours = () => {
@@ -39,7 +39,7 @@ const AdminTours = () => {
   // Fetch all tours
   const fetchTours = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/tours");
+      const response = await axios.get("/api/tours");
       setTours(response.data);
     } catch (error) {
       console.error("Error fetching tours:", error);
@@ -49,7 +49,7 @@ const AdminTours = () => {
   // Fetch all destinations
   const fetchDestinations = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/destinations");
+      const res = await axios.get("/api/destinations");
       setDestinations(res.data);
     } catch (err) {
       console.error("Error fetching destinations:", err);
@@ -113,7 +113,7 @@ const AdminTours = () => {
     try {
       if (editId) {
         await axios.put(
-          `http://localhost:5000/api/tours/${editId}`,
+          `/api/tours/${editId}`,
           formDataObj,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -121,7 +121,7 @@ const AdminTours = () => {
         );
         showPopup("Tour Updated Successfully!", "success");
       } else {
-        await axios.post("http://localhost:5000/api/tours", formDataObj, {
+        await axios.post("/api/tours", formDataObj, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         showPopup("Tour Added Successfully!", "success");
@@ -157,7 +157,7 @@ const AdminTours = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this tour?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/tours/${id}`);
+        await axios.delete(`/api/tours/${id}`);
         fetchTours();
         showPopup("Tour Deleted!", "success");
       } catch (error) {
@@ -577,7 +577,7 @@ const AdminTours = () => {
               </div>
             )}
             <img
-              src={`http://localhost:5000${tour.imageUrl}`}
+              src={tour.imageUrl}
               alt={tour.title}
               style={styles.imageStyle}
             />

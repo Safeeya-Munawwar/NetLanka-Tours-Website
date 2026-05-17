@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaUser, FaComment } from "react-icons/fa";
-import axios from "axios";
+import axios from "../axiosConfig";
 
 const ContactForm = () => {
   const [contactData, setContactData] = useState({
@@ -19,11 +19,11 @@ const ContactForm = () => {
   useEffect(() => {
     const fetchContact = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/home-content");
+        const res = await axios.get("/api/home-content");
         const data = res.data;
         setContactData({
           contact: data.contact || "Not available",
-          email: data.email || "info@mahaweli.lk", // optional email field in schema
+          email: data.email || "info@mahaweli.lk",
           address: data.address || "No address available",
         });
       } catch (err) {

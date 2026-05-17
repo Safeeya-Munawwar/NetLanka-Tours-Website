@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { FaUser, FaSuitcase, FaCarSide, FaClock, FaDollarSign, FaUsers, FaSnowflake } from "react-icons/fa";
 import { GiGearStick } from "react-icons/gi";
 

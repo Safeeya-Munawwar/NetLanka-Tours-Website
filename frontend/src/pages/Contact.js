@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { FaFacebook, FaYoutube, FaTripadvisor, FaPinterest, FaInstagram, FaGoogle } from "react-icons/fa";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
@@ -7,8 +7,6 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "./Contact.css";
-
-const API_BASE = "http://localhost:5000";
 
 const socialMediaMap = {
   Facebook: { icon: <FaFacebook /> },
@@ -250,7 +248,7 @@ function Contact() {
 
   const fetchContactInfo = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/api/contact`);
+      const res = await axios.get("/api/contact");
       setContactInfo(res.data);
     } catch (err) {
       console.error(err);
@@ -309,7 +307,7 @@ function Contact() {
     if (!/.+@.+\..+/.test(email)) { setStatusMessage("Please enter a valid email"); setStatusType("error"); return; }
     setLoading(true);
     try {
-      const res = await axios.post(`${API_BASE}/api/comments`, { page: "contact", name: name.trim(), email: email.trim(), message: message.trim() });
+      const res = await axios.post("/api/comments", { page: "contact", name: name.trim(), email: email.trim(), message: message.trim() });
       if (res.status === 201) { setForm({ name: "", email: "", message: "" }); setStatusMessage("✅ Thank you! We'll get back to you soon."); setStatusType("success"); }
       else { setStatusMessage("Failed to send message"); setStatusType("error"); }
     } catch (err) { console.error(err.response || err.message); setStatusMessage("Failed to send message"); setStatusType("error"); }

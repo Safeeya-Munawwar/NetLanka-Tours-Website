@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { FaCheckCircle, FaTimesCircle, FaClock } from "react-icons/fa";
 
 const AdminBookings = () => {
@@ -13,7 +13,7 @@ const AdminBookings = () => {
     const fetchBookings = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:5000/api/bookings/page/${source}`);
+        const res = await axios.get(`/api/bookings/page/${source}`);
         setBookings(res.data);
       } catch (err) {
         console.error(err);
@@ -27,7 +27,7 @@ const AdminBookings = () => {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/bookings/${id}`, { status: newStatus });
+      await axios.put(`/api/bookings/${id}`, { status: newStatus });
       setBookings((prev) =>
         prev.map((b) => (b._id === id ? { ...b, status: newStatus } : b))
       );
@@ -57,9 +57,10 @@ const AdminBookings = () => {
 
   // Delete booking
   const deleteBooking = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this booking?")) return;
+    if (!window.confirm("Are you sure you want to delete this booking?"))
+      return;
     try {
-      await axios.delete(`http://localhost:5000/api/bookings/${id}`);
+      await axios.delete(`/api/bookings/${id}`);
       setBookings((prev) => prev.filter((b) => b._id !== id));
     } catch (err) {
       console.error(err);
@@ -116,9 +117,13 @@ const AdminBookings = () => {
       {/* Table */}
       <div className="overflow-x-auto bg-white p-6 rounded-xl shadow-md">
         {loading ? (
-          <p className="text-center text-gray-700 font-medium">Loading bookings...</p>
+          <p className="text-center text-gray-700 font-medium">
+            Loading bookings...
+          </p>
         ) : filteredBookings.length === 0 ? (
-          <p className="text-center text-gray-700 font-medium">No bookings found.</p>
+          <p className="text-center text-gray-700 font-medium">
+            No bookings found.
+          </p>
         ) : (
           <table className="w-full border border-green-900 border-collapse min-w-[900px]">
             <thead className="bg-green-900 text-white text-sm">
@@ -138,7 +143,10 @@ const AdminBookings = () => {
                   "Status",
                   "Actions",
                 ].map((th) => (
-                  <th key={th} className="border border-green-800 p-3 font-semibold">
+                  <th
+                    key={th}
+                    className="border border-green-800 p-3 font-semibold"
+                  >
                     {th}
                   </th>
                 ))}
@@ -196,12 +204,12 @@ const AdminBookings = () => {
                           >
                             Complete
                           </button>
-                          {/* <button
+                          <button
                         onClick={() => deleteBooking(b._id)}
                         className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition"
                       >
                         Delete
-                      </button> */}
+                      </button>
                         </>
                       )}
                       {(status === "completed" || status === "canceled") && (

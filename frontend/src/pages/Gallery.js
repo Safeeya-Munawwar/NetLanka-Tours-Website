@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-const BACKEND_URL = "http://localhost:5000";
 
 function Gallery() {
   const [photos, setPhotos] = useState([]);
@@ -17,7 +15,7 @@ function Gallery() {
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/gallery`);
+        const res = await axios.get("/api/gallery");
         setPhotos(res.data);
       } catch (err) {
         console.error(err);
@@ -104,11 +102,11 @@ function Gallery() {
                 <div
                   className="bg-white rounded-xl shadow-md overflow-hidden border-2 border-green-900 cursor-pointer transform transition hover:scale-105 hover:shadow-lg"
                   onClick={() =>
-                    setSelectedImage(`${BACKEND_URL}${photo.imageUrl}`)
+                    setSelectedImage(photo.imageUrl)
                   }
                 >
                   <img
-                    src={`${BACKEND_URL}${photo.imageUrl}`}
+                    src={photo.imageUrl}
                     alt={photo.title}
                     className="w-full h-48 object-cover"
                   />
@@ -128,11 +126,11 @@ function Gallery() {
                 key={photo._id}
                 className="bg-yellow-50 rounded-xl overflow-hidden shadow-md border-2 border-green-900 cursor-pointer transform transition hover:scale-105 hover:shadow-lg"
                 onClick={() =>
-                  setSelectedImage(`${BACKEND_URL}${photo.imageUrl}`)
+                  setSelectedImage(photo.imageUrl)
                 }
               >
                 <img
-                  src={`${BACKEND_URL}${photo.imageUrl}`}
+                  src={photo.imageUrl}
                   alt={photo.title}
                   className="w-full h-48 object-cover"
                 />

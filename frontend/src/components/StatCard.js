@@ -1,32 +1,29 @@
 import React, { useEffect, useState, useRef } from "react";
+import { FaGlobe, FaUserFriends, FaMapMarkedAlt } from "react-icons/fa";
 
 const StatCard = ({ stats = [] }) => {
-  const darkGrayGradients = [
-    "from-gray-600/70 to-gray-700/80",
-    "from-gray-500/70 to-gray-600/80",
-    "from-gray-700/70 to-gray-800/80",
-  ];
-
   return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
-        {stats.length > 0 ? (
-          stats.map((stat, i) => (
-            <AnimatedStat
-              key={i}
-              stat={stat}
-              gradient={darkGrayGradients[i % darkGrayGradients.length]}
-            />
-          ))
-        ) : (
-          <p className="col-span-3 text-center text-white">No stats available</p>
-        )}
-      </div>
+    <div className="w-full flex flex-wrap justify-center gap-4">
+      {stats.length > 0 ? (
+        stats.map((stat, i) => (
+          <SingleStat
+            key={i}
+            stat={{
+              ...stat,
+              icon:
+                stat.icon ||
+                [<FaGlobe />, <FaUserFriends />, <FaMapMarkedAlt />][i % 3],
+            }}
+          />
+        ))
+      ) : (
+        <p className="text-center text-gray-300 w-full">No stats available</p>
+      )}
     </div>
   );
 };
 
-const AnimatedStat = ({ stat, gradient }) => {
+const SingleStat = ({ stat }) => {
   const [count, setCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef();
@@ -38,7 +35,7 @@ const AnimatedStat = ({ stat, gradient }) => {
     const startCount = () => {
       const end = parseInt(stat.number, 10) || 0;
       const duration = 2000;
-      const stepTime = 16; // ~60fps
+      const stepTime = 16;
       let current = 0;
       const increment = end / (duration / stepTime);
 
@@ -57,7 +54,7 @@ const AnimatedStat = ({ stat, gradient }) => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAnimated) {
-            startCount(); // ✅ call it here
+            startCount();
             setHasAnimated(true);
           }
         });
@@ -66,24 +63,19 @@ const AnimatedStat = ({ stat, gradient }) => {
     );
 
     observer.observe(node);
-
     return () => observer.unobserve(node);
-  }, [hasAnimated, stat.number]); // ✅ no ESLint warning
+  }, [hasAnimated, stat.number]);
 
   return (
     <div
       ref={ref}
-      className={`w-full max-w-[320px] p-6 rounded-xl shadow-lg text-center
-                  bg-gradient-to-br ${gradient}
-                  backdrop-blur-md border border-white/20
-                  transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer`}
+      className="w-full sm:w-80 md:w-96 p-6 rounded-xl bg-black/70 backdrop-blur-md text-center border border-white/20 transition-all duration-300 hover:scale-105 hover:bg-white/20 cursor-default"
     >
-      <div className="text-3xl md:text-4xl font-bold text-white flex justify-center items-center gap-2 mb-2 drop-shadow-lg">
-        {stat.icon || "⭐"} {count.toLocaleString()}
+      <div className="text-4xl text-green-500 mb-3 flex justify-center">
+        {stat.icon}
       </div>
-      <p className="text-white font-semibold text-lg md:text-xl m-0 drop-shadow-md">
-        {stat.label}
-      </p>
+      <div className="text-3xl font-bold text-white mb-1">{count.toLocaleString()}</div>
+      <p className="text-white/80 font-medium text-lg">{stat.label}</p>
     </div>
   );
 };

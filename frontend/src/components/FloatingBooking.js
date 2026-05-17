@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import emailjs from "@emailjs/browser";
 
 const FloatingBooking = () => {
@@ -9,8 +9,8 @@ const FloatingBooking = () => {
   const [bookingForm, setBookingForm] = useState({
     tourId: "",
     location: "",
-    tourPrice: 0,        // 👈 per person
-    transportPrice: 0,   // 👈 fixed vehicle cost
+    tourPrice: 0, // 👈 per person
+    transportPrice: 0, // 👈 fixed vehicle cost
     members: 1,
     total: 0,
     name: "",
@@ -26,7 +26,7 @@ const FloatingBooking = () => {
   const initialFormState = { ...bookingForm };
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/tours").then((res) => {
+    axios.get("/api/tours").then((res) => {
       setTours(res.data);
     });
   }, []);
@@ -53,7 +53,9 @@ const FloatingBooking = () => {
   // Select Transport
   const handleTransportSelect = (e) => {
     const vehicle = e.target.value;
-    const transportPrice = Number(selectedTour?.transportPrices?.[vehicle] || 0);
+    const transportPrice = Number(
+      selectedTour?.transportPrices?.[vehicle] || 0
+    );
 
     setBookingForm((prev) => {
       const total = prev.tourPrice * prev.members + transportPrice;
@@ -84,7 +86,7 @@ const FloatingBooking = () => {
 
     try {
       // Save booking in DB
-      await axios.post("http://localhost:5000/api/bookings", {
+      await axios.post("/api/bookings", {
         tourId: bookingForm.tourId,
         tourTitle: bookingForm.location,
         ...bookingForm,
@@ -111,7 +113,7 @@ const FloatingBooking = () => {
         process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
         templateParams,
         process.env.REACT_APP_EMAILJS_USER_ID
-      );      
+      );
 
       alert("Booking sent and saved successfully!");
 
@@ -149,44 +151,44 @@ const FloatingBooking = () => {
         📅 <span>Book a Tour</span>
       </div>
 
-{/* Modal */}
-{showModal && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: "rgba(0,0,0,0.6)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      zIndex: 3000,
-      padding: "15px",
-    }}
-    onClick={() => setShowModal(false)}
-  >
-    <form
-      onClick={(e) => e.stopPropagation()}
-      onSubmit={handleSubmit}
-      style={{
-        background: "#fff",
-        padding: "25px 30px",
-        borderRadius: "12px",
-        width: "100%",
-        maxWidth: "420px",
-        display: "flex",
-        flexDirection: "column",
-        boxShadow: "0 6px 25px rgba(0,0,0,0.2)",
-        borderTop: "5px solid #2e7d32",
-        maxHeight: "90vh",   // 👈 limit modal height
-        overflowY: "auto",   // 👈 scroll inside modal
-      }}
-    >
-      <h2 style={{ marginBottom: "15px", color: "#2e7d32" }}>
-        Book Your Tour
-      </h2>
+      {/* Modal */}
+      {showModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 3000,
+            padding: "15px",
+          }}
+          onClick={() => setShowModal(false)}
+        >
+          <form
+            onClick={(e) => e.stopPropagation()}
+            onSubmit={handleSubmit}
+            style={{
+              background: "#fff",
+              padding: "25px 30px",
+              borderRadius: "12px",
+              width: "100%",
+              maxWidth: "420px",
+              display: "flex",
+              flexDirection: "column",
+              boxShadow: "0 6px 25px rgba(0,0,0,0.2)",
+              borderTop: "5px solid #2e7d32",
+              maxHeight: "90vh", // 👈 limit modal height
+              overflowY: "auto", // 👈 scroll inside modal
+            }}
+          >
+            <h2 style={{ marginBottom: "15px", color: "#2e7d32" }}>
+              Book Your Tour
+            </h2>
 
             {/* Tour Select */}
             <label>Select Tour</label>
@@ -315,34 +317,34 @@ const FloatingBooking = () => {
               style={{ marginBottom: "15px", padding: "10px" }}
             />
 
-<button
-        type="submit"
-        style={{
-          background: "#2e7d32",
-          color: "white",
-          padding: "12px",
-          border: "none",
-          borderRadius: "6px",
-          marginBottom: "8px",
-        }}
-      >
-        Confirm Booking
-      </button>
-      <button
-        type="button"
-        onClick={() => setShowModal(false)}
-        style={{
-          background: "#ccc",
-          padding: "10px",
-          border: "none",
-          borderRadius: "6px",
-        }}
-      >
-        Cancel
-      </button>
-    </form>
-  </div>
-)}
+            <button
+              type="submit"
+              style={{
+                background: "#2e7d32",
+                color: "white",
+                padding: "12px",
+                border: "none",
+                borderRadius: "6px",
+                marginBottom: "8px",
+              }}
+            >
+              Confirm Booking
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowModal(false)}
+              style={{
+                background: "#ccc",
+                padding: "10px",
+                border: "none",
+                borderRadius: "6px",
+              }}
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
+      )}
     </>
   );
 };

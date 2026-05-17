@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { FaTrashAlt, FaUserCircle } from "react-icons/fa";
-
-const API_BASE = "http://localhost:5000";
 
 const AdminCommentPage = () => {
   const [comments, setComments] = useState([]);
@@ -26,7 +24,7 @@ const AdminCommentPage = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get(`${API_BASE}/api/comments`);
+      const res = await axios.get("/api/comments");
       setComments(res.data);
     } catch (err) {
       console.error(err);
@@ -36,9 +34,10 @@ const AdminCommentPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this comment?")) return;
+    if (!window.confirm("Are you sure you want to delete this comment?"))
+      return;
     try {
-      await axios.delete(`${API_BASE}/api/comments/${id}`);
+      await axios.delete(`/api/comments/${id}`);
       showPopup("Comment deleted successfully!");
       setComments(comments.filter((c) => c._id !== id));
     } catch (err) {
@@ -86,7 +85,9 @@ const AdminCommentPage = () => {
 
       {/* Loading / Error Messages */}
       {loading && (
-        <p className="text-center text-lg text-green-900">Loading comments...</p>
+        <p className="text-center text-lg text-green-900">
+          Loading comments...
+        </p>
       )}
       {error && <p className="text-center text-red-700">{error}</p>}
       {!loading && filteredComments.length === 0 && (

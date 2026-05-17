@@ -1,10 +1,9 @@
-// src/components/FloatingWhatsApp.js
 import React from 'react';
 
 const FloatingWhatsApp = () => {
   return (
     <a
-      href="https://wa.me/94750906149" // Replace with your WhatsApp number
+      href="https://wa.me/94750906149" 
       target="_blank"
       rel="noopener noreferrer"
       style={{

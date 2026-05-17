@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-const BACKEND_URL = "http://localhost:5000";
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -19,7 +17,7 @@ const Blog = () => {
   };
 
   useEffect(() => {
-    axios.get(`${BACKEND_URL}/api/blogs`).then((res) => setBlogs(res.data));
+    axios.get(`/api/blogs`).then((res) => setBlogs(res.data));
 
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
@@ -156,7 +154,7 @@ const renderBlogContent = (b) => (
 
     {b.imageUrl && (
       <img
-        src={`${BACKEND_URL}${b.imageUrl}`}
+        src={b.imageUrl}
         alt={b.title}
         style={{
           width: "100%",

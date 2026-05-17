@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-const BACKEND_URL = "http://localhost:5000";
 
 function UserDestinations() {
   const [destinations, setDestinations] = useState([]);
@@ -22,7 +20,7 @@ function UserDestinations() {
   // Fetch destinations
   const fetchDestinations = async () => {
     try {
-      const res = await axios.get(`${BACKEND_URL}/api/destinations`);
+      const res = await axios.get("/api/destinations");
       setDestinations(res.data);
 
       const uniqueCategories = [
@@ -46,7 +44,7 @@ function UserDestinations() {
   const handleViewTours = async (destination) => {
     try {
       const res = await axios.get(
-        `${BACKEND_URL}/api/tours/by-destination/${destination._id}`
+        `/api/tours/by-destination/${destination._id}`
       );
       setTours(res.data);
       setSelectedDestination(destination);
@@ -150,7 +148,7 @@ function UserDestinations() {
                 >
                   {dest.imageUrl && (
                     <img
-                      src={`${BACKEND_URL}${dest.imageUrl}`}
+                      src={dest.imageUrl}
                       alt={dest.name}
                       className="w-full h-48 object-cover"
                     />
@@ -176,7 +174,7 @@ function UserDestinations() {
               >
                 {dest.imageUrl && (
                   <img
-                    src={`${BACKEND_URL}${dest.imageUrl}`}
+                    src={dest.imageUrl}
                     alt={dest.name}
                     className="w-full h-40 object-cover"
                   />
@@ -229,7 +227,7 @@ function UserDestinations() {
                   >
                     {tour.imageUrl && (
                       <img
-                        src={`${BACKEND_URL}${tour.imageUrl}`}
+                        src={tour.imageUrl}
                         alt={tour.name}
                         className="w-full h-40 md:h-48 object-cover rounded-lg mb-4"
                       />

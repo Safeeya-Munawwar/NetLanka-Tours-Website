@@ -1,8 +1,5 @@
-// src/components/CommentsGrid.js
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-const API_BASE = "http://localhost:5000";
+import axios from "../axiosConfig";
 
 const CommentsGrid = () => {
   const [comments, setComments] = useState([]);
@@ -14,7 +11,7 @@ const CommentsGrid = () => {
       setLoading(true);
       setError("");
       try {
-        const res = await axios.get(`${API_BASE}/api/comments`);
+        const res = await axios.get("/api/comments");
         const lastComments = res.data.slice(-4).reverse();
         setComments(lastComments);
       } catch (err) {
@@ -26,7 +23,8 @@ const CommentsGrid = () => {
     fetchComments();
   }, []);
 
-  if (loading) return <p className="text-center text-green-900">Loading comments...</p>;
+  if (loading)
+    return <p className="text-center text-green-900">Loading comments...</p>;
   if (error) return <p className="text-center text-red-600">{error}</p>;
 
   return (
@@ -42,9 +40,14 @@ const CommentsGrid = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {comments.map((comment, idx) => {
-          const createdAt = comment.createdAt || comment.date || comment.time || null;
-          const formattedDate = createdAt ? new Date(createdAt).toLocaleDateString() : "";
-          const formattedTime = createdAt ? new Date(createdAt).toLocaleTimeString() : "";
+          const createdAt =
+            comment.createdAt || comment.date || comment.time || null;
+          const formattedDate = createdAt
+            ? new Date(createdAt).toLocaleDateString()
+            : "";
+          const formattedTime = createdAt
+            ? new Date(createdAt).toLocaleTimeString()
+            : "";
 
           return (
             <div
@@ -52,7 +55,9 @@ const CommentsGrid = () => {
               className="bg-lime-300 p-4 rounded-2xl shadow-lg border-2 border-black flex flex-col justify-between h-[200px] transition-transform duration-300 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl"
             >
               <div className="mb-2">
-                <h3 className="text-green-950 font-bold text-lg">{comment.name}</h3>
+                <h3 className="text-green-950 font-bold text-lg">
+                  {comment.name}
+                </h3>
                 <p className="text-green-950 text-xs mt-1">
                   {formattedDate} {formattedTime}
                 </p>

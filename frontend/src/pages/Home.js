@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import Slideshow from "../components/Slideshow";
 import InfoCard from "../components/InfoCard";
 import DestinationCard from "../components/DestinationCard";
@@ -14,8 +14,6 @@ import CommentsGrid from "../components/TestimonialCard";
 import ContactForm from "../components/ContactForm";
 
 import { FaSuitcaseRolling, FaMapMarkedAlt, FaImages, FaPenFancy, FaInfoCircle, FaEnvelope, FaCarSide, FaHandsHelping, FaMapSigns } from "react-icons/fa";
-
-const API_BASE = "http://localhost:5000";
 
 const navCards = [
   { text: <><FaSuitcaseRolling className="mr-2" /> Tour Packages</>, label: 'Explore Tours', link: '/tours' },
@@ -52,7 +50,7 @@ const Home = () => {
   useEffect(() => {
     const fetchHomeContent = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/api/home-content`);
+        const res = await axios.get("/api/home-content");
         const data = res.data || {};
         setHomeContent(data);
         setStats(Array.isArray(data.stats) ? data.stats : []);
@@ -66,7 +64,7 @@ const Home = () => {
 
     const fetchTours = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/api/tours`);
+        const res = await axios.get("/api/tours");
         setPopularTours(res.data.filter(t => t.isSpecial).slice(0, 4));
       } catch (err) {
         console.error("Failed to fetch tours:", err);
@@ -75,7 +73,7 @@ const Home = () => {
 
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/api/blogs`);
+        const res = await axios.get("/api/blogs");
         setLatestBlogs(res.data.slice(0, 4));
       } catch (err) {
         console.error("Failed to fetch blogs:", err);

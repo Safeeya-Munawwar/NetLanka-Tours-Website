@@ -1,6 +1,5 @@
-// src/components/FloatingCustomize.js
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 
 const FloatingCustomize = () => {
   const [open, setOpen] = useState(false);
@@ -12,7 +11,7 @@ const FloatingCustomize = () => {
     preferences: "",
     duration: "",
     budget: "",
-    vehicle: "",         // optional transport
+    vehicle: "",
     pickupLocation: "",
     pickupDate: "",
     pickupTime: "",
@@ -27,7 +26,7 @@ const FloatingCustomize = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/customTours", form);
+      await axios.post("/api/customTours", form);
       alert("Your customization request has been sent successfully!");
       setForm({
         name: "",
@@ -74,12 +73,13 @@ const FloatingCustomize = () => {
     flexDirection: "column",
     boxShadow: "0 6px 25px rgba(0,0,0,0.2)",
     borderTop: "5px solid #2e7d32",
-    maxHeight: "90vh",   // 👈 limit modal height
-    overflowY: "auto",   // 👈 scroll inside modal
+    maxHeight: "90vh",
+    overflowY: "auto",
   };
 
   const inputStyle = {
-    marginBottom: "12px", padding: "10px"
+    marginBottom: "12px",
+    padding: "10px",
   };
 
   const submitButton = {
@@ -139,7 +139,9 @@ const FloatingCustomize = () => {
             onClick={(e) => e.stopPropagation()}
             onSubmit={handleSubmit}
           >
-            <h2 style={{ marginBottom: "15px", color: "#2e7d32" }}>Customize Your Tour</h2>
+            <h2 style={{ marginBottom: "15px", color: "#2e7d32" }}>
+              Customize Your Tour
+            </h2>
 
             <label>Name:</label>
             <input
@@ -151,8 +153,8 @@ const FloatingCustomize = () => {
               required
               style={inputStyle}
             />
-               <label>Email:</label>         
-              <input
+            <label>Email:</label>
+            <input
               type="email"
               name="email"
               placeholder="Your Email"
@@ -173,17 +175,17 @@ const FloatingCustomize = () => {
             />
             <label>Preferred Destinations / Preferences:</label>
             <textarea
-  name="preferences"
-  placeholder="Preferred Destinations / Preferences"
-  value={form.preferences}
-  onChange={handleChange}
-  style={{ 
-    ...inputStyle, 
-    height: 140,          // 👈 increased height
-    resize: "vertical",   // 👈 allow vertical resize
-    minHeight: 100
-  }}
-/>
+              name="preferences"
+              placeholder="Preferred Destinations / Preferences"
+              value={form.preferences}
+              onChange={handleChange}
+              style={{
+                ...inputStyle,
+                height: 140, // 👈 increased height
+                resize: "vertical", // 👈 allow vertical resize
+                minHeight: 100,
+              }}
+            />
             <label>Duration (Days):</label>
             <input
               type="number"

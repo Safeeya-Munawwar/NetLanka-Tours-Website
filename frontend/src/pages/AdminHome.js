@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { FaSave, FaPlus, FaTrash } from "react-icons/fa";
-
-const BACKEND_URL = "http://localhost:5000";
 
 const AdminHome = () => {
   const [contentData, setContentData] = useState({
@@ -31,7 +29,7 @@ const AdminHome = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/home-content`);
+        const res = await axios.get("/api/home-content");
         const data = res.data;
 
         setContentData({
@@ -45,7 +43,7 @@ const AdminHome = () => {
           transport: Array.isArray(data.transport)
             ? data.transport.map((t) => ({
                 ...t,
-                imgPreview: t.img ? `${BACKEND_URL}${t.img}` : "",
+                imgPreview: t.img ? `${t.img}` : "",
               }))
             : [],
         });
@@ -128,7 +126,7 @@ const AdminHome = () => {
         );
       });
 
-      await axios.put(`${BACKEND_URL}/api/home-content`, formData, {
+      await axios.put(`/api/home-content`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

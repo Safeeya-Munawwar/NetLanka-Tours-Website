@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import {
   FaFacebookF,
   FaYoutube,
@@ -16,7 +16,7 @@ const Support = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/contact")
+      .get("/api/contact")
       .then((res) => setContact(res.data))
       .catch((err) => console.error("Error fetching contact:", err));
   }, []);

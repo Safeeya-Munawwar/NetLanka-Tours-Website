@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShieldAlt, FaHotel, FaThumbsUp, FaCreditCard } from "react-icons/fa";
-import axios from "axios";
+import axios from "../axiosConfig";
 import DestinationCard from "../components/DestinationCard";
 
 export default function LandingPage() {
@@ -16,7 +16,7 @@ export default function LandingPage() {
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/destinations");
+        const res = await axios.get("/api/destinations");
         setDestinations(res.data);
       } catch (err) {
         console.error("Failed to fetch destinations:", err);

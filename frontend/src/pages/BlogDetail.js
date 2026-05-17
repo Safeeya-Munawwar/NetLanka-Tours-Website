@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from "../axiosConfig";
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaUserCircle, FaArrowLeft } from "react-icons/fa";
-
-const API_BASE = 'http://localhost:5000';
 
 const BlogDetail = () => {
   const { postId } = useParams();
@@ -27,7 +25,7 @@ const BlogDetail = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/api/blogs/${postId}`);
+        const res = await axios.get(`/api/blogs/${postId}`);
         setPost(res.data);
       } catch (err) {
         console.error('Failed to fetch blog post:', err);
@@ -41,7 +39,7 @@ const BlogDetail = () => {
   const fetchComments = React.useCallback(async () => {
     if (!postId) return;
     try {
-      const res = await axios.get(`${API_BASE}/api/comments/${postId}`);
+      const res = await axios.get(`/api/comments/${postId}`);
       setComments(res.data);
     } catch (err) {
       console.error('Failed to fetch comments:', err);
@@ -89,7 +87,7 @@ const BlogDetail = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_BASE}/api/comments`, {
+      const res = await axios.post(`/api/comments`, {
         page: 'blog',
         postId,
         name,
@@ -135,7 +133,7 @@ const BlogDetail = () => {
 
       <h1 style={styles.title}>{post.title}</h1>
 
-      {post.imageUrl && <img src={`${API_BASE}${post.imageUrl}`} alt={post.title} style={styles.postImage} />}
+      {post.imageUrl && <img src={post.imageUrl} alt={post.title} style={styles.postImage} />}
       <p style={styles.content}>{post.content}</p>
 
       <h2 style={styles.commentsHeading}>Comments</h2>

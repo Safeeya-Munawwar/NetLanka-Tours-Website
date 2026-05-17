@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import {
   FaUsers,
   FaMapMarkedAlt,
@@ -31,7 +31,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/admin/dashboard")
+      .get("/api/admin/dashboard")
       .then((res) => {
         setData(res.data);
         setLoading(false);

@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaPlaneArrival, FaPlaneDeparture, FaHotel, FaShuttleVan, FaCalendarCheck } from "react-icons/fa";
-import axios from "axios";
+import {
+  FaPlaneArrival,
+  FaPlaneDeparture,
+  FaHotel,
+  FaShuttleVan,
+  FaCalendarCheck,
+} from "react-icons/fa";
+import axios from "../axiosConfig";
 
 const Transportation = ({ transport = [] }) => {
   const [showCustomize, setShowCustomize] = useState(false);
@@ -65,7 +71,7 @@ const Transportation = ({ transport = [] }) => {
         img: v.img
           ? v.img.startsWith("http")
             ? v.img
-            : `http://localhost:5000${v.img}`
+            : `${axios.defaults.baseURL}${v.img}`
           : "",
       }))
     );
@@ -90,7 +96,7 @@ const Transportation = ({ transport = [] }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/bookings", {
+      await axios.post("/api/bookings", {
         tourId: "transport-service",
         tourTitle: form.location,
         ...form,
@@ -123,78 +129,77 @@ const Transportation = ({ transport = [] }) => {
 
   return (
     <div>
-{/* Comfortable Transportation Section */}
-<section className="relative overflow-hidden py-16">
-  {/* Background */}
-  <div
-    className="absolute inset-0 bg-cover bg-center z-0"
-    style={{ backgroundImage: "url('/images/ella1.jpg')" }}
-  ></div>
-  <div className="absolute inset-0 bg-white/30 backdrop-blur-sm z-10"></div>
+      {/* Comfortable Transportation Section */}
+      <section className="relative overflow-hidden py-16">
+        {/* Background */}
+        <div
+          className="absolute inset-0 bg-cover bg-center z-0"
+          style={{ backgroundImage: "url('/images/ella1.jpg')" }}
+        ></div>
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm z-10"></div>
 
-  {/* Content Wrapper */}
-  <div className="relative z-20 max-w-7xl mx-auto px-5">
-    {/* Section Title */}
-    <div className="text-center mb-10">
-      <h2 className="text-3xl md:text-4xl font-bold text-green-900">
-        Comfortable Transportation
-      </h2>
-      <p className="text-gray-700 md:text-lg">
-        Whether solo or in a group, enjoy hassle-free travel with safe,
-        air-conditioned vehicles included in every package.
-      </p>
-    </div>
-
-    {/* Vehicles Grid */}
-    <div className="mt-10 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-items-center">
-      {vehicles.length ? (
-        vehicles.map((vehicle) => (
-          <div
-            key={vehicle.name}
-            onClick={() => {
-              setSelectedVehicle(vehicle.name);
-              setForm({ ...form, vehicle: vehicle.name });
-            }}
-            className={`w-full max-w-xs sm:max-w-sm md:max-w-md border-2 rounded-xl overflow-hidden cursor-pointer transform bg-white shadow-md transition duration-300 hover:scale-105 hover:shadow-xl ${
-              selectedVehicle === vehicle.name
-                ? "border-green-800"
-                : "border-transparent"
-            }`}
-          >
-            <img
-              src={vehicle.img}
-              alt={vehicle.name}
-              className="w-full h-40 sm:h-48 md:h-56 object-cover"
-            />
-            <h4 className="text-center mt-2 font-semibold text-sm sm:text-base">
-              {vehicle.name}
-            </h4>
-            <p className="text-center text-gray-600 text-xs sm:text-sm p-2">
-              {vehicle.details}
+        {/* Content Wrapper */}
+        <div className="relative z-20 max-w-7xl mx-auto px-5">
+          {/* Section Title */}
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-green-900">
+              Comfortable Transportation
+            </h2>
+            <p className="text-gray-700 md:text-lg">
+              Whether solo or in a group, enjoy hassle-free travel with safe,
+              air-conditioned vehicles included in every package.
             </p>
           </div>
-        ))
-      ) : (
-        <p className="text-center col-span-3 text-gray-500">
-          No transport options available.
-        </p>
-      )}
-    </div>
 
-    {/* View More Button */}
-    {vehicles.length > 0 && (
-      <div className="flex justify-center mt-6 w-full">
-        <button
-          onClick={() => (window.location.href = "/transport")}
-          className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
-          >
-          <FaShuttleVan /> View More Transports
-        </button>
-      </div>
-    )}
-  </div>
-</section>
+          {/* Vehicles Grid */}
+          <div className="mt-10 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-items-center">
+            {vehicles.length ? (
+              vehicles.map((vehicle) => (
+                <div
+                  key={vehicle.name}
+                  onClick={() => {
+                    setSelectedVehicle(vehicle.name);
+                    setForm({ ...form, vehicle: vehicle.name });
+                  }}
+                  className={`w-full max-w-xs sm:max-w-sm md:max-w-md border-2 rounded-xl overflow-hidden cursor-pointer transform bg-white shadow-md transition duration-300 hover:scale-105 hover:shadow-xl ${
+                    selectedVehicle === vehicle.name
+                      ? "border-green-800"
+                      : "border-transparent"
+                  }`}
+                >
+                  <img
+                    src={vehicle.img}
+                    alt={vehicle.name}
+                    className="w-full h-40 sm:h-48 md:h-56 object-cover"
+                  />
+                  <h4 className="text-center mt-2 font-semibold text-sm sm:text-base">
+                    {vehicle.name}
+                  </h4>
+                  <p className="text-center text-gray-600 text-xs sm:text-sm p-2">
+                    {vehicle.details}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-center col-span-3 text-gray-500">
+                No transport options available.
+              </p>
+            )}
+          </div>
 
+          {/* View More Button */}
+          {vehicles.length > 0 && (
+            <div className="flex justify-center mt-6 w-full">
+              <button
+                onClick={() => (window.location.href = "/transport")}
+                className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
+              >
+                <FaShuttleVan /> View More Transports
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Pickup & Drop Section */}
       <section className="text-center px-4 mb-6 max-w-6xl mx-auto pt-14">
@@ -235,16 +240,16 @@ const Transportation = ({ transport = [] }) => {
         </div>
       </section>
 
-{/* Book Transport Button */}
-<div className="flex justify-center mt-10 pb-12">
-  <button
-    onClick={() => setShowCustomize(!showCustomize)}
-    className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
-  >
-    <FaCalendarCheck />
-    {showCustomize ? "Close Booking Form" : "Book Your Transport"}
-  </button>
-</div>
+      {/* Book Transport Button */}
+      <div className="flex justify-center mt-10 pb-12">
+        <button
+          onClick={() => setShowCustomize(!showCustomize)}
+          className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
+        >
+          <FaCalendarCheck />
+          {showCustomize ? "Close Booking Form" : "Book Your Transport"}
+        </button>
+      </div>
 
       {/* Modal Form */}
       {showCustomize && (

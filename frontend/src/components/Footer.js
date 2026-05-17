@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import emailjs from "@emailjs/browser";
 import {
   FaFacebookSquare,
@@ -20,8 +20,8 @@ const Footer = () => {
     const fetchData = async () => {
       try {
         const [toursRes, contactRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/tours"),
-          axios.get("http://localhost:5000/api/contact"),
+          axios.get("/api/tours"),
+          axios.get("/api/contact"),
         ]);
 
         const tours = toursRes.data || [];

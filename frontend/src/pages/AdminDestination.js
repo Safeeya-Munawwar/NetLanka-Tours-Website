@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 
 const AdminDestination = () => {
   const [destinations, setDestinations] = useState([]);
@@ -23,7 +23,7 @@ const AdminDestination = () => {
 
   const fetchDestinations = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/destinations");
+      const res = await axios.get("/api/destinations");
       setDestinations(res.data);
     } catch (err) {
       console.error(err);
@@ -53,19 +53,23 @@ const AdminDestination = () => {
 
     try {
       if (editing) {
-        await axios.put(
-          `http://localhost:5000/api/destinations/${formData.id}`,
-          data,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+        await axios.put(`/api/destinations/${formData.id}`, data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         showPopup("Destination Updated!", "success");
       } else {
-        await axios.post("http://localhost:5000/api/destinations", data, {
+        await axios.post("/api/destinations", data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         showPopup("Destination Added!", "success");
       }
-      setFormData({ id: "", name: "", description: "", category: "", image: null });
+      setFormData({
+        id: "",
+        name: "",
+        description: "",
+        category: "",
+        image: null,
+      });
       setEditing(false);
       fetchDestinations();
     } catch (err) {
@@ -87,9 +91,10 @@ const AdminDestination = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this destination?")) return;
+    if (!window.confirm("Are you sure you want to delete this destination?"))
+      return;
     try {
-      await axios.delete(`http://localhost:5000/api/destinations/${id}`);
+      await axios.delete(`/api/destinations/${id}`);
       fetchDestinations();
       showPopup("Destination Deleted!", "success");
     } catch (err) {
@@ -175,7 +180,13 @@ const AdminDestination = () => {
             type="button"
             onClick={() => {
               setEditing(false);
-              setFormData({ id: "", name: "", description: "", category: "", image: null });
+              setFormData({
+                id: "",
+                name: "",
+                description: "",
+                category: "",
+                image: null,
+              });
             }}
             className="bg-red-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-red-500 transition-all w-40"
           >
@@ -201,7 +212,7 @@ const AdminDestination = () => {
                 >
                   {dest.imageUrl && (
                     <img
-                      src={`http://localhost:5000${dest.imageUrl}`}
+                      src={dest.imageUrl}
                       alt={dest.name}
                       className="w-full h-40 object-cover rounded-md mb-3"
                     />

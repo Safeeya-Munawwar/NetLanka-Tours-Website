@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { FaMapMarkerAlt, FaStar, FaMapMarkedAlt } from "react-icons/fa";
 
 const DestinationCard = () => {
@@ -8,7 +8,7 @@ const DestinationCard = () => {
   useEffect(() => {
     const fetchTours = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/tours");
+        const res = await axios.get("/api/tours");
         const latestTours = res.data
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .slice(0, 4);
@@ -37,7 +37,7 @@ const DestinationCard = () => {
           >
             {tour.imageUrl && (
               <img
-                src={`http://localhost:5000${tour.imageUrl}`}
+                src={tour.imageUrl}
                 alt={tour.title}
                 className="w-full h-44 object-cover"
               />

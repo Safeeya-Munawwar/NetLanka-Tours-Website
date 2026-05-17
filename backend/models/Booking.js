@@ -12,16 +12,16 @@ const BookingSchema = new mongoose.Schema({
   email: { 
     type: String, 
     required: true,
-    match: [/.+@.+\..+/, 'Please enter a valid email'] // validate email
+    match: [/.+@.+\..+/, 'Please enter a valid email'] 
   },
   phone: { type: String, required: true },
 
   // Transport-specific fields
-  vehicle: { type: String, default: "van" },        // car | van | bus | airport
-  pickupLocation: { type: String, default: "" },    // e.g., Colombo Airport / Hotel
-  dropLocation: { type: String, default: "" },      // Only for transport bookings
+  vehicle: { type: String, default: "van" },       
+  pickupLocation: { type: String, default: "" },   
+  dropLocation: { type: String, default: "" },    
   pickupDate: { type: Date },
-  pickupTime: { type: String, default: "" },        // "09:00 AM"
+  pickupTime: { type: String, default: "" },  
 
   // Page-wise field
   page: { 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 
 function AdminTransport() {
   const [vehicles, setVehicles] = useState([]);

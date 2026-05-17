@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -32,7 +32,7 @@ const AdminBlog = () => {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/blogs");
+      const res = await axios.get("/api/blogs");
       setBlogs(res.data);
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -63,10 +63,10 @@ const AdminBlog = () => {
       if (imageFile) formData.append("image", imageFile);
 
       if (editId) {
-        await axios.put(`http://localhost:5000/api/blogs/${editId}`, formData);
+        await axios.put(`/api/blogs/${editId}`, formData);
         showPopup("Blog updated successfully!");
       } else {
-        await axios.post("http://localhost:5000/api/blogs", formData);
+        await axios.post("/api/blogs", formData);
         showPopup("Blog posted successfully!");
       }
 
@@ -86,15 +86,23 @@ const AdminBlog = () => {
     setTitle(blog.title);
     setContent(blog.content);
     setEditId(blog._id);
-    setImagePreview(blog.imageUrl ? `http://localhost:5000${blog.imageUrl}` : null);
+
+    setImagePreview(
+      blog.imageUrl ? `${axios.defaults.baseURL}${blog.imageUrl}` : null
+    );
+
     setImageFile(null);
-    formRef.current?.scrollIntoView({ behavior: "smooth" });
+
+    formRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this blog?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/blogs/${id}`);
+        await axios.delete(`/api/blogs/${id}`);
+
         showPopup("Blog deleted successfully!");
         fetchBlogs();
       } catch (error) {
@@ -201,11 +209,13 @@ const AdminBlog = () => {
           {blogs.map((blog) => (
             <SwiperSlide key={blog._id}>
               <div className="bg-white border-4 border-green-700 p-5 rounded-xl text-center">
-                <h4 className="font-bold text-lg text-gray-800 mb-2">{blog.title}</h4>
+                <h4 className="font-bold text-lg text-gray-800 mb-2">
+                  {blog.title}
+                </h4>
                 <p className="text-gray-700">{blog.content}</p>
                 {blog.imageUrl && (
                   <img
-                    src={`http://localhost:5000${blog.imageUrl}`}
+                    src={`${axios.defaults.baseURL}${blog.imageUrl}`}
                     alt="blog"
                     className="w-full rounded-md mt-3 object-cover max-h-56"
                   />
@@ -235,11 +245,13 @@ const AdminBlog = () => {
               key={blog._id}
               className="bg-white border-4 border-green-700 p-5 rounded-xl flex flex-col shadow"
             >
-              <h4 className="font-bold text-lg mb-2 text-gray-800">{blog.title}</h4>
+              <h4 className="font-bold text-lg mb-2 text-gray-800">
+                {blog.title}
+              </h4>
               <p className="text-gray-700 flex-grow">{blog.content}</p>
               {blog.imageUrl && (
                 <img
-                  src={`http://localhost:5000${blog.imageUrl}`}
+                  src={`${axios.defaults.baseURL}${blog.imageUrl}`}
                   alt="blog"
                   className="w-full rounded-md mt-3 object-cover max-h-56"
                 />

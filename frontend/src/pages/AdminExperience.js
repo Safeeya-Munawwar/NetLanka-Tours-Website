@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 
 const AdminExperience = () => {
   const [experiences, setExperiences] = useState([]);
@@ -22,7 +22,7 @@ const AdminExperience = () => {
 
   const fetchExperiences = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/experiences");
+      const res = await axios.get("/api/experiences");
       setExperiences(res.data);
     } catch (err) {
       console.error(err);
@@ -52,13 +52,13 @@ const AdminExperience = () => {
     try {
       if (editing) {
         await axios.put(
-          `http://localhost:5000/api/experiences/${formData.id}`,
+          `/api/experiences/${formData.id}`,
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
         showPopup("Experience updated successfully!", "success");
       } else {
-        await axios.post("http://localhost:5000/api/experiences", data, {
+        await axios.post("/api/experiences", data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         showPopup("Experience added successfully!", "success");
@@ -87,7 +87,7 @@ const AdminExperience = () => {
     if (!window.confirm("Are you sure you want to delete this experience?"))
       return;
     try {
-      await axios.delete(`http://localhost:5000/api/experiences/${id}`);
+      await axios.delete(`/api/experiences/${id}`);
       fetchExperiences();
       showPopup("Experience deleted successfully!", "success");
     } catch (err) {
@@ -184,7 +184,7 @@ const AdminExperience = () => {
             >
               {exp.imageUrl && (
                 <img
-                  src={`http://localhost:5000${exp.imageUrl}`}
+                  src={`${exp.imageUrl}`}
                   alt={exp.title}
                   className="w-full h-48 object-cover rounded-md mb-3"
                 />

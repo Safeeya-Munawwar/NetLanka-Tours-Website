@@ -1,15 +1,22 @@
 import React from "react";
 import { FaPenFancy } from "react-icons/fa";
+import axios from "../axiosConfig";
 
 const BlogCard = ({ blog, showViewMore = false, latestBlogs = [] }) => {
   // ✅ Render Single Blog Card
   if (blog) {
     return (
-      <div className="bg-gradient-to-br from-white to-green-50 p-3 sm:p-4 rounded-2xl shadow-lg border-2 border-black flex flex-col justify-between transition-transform duration-300 ease-in-out cursor-pointer hover:-translate-y-2 hover:scale-105 hover:shadow-2xl
-                      h-[320px] sm:h-[360px]">
+      <div
+        className="bg-gradient-to-br from-white to-green-50 p-3 sm:p-4 rounded-2xl shadow-lg border-2 border-black flex flex-col justify-between transition-transform duration-300 ease-in-out cursor-pointer hover:-translate-y-2 hover:scale-105 hover:shadow-2xl
+                      h-[320px] sm:h-[360px]"
+      >
         {blog.imageUrl && (
           <img
-            src={blog.imageUrl.startsWith("http") ? blog.imageUrl : `http://localhost:5000${blog.imageUrl}`}
+            src={
+              blog.imageUrl.startsWith("http")
+                ? blog.imageUrl
+                : `${axios.defaults.baseURL}${blog.imageUrl}`
+            }
             alt={blog.title}
             className="w-full h-[140px] sm:h-[180px] rounded-xl object-cover border-2 border-black transition-all"
           />
@@ -37,8 +44,8 @@ const BlogCard = ({ blog, showViewMore = false, latestBlogs = [] }) => {
         <button
           onClick={() => (window.location.href = "/blog")}
           className="bg-green-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
-          >
-            <FaPenFancy /> View More Blogs
+        >
+          <FaPenFancy /> View More Blogs
         </button>
       </div>
     );

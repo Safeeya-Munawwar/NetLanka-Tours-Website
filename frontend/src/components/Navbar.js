@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 
 function Navbar() {
@@ -22,7 +22,7 @@ function Navbar() {
   useEffect(() => {
     const fetchContact = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/contact");
+        const res = await axios.get("/api/contact");
         setContact(res.data);
       } catch (err) {
         console.error("Error fetching contact info:", err);

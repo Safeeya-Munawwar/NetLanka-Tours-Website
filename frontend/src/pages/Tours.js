@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import emailjs from "@emailjs/browser";
 import { jsPDF } from "jspdf";
 import QRCode from "qrcode";
@@ -50,7 +50,7 @@ const Tours = () => {
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/tours").then((res) => setTours(res.data));
+    axios.get("/api/tours").then((res) => setTours(res.data));
   }, []);
 
   useEffect(() => {
@@ -144,7 +144,7 @@ const Tours = () => {
         process.env.REACT_APP_EMAILJS_USER_ID
       );
 
-      await axios.post("http://localhost:5000/api/bookings", {
+      await axios.post("/api/bookings", {
         tourId: bookingId,
         tourTitle: bookingForm.location,
         ...bookingForm,
@@ -198,7 +198,7 @@ const Tours = () => {
       const tour = tours.find((t) => t._id === customizeId);
       if (!tour) throw new Error("Tour not found.");
 
-      await axios.post("http://localhost:5000/api/customTours", {
+      await axios.post("/api/customTours", {
         tourId: tour._id,
         tourTitle: tour.title,
         tourLocation: tour.location,
@@ -282,7 +282,7 @@ const Tours = () => {
     doc.setTextColor(...greenColor);
     doc.text(tour.title || "Tour Title", margin, y);
 
-    const tourImageUrl = `http://localhost:5000${tour.imageUrl}`;
+    const tourImageUrl = `${tour.imageUrl}`;
     const tourImageDataUrl = await loadImageAsDataUrl(tourImageUrl, "JPEG");
     if (tourImageDataUrl) {
       y += 10;
@@ -483,7 +483,7 @@ const Tours = () => {
       <div style={{ position: "relative" }}>
         {tour.isSpecial && <div style={specialBadgeStyle}>⭐ Special</div>}
         <img
-          src={`http://localhost:5000${tour.imageUrl}`}
+          src={tour.imageUrl}
           alt={tour.title}
           style={{
             ...imageStyle,

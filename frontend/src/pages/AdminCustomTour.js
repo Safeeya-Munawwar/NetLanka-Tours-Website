@@ -1,14 +1,10 @@
 /* eslint-disable no-restricted-globals */
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { jsPDF } from "jspdf";
 import * as XLSX from "xlsx";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
-import {
-  FaClock,
-  FaCheckCircle,
-  FaTimesCircle,
-} from "react-icons/fa"; // ✅ Icons for statuses
+import { FaClock, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const AdminCustomTour = () => {
   const [customTours, setCustomTours] = useState([]);
@@ -19,14 +15,6 @@ const AdminCustomTour = () => {
     duration: "",
     budget: "",
   });
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-  // Responsive listener
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   // Fetch tours
   useEffect(() => {
@@ -35,7 +23,7 @@ const AdminCustomTour = () => {
 
   const fetchTours = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/customTours");
+      const res = await axios.get("/api/customTours");
       setCustomTours(res.data);
     } catch (err) {
       console.error(err);
@@ -52,10 +40,7 @@ const AdminCustomTour = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
-        `http://localhost:5000/api/customTours/${editId}`,
-        editForm
-      );
+      await axios.put(`/api/customTours/${editId}`, editForm);
       alert("Request updated successfully!");
       fetchTours();
       closeEdit();
@@ -192,7 +177,10 @@ const AdminCustomTour = () => {
                 "Status",
                 "Actions",
               ].map((h) => (
-                <th key={h} className="border border-green-800 p-3 font-semibold">
+                <th
+                  key={h}
+                  className="border border-green-800 p-3 font-semibold"
+                >
                   {h}
                 </th>
               ))}
@@ -248,10 +236,9 @@ const AdminCustomTour = () => {
                             className="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded-md mr-2"
                             onClick={() =>
                               axios
-                                .put(
-                                  `http://localhost:5000/api/customTours/${t._id}`,
-                                  { status: "approved" }
-                                )
+                                .put(`/api/customTours/${t._id}`, {
+                                  status: "approved",
+                                })
                                 .then(fetchTours)
                             }
                           >
@@ -261,10 +248,9 @@ const AdminCustomTour = () => {
                             className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md mr-2"
                             onClick={() =>
                               axios
-                                .put(
-                                  `http://localhost:5000/api/customTours/${t._id}`,
-                                  { status: "rejected" }
-                                )
+                                .put(`/api/customTours/${t._id}`, {
+                                  status: "rejected",
+                                })
                                 .then(fetchTours)
                             }
                           >
@@ -277,10 +263,9 @@ const AdminCustomTour = () => {
                           className="bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded-md mr-2"
                           onClick={() =>
                             axios
-                              .put(
-                                `http://localhost:5000/api/customTours/${t._id}`,
-                                { status: "pending" }
-                              )
+                              .put(`/api/customTours/${t._id}`, {
+                                status: "pending",
+                              })
                               .then(fetchTours)
                           }
                         >

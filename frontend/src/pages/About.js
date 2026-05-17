@@ -32,7 +32,8 @@ function About() {
         {
           id: 2,
           name: "Maria Gomez",
-          message: "Our family loved the tour! Everything was perfectly arranged.",
+          message:
+            "Our family loved the tour! Everything was perfectly arranged.",
           date: "2025-07-10",
         },
         {
@@ -69,13 +70,18 @@ function About() {
         className="w-full h-[350px] sm:h-[400px] md:h-[450px] flex flex-col justify-center items-center text-center bg-cover bg-center relative"
         style={{ backgroundImage: "url(/images/about.PNG)" }}
       >
-<div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
         <div className="relative z-10 px-6 md:px-20">
-        <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
-             The Best Travel Agency
+          <h1 className="text-2xl sm:text-3xl md:text-5xl text-green-950 font-serif font-semibold drop-shadow-md mb-4 sm:mb-6">
+            The Best Travel Agency
           </h1>
           <p className="text-black text-base sm:text-lg md:text-xl max-w-md sm:max-w-3xl mx-auto leading-relaxed mb-4">
-            At Net Lanka Tours, we are dedicated to creating unforgettable travel experiences across Sri Lanka. Our mission is to provide personalized, safe, and immersive tours that showcase the island’s natural beauty, rich heritage, and warm hospitality. With years of experience and a passion for adventure, we ensure every journey is unique and memorable.
+            At Net Lanka Tours, we are dedicated to creating unforgettable
+            travel experiences across Sri Lanka. Our mission is to provide
+            personalized, safe, and immersive tours that showcase the island’s
+            natural beauty, rich heritage, and warm hospitality. With years of
+            experience and a passion for adventure, we ensure every journey is
+            unique and memorable.
           </p>
         </div>
       </div>
@@ -126,23 +132,32 @@ function About() {
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {/* Mission */}
             <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-              <h3 className="text-2xl font-semibold text-green-900 mb-4">Mission</h3>
+              <h3 className="text-2xl font-semibold text-green-900 mb-4">
+                Mission
+              </h3>
               <p className="text-gray-800 text-base sm:text-lg leading-relaxed">
-                To provide safe, reliable, and enjoyable travel experiences across Sri Lanka, ensuring every journey is memorable.
+                To provide safe, reliable, and enjoyable travel experiences
+                across Sri Lanka, ensuring every journey is memorable.
               </p>
             </div>
             {/* Vision */}
             <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-              <h3 className="text-2xl font-semibold text-green-900 mb-4">Vision</h3>
+              <h3 className="text-2xl font-semibold text-green-900 mb-4">
+                Vision
+              </h3>
               <p className="text-gray-800 text-base sm:text-lg leading-relaxed">
-                To be the most trusted and preferred tour operator in Sri Lanka for both local and international travelers.
+                To be the most trusted and preferred tour operator in Sri Lanka
+                for both local and international travelers.
               </p>
             </div>
             {/* Standards */}
             <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-              <h3 className="text-2xl font-semibold text-green-900 mb-4">Standards</h3>
+              <h3 className="text-2xl font-semibold text-green-900 mb-4">
+                Standards
+              </h3>
               <p className="text-gray-800 text-base sm:text-lg leading-relaxed">
-                Maintaining high-quality vehicles, professional service, and personalized travel experiences for every guest.
+                Maintaining high-quality vehicles, professional service, and
+                personalized travel experiences for every guest.
               </p>
             </div>
           </div>
@@ -160,8 +175,19 @@ function About() {
               {
                 title: "Tailor-Made Tours",
                 icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c.667 0 1.333.333 2 1l4 4-1.414 1.414L12 10l-4.586 4.414L6 13l4-4c.667-.667 1.333-1 2-1z" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8c.667 0 1.333.333 2 1l4 4-1.414 1.414L12 10l-4.586 4.414L6 13l4-4c.667-.667 1.333-1 2-1z"
+                    />
                   </svg>
                 ),
                 text: "Custom itineraries designed to match your interests, preferences, and schedule.",
@@ -169,8 +195,19 @@ function About() {
               {
                 title: "Unbeatable Value for Money",
                 icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                 ),
                 text: "High-quality experiences at competitive prices to make every trip worth it.",
@@ -178,8 +215,19 @@ function About() {
               {
                 title: "Expert Personal Service",
                 icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 ),
                 text: "Professional guidance and assistance for a smooth and enjoyable journey.",
@@ -187,8 +235,19 @@ function About() {
               {
                 title: "Experienced Guides",
                 icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M9 16h6M4 6h16" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 12h.01M12 12h.01M16 12h.01M9 16h6M4 6h16"
+                    />
                   </svg>
                 ),
                 text: "Knowledgeable local guides to enrich your experience with insights and stories.",
@@ -196,8 +255,19 @@ function About() {
               {
                 title: "Choice of Accommodation",
                 icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.333 0-4 2-4 2s2.667 2 4 2 4-2 4-2-2.667-2-4-2z" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8c-1.333 0-4 2-4 2s2.667 2 4 2 4-2 4-2-2.667-2-4-2z"
+                    />
                   </svg>
                 ),
                 text: "A wide range of stays to suit all budgets and preferences.",
@@ -205,8 +275,19 @@ function About() {
               {
                 title: "Enticing Range of Activities",
                 icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 14l9-5-9-5-9 5 9 5z"
+                    />
                   </svg>
                 ),
                 text: "From adventure to culture, there’s something for every traveler to enjoy.",
@@ -216,9 +297,15 @@ function About() {
                 key={i}
                 className="bg-green-800 p-6 rounded-2xl shadow-lg text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl"
               >
-                <div className="flex justify-center mb-4 text-lime-500">{item.icon}</div>
-                <h3 className="text-2xl font-semibold text-lime-400 mb-4">{item.title}</h3>
-                <p className="text-white text-lg leading-relaxed">{item.text}</p>
+                <div className="flex justify-center mb-4 text-lime-500">
+                  {item.icon}
+                </div>
+                <h3 className="text-2xl font-semibold text-lime-400 mb-4">
+                  {item.title}
+                </h3>
+                <p className="text-white text-lg leading-relaxed">
+                  {item.text}
+                </p>
               </div>
             ))}
           </div>

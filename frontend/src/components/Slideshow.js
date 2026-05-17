@@ -1,44 +1,73 @@
-import React from "react";
-import StatCard from "../components/StatCard";
+import React, { useEffect, useState } from "react";
+import StatCard from "./StatCard";
+import { FaGlobe, FaUserFriends, FaMapMarkedAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-const Slideshow = ({ title, images, navCards = [], stats = [] }) => {
+const Slideshow = ({ title, images = [], stats = [] }) => {
+  const [current, setCurrent] = useState(0);
+  const navigate = useNavigate();
+
+  // Auto-slide every 6 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   if (!images || images.length === 0) return null;
 
-  const loopImages = [...images, ...images];
-
   return (
-    <div className="relative w-full h-[100vh] overflow-hidden">
-      {/* Sliding Background */}
-      <div className="absolute inset-0 flex h-full z-10">
+    <div className="relative w-full h-[120vh] overflow-hidden font-serif">
+      {/* Background slideshow */}
+      {images.map((img, idx) => (
         <div
-          className="flex animate-slideLeft w-max"
-          style={{ width: `${loopImages.length * 100}vw` }}
-        >
-          {loopImages.map((img, idx) => (
-            <div
-              key={idx}
-              className="w-screen h-full bg-cover bg-center"
-              style={{ backgroundImage: `url(${img})`, filter: "brightness(0.6)" }}
-            />
-          ))}
-        </div>
-      </div>
+          key={idx}
+          className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out ${
+            idx === current ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            backgroundImage: `url(${img})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "brightness(0.55)",
+          }}
+        />
+      ))}
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0b3d2e]/80 via-[#1f513f]/50 to-transparent z-20"></div>
+      {/* Overlay gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-transparent z-10"></div>
 
       {/* Content */}
-      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 md:px-20 z-30">
-        {/* Hero Title */}
-        <h1 className="text-white text-4xl md:text-6xl font-serif font-semibold drop-shadow-lg mb-4">
-          {title}
+      <div className="relative z-20 flex flex-col items-center justify-center h-full text-center text-white px-6 md:px-12 lg:px-20 -mt-16">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 drop-shadow-xl animate-fadeDown tracking-wide mt-20 sm:mt-0">
+          {title || "Net Lanka Tours & Holidays"}
         </h1>
-        <p className="text-white text-lg md:text-2xl mb-6 drop-shadow-md">
-          Explore the beauty, adventure, and culture of Sri Lanka with us!
+
+        {/* Subtitle */}
+        <p className="text-lg sm:text-xl md:text-2xl text-gray-100 mb-10 max-w-2xl leading-relaxed animate-fadeUp">
+          Experience breathtaking landscapes, ancient heritage, and tropical
+          luxury - all in one island.
         </p>
 
-        {/* Search Bar */}
-        <div className="flex items-center w-full max-w-xl mx-auto mb-8 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+        {/* CTA Buttons - Only 2 buttons */}
+        <div className="flex flex-wrap justify-center gap-5 mb-10 animate-fadeUp">
+          <button
+            onClick={() => navigate("/tours")}
+            className="bg-orange-500 hover:bg-orange-600 px-7 py-3 rounded-full font-medium text-white text-base transition-all duration-300 shadow-md"
+          >
+            Plan Your Trip
+          </button>
+          <button
+            onClick={() => navigate("/destinations")}
+            className="border border-white px-7 py-3 rounded-full font-medium text-white hover:bg-white hover:text-green-900 text-base transition-all duration-300 shadow-md"
+          >
+            Explore Destinations
+          </button>
+        </div>
+
+        {/* Search Bar - hidden on mobile */}
+        <div className="hidden sm:flex items-center w-full max-w-xl mx-auto mb-12 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
           <div className="flex items-center flex-1 bg-white px-5 sm:px-6 h-12 sm:h-14">
             <i className="fa-solid fa-magnifying-glass text-gray-400 text-base sm:text-lg mr-3 sm:mr-4"></i>
             <input
@@ -48,48 +77,39 @@ const Slideshow = ({ title, images, navCards = [], stats = [] }) => {
             />
           </div>
 
-          <button
-            className="h-12 sm:h-14 px-6 sm:px-8 bg-green-700 text-white font-medium text-sm sm:text-base hover:bg-green-800 active:scale-95 transition-all duration-200"
-          >
+          <button className="h-12 sm:h-14 px-6 sm:px-8 bg-green-700 text-white font-medium text-sm sm:text-base hover:bg-green-800 active:scale-95 transition-all duration-200">
             Search
           </button>
         </div>
 
-        {/* Navigation Cards */}
-        {navCards.length > 0 && (
-          <div className="mt-4 w-full gap-2 mb-8 hidden md:flex">
-            {navCards.map((card, idx) => (
-              <div
-                key={idx}
-                className="relative flex-1 h-14 bg-white bg-opacity-20 backdrop-blur-md rounded-lg cursor-pointer overflow-hidden group flex justify-center items-center"
-                onClick={() => (window.location.href = card.link)}
-              >
-                <div className="relative z-10 text-white text-sm md:text-base font-medium flex flex-col items-center justify-center">
-                  {card.text}
-                </div>
-              </div>
-            ))}
+        {/* Stats Section */}
+        {stats.length > 0 && (
+          <div className="w-full flex flex-wrap justify-center gap-4 mt-8 lg:mt-0 lg:absolute lg:bottom-10">
+            <StatCard
+              stats={stats.map((s, i) => ({
+                ...s,
+                icon:
+                  s.icon ||
+                  [<FaGlobe />, <FaUserFriends />, <FaMapMarkedAlt />][i % 3],
+              }))}
+            />
           </div>
         )}
-
-        {/* Stats Section */}
-        <div className="w-full mt-10">
-          <StatCard stats={stats} />
-        </div>
       </div>
 
-      {/* Tailwind animation */}
-      <style>
-        {`
-          @keyframes slideLeft {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .animate-slideLeft {
-            animation: slideLeft 20s linear infinite;
-          }
-        `}
-      </style>
+      {/* Animations */}
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(25px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeDown {
+          from { opacity: 0; transform: translateY(-25px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeUp { animation: fadeUp 1.2s ease-out forwards; }
+        .animate-fadeDown { animation: fadeDown 1.2s ease-out forwards; }
+      `}</style>
     </div>
   );
 };

@@ -45,11 +45,10 @@ function App() {
   // Detect admin routes
   const isAdminRoute = location.pathname.startsWith("/admin") && location.pathname !== "/admin-login";
 
-  // Hide floating buttons on specific pages
-  const hideFloatingButtons = 
-    isAdminRoute || 
-    location.pathname === "/" ||  // Landing page
-    location.pathname === "/admin-login"; // Admin login
+
+
+    // Hide floating buttons on admin pages and admin login
+    const hideFloatingButtons = isAdminRoute || location.pathname === "/admin-login" || location.pathname === "/";
 
   return (
     <>
